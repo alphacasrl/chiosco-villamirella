@@ -124,6 +124,12 @@ button[data-stato="off"] { background: #2a333a; border-color: #44515c; color: #b
         <button id="b-adapt" data-stato="off">pr adattivo<br>OFF</button>
         <button id="b-vola">Volo<br>reale</button>
       </div>
+      <div class="bottoni">
+        <button id="b-base">Base:<br>Satellite Esri</button>
+        <button id="b-det">Dettaglio<br>1&times;</button>
+        <button id="b-oriz" data-stato="off">Orizzonte<br>pulito OFF</button>
+        <button id="b-zoom">Zoom<br>13</button>
+      </div>
       <table id="t-misure" style="margin-top:.5rem"></table>
       <table id="t-tile" style="margin-top:.35rem"></table>
     </div>
@@ -151,6 +157,25 @@ var CONFIG = {
   // Esri World Imagery (nessuna chiave). ATTENZIONE: ordine {z}/{y}/{x}.
   TILE_SAT: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   ATTRIB_SAT: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
+
+  /* Basi cartografiche alternative, tutte senza chiave e tutte in HTTPS
+     (obbligatorio: la pagina e' servita in https, il contenuto misto e' bloccato).
+     maxzoom: oltre il proprio massimo Esri restituisce un riquadro grigio
+     "map data not yet available", quindi va dichiarato per forza. */
+  BASI: [
+    { id: 'sat',   nome: 'Satellite Esri', maxzoom: 19,
+      tiles: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attrib: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' },
+    { id: 'osm',   nome: 'OSM standard', maxzoom: 19,
+      tiles: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attrib: '&copy; OpenStreetMap contributors' },
+    { id: 'carto', nome: 'Carto Voyager', maxzoom: 20,
+      tiles: 'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+      attrib: '&copy; OpenStreetMap contributors, &copy; CARTO' },
+    { id: 'topo',  nome: 'Esri Topografica', maxzoom: 19,
+      tiles: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+      attrib: 'Map &copy; Esri' }
+  ],
   // AWS Terrain Tiles, encoding "terrarium" (nessuna chiave).
   TILE_DEM: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
   ATTRIB_DEM: 'Elevation: AWS Terrain Tiles',
@@ -462,16 +487,16 @@ function avviaMappa() {
   var stile = {
     version: 8,
     sources: {
-      sat: {
-        type: 'raster', tiles: [CONFIG.TILE_SAT], tileSize: 256,
-        maxzoom: 19, attribution: CONFIG.ATTRIB_SAT
+      base: {
+        type: 'raster', tiles: [CONFIG.BASI[0].tiles], tileSize: 256,
+        maxzoom: CONFIG.BASI[0].maxzoom, attribution: CONFIG.BASI[0].attrib
       },
       dem: {
         type: 'raster-dem', tiles: [CONFIG.TILE_DEM], tileSize: 256,
         encoding: 'terrarium', maxzoom: CONFIG.DEM_MAXZOOM, attribution: CONFIG.ATTRIB_DEM
       }
     },
-    layers: [{ id: 'sat', type: 'raster', source: 'sat' }]
+    layers: [{ id: 'base', type: 'raster', source: 'base' }]
   };
 
   try {
@@ -623,6 +648,68 @@ function avviaMappa() {
     log('flyTo avviato (rotazione continua ' + (eraRot ? 'disattivata' : 'gia\' ferma') + ')');
   });
 
+  /* --- cambio base cartografica + dettaglio --- *
+   * "Dettaglio 2x" dichiara tileSize 128 su tile che in realta' sono 256:
+   * MapLibre crede che ogni tile copra meta' schermo e chiede un livello di
+   * zoom piu' profondo, quindi il doppio di risoluzione a video. Costa 4x
+   * richieste, per questo va misurato e non dato per buono.                */
+  var iBase = 0, det2 = false;
+  function rifaiBase() {
+    var b = CONFIG.BASI[iBase];
+    try {
+      if (mappa.getLayer('base')) mappa.removeLayer('base');
+      if (mappa.getSource('base')) mappa.removeSource('base');
+      mappa.addSource('base', {
+        type: 'raster', tiles: [b.tiles], tileSize: det2 ? 128 : 256,
+        maxzoom: b.maxzoom, attribution: b.attrib
+      });
+      mappa.addLayer({ id: 'base', type: 'raster', source: 'base' },
+                     mappa.getLayer('cielo') ? 'cielo' : undefined);
+      conta = {}; disegnaConta();
+      log('base = ' + b.nome + ', tileSize ' + (det2 ? 128 : 256) + ' (maxzoom ' + b.maxzoom + ')');
+    } catch (e) { log('cambio base fallito: ' + (e && e.message ? e.message : e)); }
+  }
+  $('#b-base').addEventListener('click', function () {
+    iBase = (iBase + 1) % CONFIG.BASI.length;
+    this.innerHTML = 'Base:<br>' + CONFIG.BASI[iBase].nome;
+    rifaiBase();
+  });
+  $('#b-det').addEventListener('click', function () {
+    det2 = !det2;
+    this.innerHTML = 'Dettaglio<br>' + (det2 ? '2&times;' : '1&times;');
+    this.setAttribute('data-stato', det2 ? 'on' : 'off');
+    rifaiBase();
+  });
+
+  /* --- orizzonte pulito: pitch piu' basso + nebbia che nasconde il bordo --- */
+  var oriz = false;
+  $('#b-oriz').addEventListener('click', function () {
+    oriz = !oriz;
+    try {
+      mappa.easeTo({ pitch: oriz ? 48 : CONFIG.TEST_PITCH, duration: 600 });
+      if (typeof mappa.setSky === 'function') {
+        mappa.setSky(oriz
+          ? { 'sky-color': '#9ccbe8', 'horizon-color': '#e8f2f8', 'fog-color': '#dfe9ef',
+              'fog-ground-blend': 0.92, 'horizon-fog-blend': 0.85, 'sky-horizon-blend': 0.9 }
+          : { 'sky-color': '#8fc6e8', 'horizon-color': '#dfeef7', 'fog-color': '#e6eef2',
+              'fog-ground-blend': 0.6 });
+      }
+    } catch (e) { log('orizzonte: ' + (e && e.message ? e.message : e)); }
+    this.innerHTML = 'Orizzonte<br>pulito ' + (oriz ? 'ON' : 'OFF');
+    this.setAttribute('data-stato', oriz ? 'on' : 'off');
+  });
+
+  /* --- zoom: il satellite Esri ha dato vero fino a ~18, poi ingrandisce --- */
+  var zl = [13, 15, 16, 17, 18], iz = 0;
+  $('#b-zoom').addEventListener('click', function () {
+    iz = (iz + 1) % zl.length;
+    rotazione = false;
+    $('#b-rot').innerHTML = 'Rotazione<br>OFF';
+    $('#b-rot').setAttribute('data-stato', 'off');
+    mappa.easeTo({ zoom: zl[iz], duration: 900 });
+    this.innerHTML = 'Zoom<br>' + zl[iz];
+  });
+
   requestAnimationFrame(loop);
 }
 
@@ -636,7 +723,7 @@ function disegnaConta() {
   if (!chiavi.length) { riga(t, 'tile', 'nessun evento ancora'); return; }
   for (var i = 0; i < chiavi.length; i++) {
     var k = chiavi[i], c = conta[k];
-    var etichetta = (k === 'sat' ? 'Esri satellite' : (k === 'dem' ? 'AWS terreno' : k));
+    var etichetta = (k === 'base' ? 'base cartografica' : (k === 'dem' ? 'AWS terreno' : k));
     var perc = c.ok + c.ko > 0 ? Math.round(100 * c.ko / (c.ok + c.ko)) : 0;
     riga(t, etichetta, c.ok + ' ok / ' + c.ko + ' KO  (' + perc + '% perse)' +
          (c.ultimo ? '  — ' + c.ultimo : ''),
