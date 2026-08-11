@@ -428,7 +428,7 @@ log('pronto — premi TEST 1/2/3 e osserva l’ordine degli eventi');
  * ================================================================== */
 var tMis = $('#t-misure');
 var mappa = null, mlVer = '—', mlMajor = 0;
-var rotazione = true, terrenoOn = true, prBasso = false;
+var rotazione = true, terrenoOn = true, prAttivo = window.devicePixelRatio;
 var bearing = 0, framePrec = 0, campioni = [];
 
 function nomap(msg) {
@@ -491,13 +491,31 @@ function avviaMappa() {
         type: 'raster', tiles: [CONFIG.BASI[0].tiles], tileSize: 256,
         maxzoom: CONFIG.BASI[0].maxzoom, attribution: CONFIG.BASI[0].attrib
       },
+      /* Sottofondo a zoom basso della STESSA base: poche tile, si scaricano
+         subito e restano in cache per sempre. Serve a non lasciare mai un buco
+         nero quando la tile vicina alla camera non e' ancora arrivata. */
+      basso: {
+        type: 'raster', tiles: [CONFIG.BASI[0].tiles], tileSize: 256,
+        maxzoom: 8, attribution: ''
+      },
       dem: {
         type: 'raster-dem', tiles: [CONFIG.TILE_DEM], tileSize: 256,
         encoding: 'terrarium', maxzoom: CONFIG.DEM_MAXZOOM, attribution: CONFIG.ATTRIB_DEM
       }
     },
-    layers: [{ id: 'base', type: 'raster', source: 'base' }]
+    layers: [
+      /* senza questo, sotto una tile mancante c'e' il nero del canvas */
+      { id: 'sfondo', type: 'background', paint: { 'background-color': '#12303f' } },
+      { id: 'basso', type: 'raster', source: 'basso', paint: { 'raster-fade-duration': 0 } },
+      { id: 'base', type: 'raster', source: 'base' }
+    ]
   };
+
+  /* pixelRatio: si fissa QUI e non si tocca piu'. Cambiarlo a runtime rialloca
+     il framebuffer e su questo driver Mali fa cadere il contesto WebGL. */
+  var prPar = (location.search.match(/[?&]pr=([0-9.]+)/) || [])[1];
+  var prScelto = prPar ? parseFloat(prPar) : window.devicePixelRatio;
+  prAttivo = prScelto;
 
   try {
     mappa = new maplibregl.Map({
@@ -509,8 +527,11 @@ function avviaMappa() {
       bearing: 0,
       attributionControl: { compact: false },
       maxPitch: 85,
-      antialias: false
+      antialias: false,
+      pixelRatio: prScelto,
+      refreshExpiredTiles: false
     });
+    log('pixelRatio fissato a ' + prScelto + ' alla costruzione');
   } catch (e) {
     nomap('Errore creando la mappa: ' + (e && e.message ? e.message : e));
     aggiornaSommario();
@@ -560,19 +581,14 @@ function avviaMappa() {
     aggiornaSommario();
   });
 
-  /* pixelRatio: si verifica se l'API esiste in QUESTA versione, non si presume */
-  var haSetPR = (typeof mappa.setPixelRatio === 'function');
+  /* pixelRatio: NON si cambia a runtime (fa cadere il contesto WebGL su questo
+     driver). Il pulsante ricarica la pagina fissandolo alla costruzione. */
+  var haSetPR = false;
   var bpr = $('#b-pr');
-  bpr.innerHTML = haSetPR ? 'pixelRatio<br>' + window.devicePixelRatio : 'pixelRatio<br>n.d.';
-  if (!haSetPR) { bpr.setAttribute('data-stato', 'off'); }
+  bpr.innerHTML = 'ricarica<br>pr ' + (prScelto === 1 ? '1.25' : '1');
   bpr.addEventListener('click', function () {
-    if (!haSetPR) { log('setPixelRatio NON esiste in MapLibre ' + mlVer); return; }
-    prBasso = !prBasso;
-    var v = prBasso ? 1 : window.devicePixelRatio;
-    try { mappa.setPixelRatio(v); log('setPixelRatio(' + v + ')'); }
-    catch (e) { log('setPixelRatio errore: ' + (e && e.message ? e.message : e)); }
-    bpr.innerHTML = 'pixelRatio<br>' + v;
-    bpr.setAttribute('data-stato', prBasso ? 'off' : 'on');
+    var nuovo = (prScelto === 1) ? window.devicePixelRatio : 1;
+    location.search = '?pr=' + nuovo;
   });
 
   $('#b-terr').addEventListener('click', function () {
@@ -615,19 +631,21 @@ function avviaMappa() {
     this.innerHTML = 'esager.<br>' + exa.toFixed(1);
   });
 
-  /* --- pixelRatio adattivo: 1 mentre ci si muove, pieno da fermi --- */
-  var adatt = false;
-  function prGiu() { if (adatt && haSetPR) { try { mappa.setPixelRatio(1); } catch (e) {} } }
-  function prSu()  { if (adatt && haSetPR) { try { mappa.setPixelRatio(window.devicePixelRatio); } catch (e) {} } }
-  mappa.on('movestart', prGiu);
-  mappa.on('moveend', prSu);
+  /* --- sottofondo: e' la cura del "vuoto cosmico nero" --- *
+   * Spegnendolo si torna al comportamento di prima (buco nero sotto la tile
+   * mancante); accendendolo sotto c'e' sempre la stessa base a zoom 8.       */
+  var sotto = true;
+  $('#b-adapt').innerHTML = 'Sottofondo<br>ON';
+  $('#b-adapt').setAttribute('data-stato', 'on');
   $('#b-adapt').addEventListener('click', function () {
-    if (!haSetPR) { log('setPixelRatio assente: adattivo impossibile'); return; }
-    adatt = !adatt;
-    if (!adatt) prSu();
-    this.innerHTML = 'pr adattivo<br>' + (adatt ? 'ON' : 'OFF');
-    this.setAttribute('data-stato', adatt ? 'on' : 'off');
-    log('pixelRatio adattivo ' + (adatt ? 'ON — guarda se sfarfalla a fine movimento' : 'OFF'));
+    sotto = !sotto;
+    try {
+      mappa.setLayoutProperty('basso', 'visibility', sotto ? 'visible' : 'none');
+      mappa.setPaintProperty('sfondo', 'background-color', sotto ? '#12303f' : '#000000');
+    } catch (e) { log('sottofondo: ' + (e && e.message ? e.message : e)); }
+    this.innerHTML = 'Sottofondo<br>' + (sotto ? 'ON' : 'OFF');
+    this.setAttribute('data-stato', sotto ? 'on' : 'off');
+    log('sottofondo ' + (sotto ? 'ON' : 'OFF') + ' — confronta i buchi vicino alla camera');
   });
 
   /* --- volo reale: e' il movimento che fara' davvero il chiosco --- */
@@ -659,12 +677,20 @@ function avviaMappa() {
     try {
       if (mappa.getLayer('base')) mappa.removeLayer('base');
       if (mappa.getSource('base')) mappa.removeSource('base');
+      if (mappa.getLayer('basso')) mappa.removeLayer('basso');
+      if (mappa.getSource('basso')) mappa.removeSource('basso');
+      mappa.addSource('basso', {
+        type: 'raster', tiles: [b.tiles], tileSize: 256, maxzoom: 8, attribution: ''
+      });
       mappa.addSource('base', {
         type: 'raster', tiles: [b.tiles], tileSize: det2 ? 128 : 256,
         maxzoom: b.maxzoom, attribution: b.attrib
       });
-      mappa.addLayer({ id: 'base', type: 'raster', source: 'base' },
-                     mappa.getLayer('cielo') ? 'cielo' : undefined);
+      var sopra = mappa.getLayer('cielo') ? 'cielo' : undefined;
+      mappa.addLayer({ id: 'basso', type: 'raster', source: 'basso',
+                       layout: { visibility: sotto ? 'visible' : 'none' },
+                       paint: { 'raster-fade-duration': 0 } }, sopra);
+      mappa.addLayer({ id: 'base', type: 'raster', source: 'base' }, sopra);
       conta = {}; disegnaConta();
       log('base = ' + b.nome + ', tileSize ' + (det2 ? 128 : 256) + ' (maxzoom ' + b.maxzoom + ')');
     } catch (e) { log('cambio base fallito: ' + (e && e.message ? e.message : e)); }
@@ -758,7 +784,7 @@ function loop(t) {
 function nomeScenario() {
   return (terrenoOn ? 'terreno ON' : 'terreno OFF') +
          ', rot ' + (rotazione ? 'ON' : 'OFF') +
-         ', pr ' + (prBasso ? '1' : String(window.devicePixelRatio));
+         ', pr ' + String(prAttivo);
 }
 function misura(secondi) {
   if (misurando) return;
