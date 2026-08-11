@@ -118,7 +118,14 @@ button[data-stato="off"] { background: #2a333a; border-color: #44515c; color: #b
         <button id="b-pr">pixelRatio<br>—</button>
         <button id="b-mis">Misura<br>10 s</button>
       </div>
+      <div class="bottoni">
+        <button id="b-par">richieste<br>16</button>
+        <button id="b-exa">esager.<br>1.3</button>
+        <button id="b-adapt" data-stato="off">pr adattivo<br>OFF</button>
+        <button id="b-vola">Volo<br>reale</button>
+      </div>
       <table id="t-misure" style="margin-top:.5rem"></table>
+      <table id="t-tile" style="margin-top:.35rem"></table>
     </div>
 
     <div class="box">
@@ -485,10 +492,23 @@ function avviaMappa() {
     return;
   }
 
+  /* contatori tile: distinguono QUALE sorgente perde i tile */
   mappa.on('error', function (e) {
+    var src = (e && e.sourceId) ? e.sourceId : 'altro';
     var m = (e && e.error && e.error.message) ? e.error.message : 'errore mappa';
-    log('MAPPA ERRORE: ' + m);
+    if (!conta[src]) conta[src] = { ok: 0, ko: 0, ultimo: '' };
+    conta[src].ko++;
+    conta[src].ultimo = m.length > 60 ? m.slice(0, 60) + '…' : m;
+    if (conta[src].ko <= 5) log('TILE KO [' + src + '] ' + m);
+    disegnaConta();
   });
+  mappa.on('data', function (e) {
+    if (!e || e.dataType !== 'source' || !e.tile) return;
+    var src = e.sourceId ? e.sourceId : 'altro';
+    if (!conta[src]) conta[src] = { ok: 0, ko: 0, ultimo: '' };
+    conta[src].ok++;
+  });
+  setInterval(disegnaConta, 2000);
 
   mappa.on('load', function () {
     /* terreno 3D */
@@ -547,7 +567,82 @@ function avviaMappa() {
 
   $('#b-mis').addEventListener('click', function () { misura(10); });
 
+  /* --- richieste parallele: default 16, spesso troppe su Wi-Fi di un televisore --- */
+  var par = 16;
+  try { if (typeof maplibregl.getMaxParallelImageRequests === 'function') par = maplibregl.getMaxParallelImageRequests(); } catch (e) {}
+  $('#b-par').innerHTML = 'richieste<br>' + par;
+  $('#b-par').addEventListener('click', function () {
+    par = (par === 16) ? 6 : 16;
+    try {
+      maplibregl.setMaxParallelImageRequests(par);
+      log('maxParallelImageRequests = ' + par + ' (azzero i contatori)');
+    } catch (e) { log('setMaxParallelImageRequests assente: ' + (e && e.message ? e.message : e)); }
+    conta = {}; disegnaConta();
+    this.innerHTML = 'richieste<br>' + par;
+    this.setAttribute('data-stato', par === 16 ? 'on' : 'off');
+  });
+
+  /* --- esagerazione del rilievo: 1.3 accentua gli artefatti ai bordi --- */
+  var exa = 1.3;
+  $('#b-exa').addEventListener('click', function () {
+    exa = (exa === 1.3) ? 1.0 : 1.3;
+    if (terrenoOn) { try { mappa.setTerrain({ source: 'dem', exaggeration: exa }); } catch (e) {} }
+    this.innerHTML = 'esager.<br>' + exa.toFixed(1);
+  });
+
+  /* --- pixelRatio adattivo: 1 mentre ci si muove, pieno da fermi --- */
+  var adatt = false;
+  function prGiu() { if (adatt && haSetPR) { try { mappa.setPixelRatio(1); } catch (e) {} } }
+  function prSu()  { if (adatt && haSetPR) { try { mappa.setPixelRatio(window.devicePixelRatio); } catch (e) {} } }
+  mappa.on('movestart', prGiu);
+  mappa.on('moveend', prSu);
+  $('#b-adapt').addEventListener('click', function () {
+    if (!haSetPR) { log('setPixelRatio assente: adattivo impossibile'); return; }
+    adatt = !adatt;
+    if (!adatt) prSu();
+    this.innerHTML = 'pr adattivo<br>' + (adatt ? 'ON' : 'OFF');
+    this.setAttribute('data-stato', adatt ? 'on' : 'off');
+    log('pixelRatio adattivo ' + (adatt ? 'ON — guarda se sfarfalla a fine movimento' : 'OFF'));
+  });
+
+  /* --- volo reale: e' il movimento che fara' davvero il chiosco --- */
+  var voloAlt = false;
+  $('#b-vola').addEventListener('click', function () {
+    var eraRot = rotazione;
+    rotazione = false;
+    $('#b-rot').innerHTML = 'Rotazione<br>OFF';
+    $('#b-rot').setAttribute('data-stato', 'off');
+    voloAlt = !voloAlt;
+    mappa.flyTo({
+      center: voloAlt ? [15.38, 40.10] : CONFIG.TEST_CENTER,
+      zoom: voloAlt ? 14 : CONFIG.TEST_ZOOM,
+      pitch: CONFIG.TEST_PITCH,
+      bearing: voloAlt ? 40 : 0,
+      duration: 2500
+    });
+    log('flyTo avviato (rotazione continua ' + (eraRot ? 'disattivata' : 'gia\' ferma') + ')');
+  });
+
   requestAnimationFrame(loop);
+}
+
+/* --- tabella contatori tile --- */
+var conta = {};
+function disegnaConta() {
+  var t = $('#t-tile');
+  if (!t) return;
+  t.innerHTML = '';
+  var chiavi = Object.keys(conta);
+  if (!chiavi.length) { riga(t, 'tile', 'nessun evento ancora'); return; }
+  for (var i = 0; i < chiavi.length; i++) {
+    var k = chiavi[i], c = conta[k];
+    var etichetta = (k === 'sat' ? 'Esri satellite' : (k === 'dem' ? 'AWS terreno' : k));
+    var perc = c.ok + c.ko > 0 ? Math.round(100 * c.ko / (c.ok + c.ko)) : 0;
+    riga(t, etichetta, c.ok + ' ok / ' + c.ko + ' KO  (' + perc + '% perse)' +
+         (c.ultimo ? '  — ' + c.ultimo : ''),
+         c.ko === 0 ? 'ok' : (perc < 3 ? 'warn' : 'ko')).className =
+         'v piccolo ' + (c.ko === 0 ? 'ok' : (perc < 3 ? 'warn' : 'ko'));
+  }
 }
 
 /* --- loop rAF: ruota la mappa e conta i frame --- */
