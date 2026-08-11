@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Diagnostica chiosco — Villamirella</title>
+<style>
+/* ------------------------------------------------------------------ *
+ * Diagnostica hardware/browser per il chiosco touch Villamirella.
+ * Pagina autonoma: nessuna dipendenza a parte MapLibre da CDN.
+ * Il testo e' volutamente grande: va letto da una foto del monitor 4K.
+ * ------------------------------------------------------------------ */
+:root { font-size: 16px; }             /* ricalcolata da JS su innerWidth */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  background: #10171d; color: #e9eef2;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overscroll-behavior: none;
+}
+body { padding: 0.6rem 0.8rem 2rem; -webkit-user-select: none; user-select: none; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; font-weight: 700; letter-spacing: .01em; }
+h2 {
+  font-size: 1.0rem; margin: 0 0 .35rem; font-weight: 700;
+  color: #7fd4ff; text-transform: uppercase; letter-spacing: .06em;
+}
+.sommario {
+  font-size: 1.15rem; line-height: 1.5; font-weight: 700;
+  background: #1b2630; border: 2px solid #2f4353; border-radius: .4rem;
+  padding: .5rem .7rem; margin-bottom: .6rem;
+}
+.sommario span { display: inline-block; margin-right: 1.4rem; white-space: nowrap; }
+.griglia { display: flex; flex-wrap: wrap; gap: .6rem; align-items: flex-start; }
+.col { flex: 1 1 30rem; min-width: 24rem; display: flex; flex-direction: column; gap: .6rem; }
+.box {
+  background: #172129; border: 1px solid #2a3a47; border-radius: .4rem;
+  padding: .55rem .7rem;
+}
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+td { padding: .18rem .3rem; vertical-align: top; line-height: 1.35; }
+td.k { color: #9fb3c2; white-space: nowrap; width: 1%; padding-right: .8rem; }
+td.v { font-weight: 700; word-break: break-word; }
+.mono { font-family: Consolas, "Courier New", monospace; }
+.piccolo { font-size: .8rem; line-height: 1.35; }
+.ok   { color: #58d68d; }
+.ko   { color: #ff6b6b; }
+.warn { color: #ffc857; }
+#mappa {
+  width: 100%; height: 22rem; background: #0b1116;
+  border: 1px solid #2a3a47; border-radius: .4rem; overflow: hidden;
+}
+#mappa .nomap { padding: 1rem; font-size: 1.1rem; line-height: 1.5; }
+.bottoni { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+button {
+  font: inherit; font-size: 1rem; font-weight: 700;
+  min-height: 4.5rem; min-width: 4.5rem; padding: .6rem 1rem;
+  background: #24485e; color: #eaf6ff;
+  border: 2px solid #3d7396; border-radius: .35rem;
+  cursor: pointer; touch-action: manipulation;
+}
+button:active { background: #3d7396; }
+button[data-stato="off"] { background: #2a333a; border-color: #44515c; color: #b6c4cf; }
+#log {
+  height: 9rem; overflow-y: auto; background: #0d1418; border: 1px solid #2a3a47;
+  border-radius: .35rem; padding: .3rem .5rem; margin-top: .5rem;
+  font-family: Consolas, "Courier New", monospace; font-size: .82rem; line-height: 1.45;
+  -webkit-user-select: text; user-select: text;
+}
+#fps { font-size: 1.6rem; font-weight: 700; }
+.maplibregl-ctrl-attrib { font-size: 11px !important; }
+</style>
+</head>
+<body>
+
+<h1>Diagnostica chiosco Villamirella <span class="piccolo mono" id="ora"></span></h1>
+
+<div class="sommario" id="sommario">Rilevamento in corso…</div>
+
+<div class="griglia">
+
+  <!-- ============ COLONNA SINISTRA ============ -->
+  <div class="col">
+
+    <div class="box">
+      <h2>Sistema e schermo</h2>
+      <table id="t-sistema"></table>
+    </div>
+
+    <div class="box">
+      <h2>WebGL</h2>
+      <table id="t-webgl"></table>
+    </div>
+
+    <div class="box">
+      <h2>Rete e tile</h2>
+      <table id="t-rete"></table>
+      <div class="piccolo" style="margin-top:.35rem;color:#9fb3c2">
+        Ogni endpoint e' provato due volte: con <b>fetch</b> (soggetto a CORS) e come
+        <b>immagine</b> (come li carica davvero MapLibre). Immagine OK + fetch KO = va bene.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ COLONNA DESTRA ============ -->
+  <div class="col">
+
+    <div class="box">
+      <h2>Mappa di prova — Capo Palinuro, pitch 60</h2>
+      <div id="mappa"></div>
+      <div style="display:flex;align-items:baseline;gap:1rem;margin-top:.4rem;flex-wrap:wrap">
+        <div id="fps">FPS —</div>
+        <div class="piccolo" id="fps-nota" style="color:#9fb3c2"></div>
+      </div>
+      <div class="bottoni">
+        <button id="b-rot"  data-stato="on">Rotazione<br>ON</button>
+        <button id="b-terr" data-stato="on">Terreno 3D<br>ON</button>
+        <button id="b-pr">pixelRatio<br>—</button>
+        <button id="b-mis">Misura<br>10 s</button>
+      </div>
+      <table id="t-misure" style="margin-top:.5rem"></table>
+    </div>
+
+    <div class="box">
+      <h2>Test touch — premi i tre pulsanti</h2>
+      <div class="bottoni">
+        <button class="tt" data-n="1">TEST<br>1</button>
+        <button class="tt" data-n="2">TEST<br>2</button>
+        <button class="tt" data-n="3">TEST<br>3</button>
+        <button id="b-clear">Pulisci<br>log</button>
+      </div>
+      <div id="log"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ================================================================== *
+ * CONFIG — gli stessi due endpoint che usera' il chiosco.
+ * Sostituibili in futuro con un provider a chiave senza toccare altro.
+ * ================================================================== */
+var CONFIG = {
+  // Esri World Imagery (nessuna chiave). ATTENZIONE: ordine {z}/{y}/{x}.
+  TILE_SAT: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  ATTRIB_SAT: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
+  // AWS Terrain Tiles, encoding "terrarium" (nessuna chiave).
+  TILE_DEM: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+  ATTRIB_DEM: 'Elevation: AWS Terrain Tiles',
+  DEM_MAXZOOM: 14,
+  // Centro SOLO per questo test. Coordinate approssimative di Capo Palinuro,
+  // NON usate nel chiosco: quelle le fornisce l'umano (vedi brief).
+  TEST_CENTER: [15.2833, 40.0230],
+  TEST_ZOOM: 13,
+  TEST_PITCH: 60
+};
+
+/* ---------- utilita' di base (ES2019: niente ?. ne' ??) ---------- */
+function $(s) { return document.querySelector(s); }
+function el(tag, cls, txt) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (txt !== undefined && txt !== null) e.textContent = String(txt);
+  return e;
+}
+function riga(tabella, chiave, valore, cls) {
+  var tr = document.createElement('tr');
+  tr.appendChild(el('td', 'k', chiave));
+  var td = el('td', 'v' + (cls ? ' ' + cls : ''), valore);
+  td.id = 'v-' + chiave.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  tr.appendChild(td);
+  tabella.appendChild(tr);
+  return td;
+}
+function log(msg) {
+  var d = $('#log');
+  var t = new Date();
+  var hh = ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) +
+           ':' + ('0' + t.getSeconds()).slice(-2) + '.' + ('00' + t.getMilliseconds()).slice(-3);
+  d.appendChild(el('div', null, hh + '  ' + msg));
+  while (d.childNodes.length > 60) d.removeChild(d.firstChild);
+  d.scrollTop = d.scrollHeight;
+}
+
+/* ---------- scala tipografica: root font-size da innerWidth ---------- */
+function scala() {
+  var f = window.innerWidth / 1920 * 16;
+  if (f < 13) f = 13;
+  if (f > 34) f = 34;
+  document.documentElement.style.fontSize = f.toFixed(2) + 'px';
+}
+scala();
+window.addEventListener('resize', scala);
+
+$('#ora').textContent = new Date().toLocaleString('it-IT');
+
+/* ================================================================== *
+ * 1. SISTEMA E SCHERMO
+ * ================================================================== */
+var tSis = $('#t-sistema');
+riga(tSis, 'userAgent', navigator.userAgent).className = 'v mono piccolo';
+riga(tSis, 'platform', navigator.platform + '  |  lang ' + navigator.language);
+riga(tSis, 'window inner', window.innerWidth + ' x ' + window.innerHeight + ' px logici');
+riga(tSis, 'screen', screen.width + ' x ' + screen.height +
+    '   (avail ' + screen.availWidth + ' x ' + screen.availHeight + ')');
+riga(tSis, 'devicePixelRatio', String(window.devicePixelRatio),
+     window.devicePixelRatio === 1 ? 'ok' : 'warn');
+riga(tSis, 'pixel fisici stimati',
+     Math.round(window.innerWidth * window.devicePixelRatio) + ' x ' +
+     Math.round(window.innerHeight * window.devicePixelRatio));
+if (window.visualViewport) {
+  riga(tSis, 'visualViewport',
+       Math.round(window.visualViewport.width) + ' x ' + Math.round(window.visualViewport.height) +
+       '  scale ' + window.visualViewport.scale);
+}
+riga(tSis, 'maxTouchPoints', String(navigator.maxTouchPoints),
+     navigator.maxTouchPoints > 0 ? 'ok' : 'ko');
+riga(tSis, 'ontouchstart', ('ontouchstart' in window) ? 'presente' : 'ASSENTE',
+     ('ontouchstart' in window) ? 'ok' : 'warn');
+riga(tSis, 'PointerEvent', (typeof window.PointerEvent === 'function') ? 'supportato' : 'ASSENTE',
+     (typeof window.PointerEvent === 'function') ? 'ok' : 'warn');
+function mq(q) { return window.matchMedia ? (window.matchMedia(q).matches ? 'si' : 'no') : '?'; }
+riga(tSis, 'pointer/hover', 'coarse:' + mq('(pointer: coarse)') +
+     '  fine:' + mq('(pointer: fine)') + '  hover:' + mq('(hover: hover)'));
+riga(tSis, 'hardwareConcurrency', String(navigator.hardwareConcurrency || '?'));
+riga(tSis, 'deviceMemory', navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'non esposto');
+riga(tSis, 'navigator.onLine', navigator.onLine ? 'true' : 'false',
+     navigator.onLine ? 'ok' : 'ko');
+riga(tSis, 'Fullscreen API',
+     (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)
+       ? 'presente (da provare)' : 'ASSENTE');
+/* feature-detect linguistiche/CSS che condizionano il codice del chiosco */
+var feat = [];
+feat.push('CSS.supports:' + (window.CSS && CSS.supports ? 'si' : 'no'));
+feat.push(':has():' + (window.CSS && CSS.supports && CSS.supports('selector(:has(*))') ? 'si' : 'NO'));
+feat.push('gap-flex:' + (window.CSS && CSS.supports && CSS.supports('gap', '1px') ? 'si' : 'no'));
+feat.push('IntersectionObserver:' + (typeof IntersectionObserver === 'function' ? 'si' : 'no'));
+feat.push('ResizeObserver:' + (typeof ResizeObserver === 'function' ? 'si' : 'no'));
+try { eval('null?.a'); feat.push('opt-chaining:si'); } catch (e) { feat.push('opt-chaining:NO'); }
+try { eval('(async()=>{})'); feat.push('async:si'); } catch (e) { feat.push('async:NO'); }
+riga(tSis, 'feature', feat.join('   ')).className = 'v piccolo mono';
+
+/* ================================================================== *
+ * 2. WEBGL
+ * ================================================================== */
+var tGl = $('#t-webgl');
+var cvs = document.createElement('canvas');
+var gl2 = null, gl1 = null;
+try { gl2 = cvs.getContext('webgl2'); } catch (e) {}
+try { gl1 = cvs.getContext('webgl') || cvs.getContext('experimental-webgl'); } catch (e) {}
+var gl = gl2 || gl1;
+
+riga(tGl, 'WebGL2', gl2 ? 'SI' : 'NO', gl2 ? 'ok' : 'ko');
+riga(tGl, 'WebGL1', gl1 || gl2 ? 'SI' : 'NO', (gl1 || gl2) ? 'ok' : 'ko');
+
+var vendorGl = '—', rendererGl = '—', vendorUnm = '—', rendererUnm = '—';
+if (gl) {
+  vendorGl = String(gl.getParameter(gl.VENDOR));
+  rendererGl = String(gl.getParameter(gl.RENDERER));
+  var dbg = null;
+  try { dbg = gl.getExtension('WEBGL_debug_renderer_info'); } catch (e) {}
+  if (dbg) {
+    try { vendorUnm = String(gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL)); } catch (e) { vendorUnm = 'errore'; }
+    try { rendererUnm = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)); } catch (e) { rendererUnm = 'errore'; }
+  } else {
+    vendorUnm = rendererUnm = 'estensione non disponibile';
+  }
+  riga(tGl, 'VENDOR', vendorGl);
+  riga(tGl, 'RENDERER', rendererGl);
+  riga(tGl, 'UNMASKED VENDOR', vendorUnm, 'ok');
+  riga(tGl, 'UNMASKED RENDERER', rendererUnm, 'ok');
+  riga(tGl, 'VERSION', String(gl.getParameter(gl.VERSION))).className = 'v piccolo mono';
+  riga(tGl, 'SHADING LANG', String(gl.getParameter(gl.SHADING_LANGUAGE_VERSION))).className = 'v piccolo mono';
+  riga(tGl, 'MAX_TEXTURE_SIZE', String(gl.getParameter(gl.MAX_TEXTURE_SIZE)),
+       gl.getParameter(gl.MAX_TEXTURE_SIZE) >= 4096 ? 'ok' : 'warn');
+  riga(tGl, 'MAX_RENDERBUFFER_SIZE', String(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE)));
+  riga(tGl, 'MAX_TEXTURE_IMAGE_UNITS', String(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)));
+  riga(tGl, 'MAX_VERTEX_UNIFORM_VECTORS', String(gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS)));
+  var maxVp = gl.getParameter(gl.MAX_VIEWPORT_DIMS);
+  riga(tGl, 'MAX_VIEWPORT_DIMS', maxVp ? (maxVp[0] + ' x ' + maxVp[1]) : '?');
+  /* estensioni che contano per il terreno raster-dem e per le etichette */
+  var wanted = ['OES_texture_float', 'OES_element_index_uint', 'WEBGL_depth_texture',
+                'EXT_color_buffer_float', 'OES_standard_derivatives', 'ANGLE_instanced_arrays'];
+  var have = [];
+  for (var i = 0; i < wanted.length; i++) {
+    have.push(wanted[i].replace(/^(OES|EXT|WEBGL|ANGLE)_/, '') + ':' + (gl.getExtension(wanted[i]) ? 'si' : 'NO'));
+  }
+  riga(tGl, 'estensioni', have.join('  ')).className = 'v piccolo mono';
+  var tot = gl.getSupportedExtensions();
+  riga(tGl, 'estensioni totali', tot ? String(tot.length) : '?');
+} else {
+  riga(tGl, 'ESITO', 'NESSUN CONTESTO WEBGL — la mappa non puo' + '’' + ' funzionare', 'ko');
+}
+
+/* ================================================================== *
+ * 3. RETE — fetch + immagine sui due endpoint
+ * ================================================================== */
+var tRete = $('#t-rete');
+
+/* tile slippy che contiene Capo Palinuro, calcolata (non inventata) */
+function tileXY(lon, lat, z) {
+  var n = Math.pow(2, z);
+  var x = Math.floor((lon + 180) / 360 * n);
+  var r = lat * Math.PI / 180;
+  var y = Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n);
+  return { x: x, y: y, z: z };
+}
+function urlDaTemplate(tpl, t) {
+  return tpl.replace('{z}', t.z).replace('{x}', t.x).replace('{y}', t.y);
+}
+var T = tileXY(CONFIG.TEST_CENTER[0], CONFIG.TEST_CENTER[1], 12);
+var urlSat = urlDaTemplate(CONFIG.TILE_SAT, T);
+var urlDem = urlDaTemplate(CONFIG.TILE_DEM, T);
+
+riga(tRete, 'tile di prova', 'z' + T.z + ' x' + T.x + ' y' + T.y).className = 'v mono piccolo';
+var cSatF = riga(tRete, 'Esri  fetch', 'in corso…', 'warn');
+var cSatI = riga(tRete, 'Esri  immagine', 'in corso…', 'warn');
+var cDemF = riga(tRete, 'AWS DEM  fetch', 'in corso…', 'warn');
+var cDemI = riga(tRete, 'AWS DEM  immagine', 'in corso…', 'warn');
+riga(tRete, 'URL Esri', urlSat).className = 'v mono piccolo';
+riga(tRete, 'URL DEM', urlDem).className = 'v mono piccolo';
+
+function provaFetch(url, cella) {
+  var t0 = Date.now();
+  fetch(url, { method: 'GET', cache: 'no-store' }).then(function (r) {
+    var ms = Date.now() - t0;
+    return r.blob().then(function (b) {
+      cella.textContent = 'HTTP ' + r.status + '  ' + Math.round(b.size / 1024) + ' KB  in ' + ms + ' ms';
+      cella.className = 'v ' + (r.ok ? 'ok' : 'ko');
+    });
+  })['catch'](function (err) {
+    var ms = Date.now() - t0;
+    cella.textContent = 'FALLITO dopo ' + ms + ' ms — ' + (err && err.message ? err.message : err) +
+                        '  (probabile CORS: guarda la riga "immagine")';
+    cella.className = 'v ko';
+  });
+}
+function provaImmagine(url, cella) {
+  var t0 = Date.now();
+  var img = new Image();
+  var fatto = false;
+  var tmo = setTimeout(function () {
+    if (fatto) return; fatto = true;
+    cella.textContent = 'TIMEOUT > 15 s'; cella.className = 'v ko';
+  }, 15000);
+  img.onload = function () {
+    if (fatto) return; fatto = true; clearTimeout(tmo);
+    cella.textContent = 'OK  ' + img.width + 'x' + img.height + ' px  in ' + (Date.now() - t0) + ' ms';
+    cella.className = 'v ok';
+  };
+  img.onerror = function () {
+    if (fatto) return; fatto = true; clearTimeout(tmo);
+    cella.textContent = 'ERRORE di caricamento dopo ' + (Date.now() - t0) + ' ms';
+    cella.className = 'v ko';
+  };
+  img.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'cb=' + Date.now();
+}
+provaFetch(urlSat, cSatF);
+provaFetch(urlDem, cDemF);
+provaImmagine(urlSat, cSatI);
+provaImmagine(urlDem, cDemI);
+
+window.addEventListener('online',  function () { log('EVENTO rete: online');  });
+window.addEventListener('offline', function () { log('EVENTO rete: OFFLINE'); });
+
+/* ================================================================== *
+ * 4. TEST TOUCH — quali eventi arriva davvero a emettere webOS
+ * ================================================================== */
+var btnTest = document.querySelectorAll('.tt');
+var eventiDaTracciare = ['pointerdown', 'pointerup', 'touchstart', 'touchend',
+                         'mousedown', 'mouseup', 'click', 'dblclick'];
+function descrivi(ev) {
+  var s = ev.type;
+  if (ev.pointerType) s += ' pointerType=' + ev.pointerType;
+  if (typeof ev.pointerId === 'number') s += ' id=' + ev.pointerId;
+  if (ev.touches) s += ' touches=' + ev.touches.length + '/changed=' + ev.changedTouches.length;
+  if (typeof ev.pressure === 'number') s += ' pressure=' + ev.pressure.toFixed(2);
+  if (typeof ev.width === 'number') s += ' area=' + Math.round(ev.width) + 'x' + Math.round(ev.height);
+  return s;
+}
+for (var b = 0; b < btnTest.length; b++) {
+  (function (btn) {
+    var n = btn.getAttribute('data-n');
+    for (var j = 0; j < eventiDaTracciare.length; j++) {
+      btn.addEventListener(eventiDaTracciare[j], function (ev) {
+        log('BTN' + n + '  ' + descrivi(ev));
+      }, { passive: true });
+    }
+  })(btnTest[b]);
+}
+$('#b-clear').addEventListener('click', function () { $('#log').innerHTML = ''; });
+log('pronto — premi TEST 1/2/3 e osserva l’ordine degli eventi');
+
+/* ================================================================== *
+ * 5. MAPPA + FPS
+ * ================================================================== */
+var tMis = $('#t-misure');
+var mappa = null, mlVer = '—', mlMajor = 0;
+var rotazione = true, terrenoOn = true, prBasso = false;
+var bearing = 0, framePrec = 0, campioni = [];
+
+function nomap(msg) {
+  var d = $('#mappa');
+  d.innerHTML = '';
+  d.appendChild(el('div', 'nomap ko', msg));
+}
+
+function caricaScript(url, ok, ko) {
+  var s = document.createElement('script');
+  s.src = url; s.async = true;
+  s.onload = ok; s.onerror = ko;
+  document.head.appendChild(s);
+}
+function caricaCss(url) {
+  var l = document.createElement('link');
+  l.rel = 'stylesheet'; l.href = url;
+  document.head.appendChild(l);
+}
+
+/* MapLibre v5 richiede WebGL2. Se qui c'e' solo WebGL1 si carica la v4. */
+var range = gl2 ? '^5' : '^4';
+var cdn1 = 'https://unpkg.com/maplibre-gl@' + range + '/dist/maplibre-gl.';
+var cdn2 = 'https://cdn.jsdelivr.net/npm/maplibre-gl@' + range + '/dist/maplibre-gl.';
+
+if (!gl) {
+  nomap('Nessun contesto WebGL disponibile: MapLibre non puo’ partire. '
+      + 'Serve un ripiego non-WebGL (mappa a immagini statiche).');
+  aggiornaSommario();
+} else {
+  caricaCss(cdn1 + 'css');
+  caricaScript(cdn1 + 'js', avviaMappa, function () {
+    log('unpkg non raggiungibile, provo jsdelivr');
+    caricaCss(cdn2 + 'css');
+    caricaScript(cdn2 + 'js', avviaMappa, function () {
+      nomap('Impossibile scaricare MapLibre da unpkg e da jsdelivr: '
+          + 'la rete blocca i CDN oppure non c’e’ connessione.');
+      aggiornaSommario();
+    });
+  });
+}
+
+function avviaMappa() {
+  if (typeof maplibregl === 'undefined') { nomap('MapLibre caricato ma non inizializzato.'); return; }
+  try {
+    if (typeof maplibregl.getVersion === 'function') mlVer = maplibregl.getVersion();
+    else if (maplibregl.version) mlVer = maplibregl.version;
+  } catch (e) {}
+  mlMajor = parseInt(String(mlVer), 10) || 0;
+  log('MapLibre ' + mlVer + ' (richiesto ' + range + ')');
+
+  var supportato = true;
+  try { if (typeof maplibregl.supported === 'function') supportato = maplibregl.supported(); } catch (e) {}
+  if (!supportato) { nomap('maplibregl.supported() = false su questo browser.'); aggiornaSommario(); return; }
+
+  var stile = {
+    version: 8,
+    sources: {
+      sat: {
+        type: 'raster', tiles: [CONFIG.TILE_SAT], tileSize: 256,
+        maxzoom: 19, attribution: CONFIG.ATTRIB_SAT
+      },
+      dem: {
+        type: 'raster-dem', tiles: [CONFIG.TILE_DEM], tileSize: 256,
+        encoding: 'terrarium', maxzoom: CONFIG.DEM_MAXZOOM, attribution: CONFIG.ATTRIB_DEM
+      }
+    },
+    layers: [{ id: 'sat', type: 'raster', source: 'sat' }]
+  };
+
+  try {
+    mappa = new maplibregl.Map({
+      container: 'mappa',
+      style: stile,
+      center: CONFIG.TEST_CENTER,
+      zoom: CONFIG.TEST_ZOOM,
+      pitch: CONFIG.TEST_PITCH,
+      bearing: 0,
+      attributionControl: { compact: false },
+      maxPitch: 85,
+      antialias: false
+    });
+  } catch (e) {
+    nomap('Errore creando la mappa: ' + (e && e.message ? e.message : e));
+    aggiornaSommario();
+    return;
+  }
+
+  mappa.on('error', function (e) {
+    var m = (e && e.error && e.error.message) ? e.error.message : 'errore mappa';
+    log('MAPPA ERRORE: ' + m);
+  });
+
+  mappa.on('load', function () {
+    /* terreno 3D */
+    try {
+      mappa.setTerrain({ source: 'dem', exaggeration: 1.3 });
+      log('setTerrain OK');
+    } catch (e) {
+      terrenoOn = false;
+      log('setTerrain FALLITO: ' + (e && e.message ? e.message : e));
+    }
+    /* cielo: API diversa tra le versioni, quindi si tenta e si registra */
+    try {
+      if (typeof mappa.setSky === 'function') {
+        mappa.setSky({ 'sky-color': '#8fc6e8', 'horizon-color': '#dfeef7', 'fog-color': '#e6eef2', 'fog-ground-blend': 0.6 });
+        log('setSky OK');
+      } else {
+        mappa.addLayer({ id: 'cielo', type: 'sky', paint: { 'sky-type': 'atmosphere' } });
+        log('layer sky OK');
+      }
+    } catch (e) {
+      log('cielo non disponibile: ' + (e && e.message ? e.message : e));
+    }
+    misuraCampione();
+    aggiornaSommario();
+  });
+
+  /* pixelRatio: si verifica se l'API esiste in QUESTA versione, non si presume */
+  var haSetPR = (typeof mappa.setPixelRatio === 'function');
+  var bpr = $('#b-pr');
+  bpr.innerHTML = haSetPR ? 'pixelRatio<br>' + window.devicePixelRatio : 'pixelRatio<br>n.d.';
+  if (!haSetPR) { bpr.setAttribute('data-stato', 'off'); }
+  bpr.addEventListener('click', function () {
+    if (!haSetPR) { log('setPixelRatio NON esiste in MapLibre ' + mlVer); return; }
+    prBasso = !prBasso;
+    var v = prBasso ? 1 : window.devicePixelRatio;
+    try { mappa.setPixelRatio(v); log('setPixelRatio(' + v + ')'); }
+    catch (e) { log('setPixelRatio errore: ' + (e && e.message ? e.message : e)); }
+    bpr.innerHTML = 'pixelRatio<br>' + v;
+    bpr.setAttribute('data-stato', prBasso ? 'off' : 'on');
+  });
+
+  $('#b-terr').addEventListener('click', function () {
+    terrenoOn = !terrenoOn;
+    try {
+      mappa.setTerrain(terrenoOn ? { source: 'dem', exaggeration: 1.3 } : null);
+    } catch (e) { log('terreno: ' + (e && e.message ? e.message : e)); }
+    this.innerHTML = 'Terreno 3D<br>' + (terrenoOn ? 'ON' : 'OFF');
+    this.setAttribute('data-stato', terrenoOn ? 'on' : 'off');
+  });
+
+  $('#b-rot').addEventListener('click', function () {
+    rotazione = !rotazione;
+    this.innerHTML = 'Rotazione<br>' + (rotazione ? 'ON' : 'OFF');
+    this.setAttribute('data-stato', rotazione ? 'on' : 'off');
+  });
+
+  $('#b-mis').addEventListener('click', function () { misura(10); });
+
+  requestAnimationFrame(loop);
+}
+
+/* --- loop rAF: ruota la mappa e conta i frame --- */
+var frames = 0, tUltimo = 0, fpsIstante = 0, misurando = null;
+function loop(t) {
+  requestAnimationFrame(loop);
+  if (!tUltimo) tUltimo = t;
+  if (rotazione && mappa) {
+    bearing = (bearing + 0.35) % 360;
+    try { mappa.setBearing(bearing); } catch (e) {}
+  }
+  frames++;
+  var dt = t - tUltimo;
+  if (dt >= 500) {
+    fpsIstante = frames * 1000 / dt;
+    frames = 0; tUltimo = t;
+    $('#fps').textContent = 'FPS ' + fpsIstante.toFixed(1);
+    $('#fps').className = fpsIstante >= 45 ? 'ok' : (fpsIstante >= 25 ? 'warn' : 'ko');
+    $('#fps').style.fontSize = '1.6rem';
+    if (misurando) {
+      misurando.campioni.push(fpsIstante);
+      if (Date.now() >= misurando.fine) chiudiMisura();
+    }
+  }
+}
+function nomeScenario() {
+  return (terrenoOn ? 'terreno ON' : 'terreno OFF') +
+         ', rot ' + (rotazione ? 'ON' : 'OFF') +
+         ', pr ' + (prBasso ? '1' : String(window.devicePixelRatio));
+}
+function misura(secondi) {
+  if (misurando) return;
+  misurando = { campioni: [], fine: Date.now() + secondi * 1000, nome: nomeScenario() };
+  $('#fps-nota').textContent = 'misurazione ' + secondi + ' s in corso… (' + misurando.nome + ')';
+}
+function chiudiMisura() {
+  var c = misurando.campioni, nome = misurando.nome;
+  misurando = null;
+  $('#fps-nota').textContent = '';
+  if (!c.length) return;
+  var somma = 0, min = c[0], max = c[0];
+  for (var i = 0; i < c.length; i++) { somma += c[i]; if (c[i] < min) min = c[i]; if (c[i] > max) max = c[i]; }
+  var tr = document.createElement('tr');
+  tr.appendChild(el('td', 'k', nome));
+  var med = somma / c.length;
+  tr.appendChild(el('td', 'v ' + (med >= 45 ? 'ok' : (med >= 25 ? 'warn' : 'ko')),
+      'media ' + med.toFixed(1) + '   min ' + min.toFixed(1) + '   max ' + max.toFixed(1) + ' fps'));
+  tMis.appendChild(tr);
+  aggiornaSommario();
+}
+function misuraCampione() { setTimeout(function () { misura(10); }, 2500); }
+
+/* ================================================================== *
+ * 6. SOMMARIO in alto (quello che conta nella foto)
+ * ================================================================== */
+function aggiornaSommario() {
+  var parti = [];
+  parti.push('<span>' + window.innerWidth + '&times;' + window.innerHeight +
+             ' logici &nbsp;@ DPR ' + window.devicePixelRatio + '</span>');
+  parti.push('<span>WebGL2 <b class="' + (gl2 ? 'ok' : 'ko') + '">' + (gl2 ? 'SI' : 'NO') + '</b></span>');
+  parti.push('<span>MapLibre <b>' + mlVer + '</b></span>');
+  parti.push('<span>GPU <b>' + (rendererUnm.length > 46 ? rendererUnm.slice(0, 46) + '…' : rendererUnm) + '</b></span>');
+  parti.push('<span>touch <b class="' + (navigator.maxTouchPoints > 0 ? 'ok' : 'ko') + '">' +
+             navigator.maxTouchPoints + ' punti</b></span>');
+  var ultime = tMis.querySelectorAll('tr');
+  if (ultime.length) {
+    parti.push('<span>ultimo test: <b>' + ultime[ultime.length - 1].children[1].textContent + '</b></span>');
+  }
+  $('#sommario').innerHTML = parti.join('');
+}
+aggiornaSommario();
+setInterval(aggiornaSommario, 3000);
+
+/* piccoli lockdown, gia' utili qui: niente menu contestuale ne' drag immagini */
+document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+document.addEventListener('dragstart', function (e) { e.preventDefault(); });
+</script>
+</body>
+</html>
