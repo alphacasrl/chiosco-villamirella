@@ -39,11 +39,12 @@ var CONFIG = {
   },
   BASE_INIZIALE: 'sat',
 
-  /* Le scritte dei luoghi sulla mappa hanno bisogno di un server di
-     glifi (font in formato mappa). Questo e' quello pubblico di
-     MapLibre; se un giorno sparisse, le scritte sparirebbero ma cerchi
-     e schede continuerebbero a funzionare. */
-  GLIFI: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+  /* Le scritte dei luoghi sulla mappa hanno bisogno di glifi (font in
+     formato mappa). Sono OSPITATI IN LOCALE in assets/glifi: i server
+     pubblici limitano le richieste (provato: HTTP 429), e un chiosco
+     sempre acceso non puo' dipenderne. Coprono i caratteri latini che
+     servono all'italiano. */
+  GLIFI: location.origin + location.pathname.replace(/[^/]*$/, '') + 'assets/glifi/{fontstack}/{range}.pbf',
   FONT_MAPPA: ['Open Sans Semibold'],
 
   /* Rilievo 3D. TERRENO_MAXZOOM 12: piu' basso di quanto il servizio
