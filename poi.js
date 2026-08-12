@@ -854,7 +854,7 @@ window.LUOGHI = [
   {
     id: "grotte-pertosa",
     nome: "Grotte di Pertosa-Auletta",
-    categoria: "grotte",
+    categoria: "natura",
     lat: "40.537046",   lng: "15.455024",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
     sommario: "Se stai cercando un’esperienza indimenticabile durante la tua vacanza nel Cilento, le Grotte di Pertosa sono una tappa assolutamente imperdibile.",
