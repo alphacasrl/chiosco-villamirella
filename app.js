@@ -219,9 +219,10 @@ var mappa = null, erroriTile = 0, timerAvviso = null;
    Colonna sinistra
    ===================================================================== */
 function badgePren() {
+  /* verde con la spunta: e' una possibilita' in piu', non un vincolo */
   var b = el('span', 'badge-pren');
-  b.innerHTML = '<svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">' +
-    '<path d="M12 2a5 5 0 0 1 5 5v3h1.6v12H5.4V10H7V7a5 5 0 0 1 5-5zm3 8V7a3 3 0 1 0-6 0v3z" fill="currentColor"/></svg>' +
+  b.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">' +
+    '<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
     '<span>Prenotabile in reception</span>';
   return b;
 }
@@ -344,6 +345,7 @@ function apriDettaglio(v) {
       if (km !== null) riga('Distanza in linea d’aria', km.toFixed(1) + ' km');
     }
     if (d.tempoAuto) riga('In auto', d.tempoAuto);
+    if (d.lidi) riga('Lidi sulla spiaggia', d.lidi);
   } else if (v.tipo === 'esperienza') {
     var rif = d.luoghi || [], nomi = [];
     for (var i = 0; i < rif.length; i++) { var l = perId(rif[i]); if (l) nomi.push(l.nome); }
@@ -862,6 +864,102 @@ tocca($('#det-mappa'), function () {
   window.__assetta(null);
 });
 
+/* =====================================================================
+   SCHERMATA INIZIALE e PAGINE INFORMATIVE (contenuti in guida.js)
+   ===================================================================== */
+var GUIDA = window.GUIDA || { MATTONELLE: [], PAGINE: {}, benvenuto: {} };
+
+/* icone disegnate a mano: linee semplici, niente emoji (font incerti su webOS) */
+var ICONE = {
+  posti:      '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/>',
+  spiagge:    '<path d="M3 18c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><path d="M3 13.5c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><circle cx="17.5" cy="6" r="2.6"/>',
+  barca:      '<path d="M4 15h16l-2.5 4h-11z"/><path d="M12 4v11"/><path d="M12 5c4 1.5 6 4 6.5 8"/>',
+  sentiero:   '<path d="M5 20c6 0 2-7 8-7s2-7 6-7"/><circle cx="19" cy="4.5" r="1.6"/><circle cx="5" cy="20" r="1.6"/>',
+  ristorante: '<path d="M7 3v7M4.5 3v4.5a2.5 2.5 0 0 0 5 0V3"/><path d="M7 10v11"/><path d="M16 3c-2 1.5-2.7 5-2.7 8H16v10"/>',
+  negozio:    '<path d="M4 8l1.4-4h13.2L20 8"/><path d="M4 8h16v3a3 3 0 0 1-6 0 3 3 0 0 1-5 0 3 3 0 0 1-5 0z"/><path d="M6 13.5V20h12v-6.5"/>',
+  bus:        '<rect x="5" y="3.5" width="14" height="13" rx="2.4"/><path d="M5 9h14"/><circle cx="8.6" cy="19" r="1.6"/><circle cx="15.4" cy="19" r="1.6"/>',
+  chiave:     '<circle cx="8" cy="8" r="4.2"/><path d="M11 11l9 9"/><path d="M16.5 16.5l2.6-2.6M19 19l2-2"/>',
+  regole:     '<rect x="5" y="3" width="14" height="18" rx="1.8"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+  wifi:       '<path d="M3 9.5C8 4.8 16 4.8 21 9.5"/><path d="M6.2 13c3.4-3.2 8.2-3.2 11.6 0"/><path d="M9.4 16.4c1.6-1.5 3.6-1.5 5.2 0"/><circle cx="12" cy="19.4" r="1.4"/>',
+  faq:        '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1.1"/>',
+  telefono:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>'
+};
+function icona(nome) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+         'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+         (ICONE[nome] || ICONE.posti) + '</svg>';
+}
+
+function mostraHome(si) {
+  $('#home').setAttribute('aria-hidden', si ? 'false' : 'true');
+  if (si) mostraPagina(null);
+}
+function mostraPagina(id) {
+  var n = $('#pagina');
+  if (!id) { n.setAttribute('aria-hidden', 'true'); return; }
+  var p = GUIDA.PAGINE[id];
+  if (!p) return;
+  $('#pagina-titolo').textContent = p.titolo;
+  var corpo = $('#pagina-corpo');
+  vuota(corpo);
+  for (var i = 0; i < p.blocchi.length; i++) {
+    var b = p.blocchi[i];
+    if (b.t) corpo.appendChild(el('h3', null, b.t));
+    else if (b.p) corpo.appendChild(el('p', null, b.p));
+    else if (b.kv) {
+      for (var j = 0; j < b.kv.length; j++) {
+        var r = el('div', 'kv');
+        r.appendChild(el('b', null, b.kv[j][0]));
+        r.appendChild(el('span', null, b.kv[j][1]));
+        corpo.appendChild(r);
+      }
+    } else if (b.card) {
+      var c = el('div', 'card');
+      c.appendChild(el('b', null, b.card.nome));
+      if (b.card.dove) c.appendChild(el('div', 'dove', b.card.dove));
+      if (b.card.testo) c.appendChild(el('p', null, b.card.testo));
+      corpo.appendChild(c);
+    }
+  }
+  corpo.scrollTop = 0;
+  n.setAttribute('aria-hidden', 'false');
+  mostraHome(false);
+}
+function apriSezione(idGruppo) {
+  stato.gruppo = idGruppo;
+  chiudiDettaglio();
+  disegnaFiltri();
+  disegnaElenco();
+  aggiornaPoi();
+  panoramica();
+  mostraHome(false);
+  mostraPagina(null);
+}
+(function () {
+  var ben = GUIDA.benvenuto || {};
+  $('#home-titolo').textContent = ben.titolo || 'Benvenuto!';
+  $('#home-sotto').textContent = ben.sotto || '';
+  var griglia = $('#mattonelle');
+  var m = GUIDA.MATTONELLE || [];
+  for (var i = 0; i < m.length; i++) {
+    (function (v) {
+      var b = el('button', 'mattonella');
+      b.type = 'button';
+      var c = el('div', 'cerchio');
+      c.innerHTML = icona(v.icona);
+      b.appendChild(c);
+      b.appendChild(el('b', null, v.nome));
+      tocca(b, function () {
+        if (v.pagina) mostraPagina(v.pagina);
+        else if (v.sezione) apriSezione(v.sezione);
+      });
+      griglia.appendChild(b);
+    })(m[i]);
+  }
+  tocca($('#pagina-home'), function () { mostraHome(true); });
+  tocca($('#pagina-esplora'), function () { apriSezione(stato.gruppo); });
+})();
+
 /* ------------------------ RICOMINCIA ------------------------------ */
 function ricomincia() {
   /* cambiaBase() commuta: chiamarla solo se non siamo gia' sulla base iniziale */
@@ -881,6 +979,7 @@ function ricomincia() {
     mappa.easeTo({ bearing: 0, duration: 400 });
     panoramica();
   }
+  mostraHome(true);   /* si riparte dalla schermata di benvenuto */
 }
 tocca($('#reset'), ricomincia);
 

@@ -77,10 +77,10 @@ window.SEZIONI = [
 window.RESIDENCE = {
   nome: "Residence Villamirella",
   indirizzo: "Via Isca 2, 84051 Palinuro (SA)",
-  lat: 40.046475,
-  lng: 15.2985,
+  lat: 40.046969,
+  lng: 15.297435,
   verified: true,
-  notaCoordinate: "civico 1 di Via Isca, il piu' vicino mappato: il n.2 non e' in OpenStreetMap — spostalo sull'ingresso esatto"
+  notaCoordinate: "segnaposto Google Maps del Residence, dal link sulla pagina FAQ di villamirella.it"
 };
 
 /* ===================== I LUOGHI SULLA MAPPA ===================== */
@@ -107,7 +107,7 @@ window.LUOGHI = [
         estratto: "Le spiagge di Palinuro e Marina di Camerota si distinguono ogni anno per la loro eccellente qualità delle acque e per la pulizia delle loro coste nel cuore del Cilento ."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "5 min",
     inEvidenza: true
   },
   {
@@ -143,7 +143,8 @@ window.LUOGHI = [
         estratto: "A Palinuro, la spiaggia del Porto è una delle spiagge del Cilento più apprezzate per la trasparenza del mare. Il porto di Palinuro è un porto di piccole dimensioni che ospita piccoli yacht o pescherecci spesso di proprietà dei pescatori di Palinuro."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "5 min",
+    lidi: "Lido da Alessandro",
     inEvidenza: true
   },
   {
@@ -161,8 +162,9 @@ window.LUOGHI = [
         estratto: "La spiaggia della Marinella si trova di fronte al famoso Scoglio del Coniglio di Palinuro . Tra le spiagge di Palinuro , la spiaggia delle Marinella è quella più immersa nella natura incontaminata e nella macchina mediterranea."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "5 min",
     prenotabileInReception: true,
+    lidi: "Lido Marinella, Lido Orfeo",
     inEvidenza: true
   },
   {
@@ -171,10 +173,10 @@ window.LUOGHI = [
     categoria: "spiagge",
     lat: "40.025687",   lng: "15.291607",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia del Buondormire di mare», quella davanti allo Scoglio del Coniglio",
-    sommario: "",
+    sommario: "Protetta dalle rocce e raggiungibile solo in barca. Una delle spiagge più affascinanti e suggestive del Cilento. Questa baia, con la sua sabbia fine e dorata, è un vero gioiello naturale.",
     immagine: "",
     articoli: [],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "solo in barca",
     inEvidenza: true
   },
   {
@@ -192,7 +194,8 @@ window.LUOGHI = [
         estratto: "La spiaggia dell’Arco Naturale si trova a pochi passi dal fiume Mingardo che scorre a Palinuro. La spiaggia con il particolare arco naturale scavato nella roccia è uno dei simboli di Palinuro."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "5 min",
+    lidi: "Lido Lo Scoglio",
     inEvidenza: true
   },
   {
@@ -210,7 +213,7 @@ window.LUOGHI = [
         estratto: "Cala Bianca è una delle spiagge di Marina di Camerota che devi visitare se sei a Marina di Camerota. Nel 2013 Cala Bianca è stata eletta come la spiaggia più bella d’Italia , vincendo il sondaggio di Legambiente “la più bella sei tu”."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "25 min + 30 a piedi",
     inEvidenza: false
   },
   {
@@ -228,7 +231,7 @@ window.LUOGHI = [
         estratto: "La spiaggia del Pozzallo è una vera e propria spiaggia da cartolina. Il Pozzallo è una tappa irrinunciabile nel corso di una vacanza nel Cilento. La spiaggia di Pozzallo è un misto di ciottoli bianchi e sabbia."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "25 min + 15 a piedi",
     inEvidenza: false
   },
   {
@@ -251,7 +254,32 @@ window.LUOGHI = [
         estratto: "Il sentiero del Mediterraneo a Marina di Camerota è un percorso naturalistico situato nella parte meridionale del Parco Nazionale del Cilento, Vallo di Diano e Alburni, in Campania, Italia."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "30 min + 10 a piedi",
+    inEvidenza: false
+  },
+
+  {
+    id: "cala-del-cefalo",
+    nome: "Cala del Cefalo",
+    categoria: "spiagge",
+    lat: 40.022182,   lng: 15.324142,   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia Cala del Céfalo»",
+    sommario: "La spiaggia della Cala del Cefalo tra Palinuro e Marina di Camerota rappresenta uno dei tratti costieri più belli e ricchi di storia del Mediterraneo. Si tratta di una spiaggia di sabbia e ciottoli lunga circa 5 km.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "5 min",
+    inEvidenza: false
+  },
+  {
+    id: "la-calanca",
+    nome: "Spiaggia della Calanca",
+    categoria: "spiagge",
+    lat: 40.000492,   lng: 15.366057,   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia della Calanca»",
+    sommario: "Si trova praticamente all'inizio dell'abitato di Marina di Camerota. La spiaggia è sabbiosa e il suo fondale digrada molto lentamente e questo la rende ottima per i bambini.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "16 min",
     inEvidenza: false
   },
 
@@ -345,7 +373,7 @@ window.LUOGHI = [
         estratto: "Pisciotta domina dall'alto la costa che vada Capo Palinuro ad Ascea, arroccata su una collina per ragioni difensive. Gli abitanti potevano raggiungere la costa tramite un sentiero con scalinate ancora utilizzabili oggi."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "10 min",
     inEvidenza: false
   },
   {
@@ -476,7 +504,7 @@ window.LUOGHI = [
         estratto: "San Severino di Centola rappresenta una delle gemme nascoste della Campania. Situato lungo l'incantevole strada che porta a Palinuro, questo borgo abbandonato offre un'esperienza indimenticabile per gli amanti della natura e dell'arte."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "10 min",
     inEvidenza: false
   },
   {
@@ -530,7 +558,7 @@ window.LUOGHI = [
         estratto: "Marina di Pisciotta , nel cuore della Costa Cilentana in Campania , è una perla nascosta tra mare cristallino, tradizioni millenarie e paesaggi mozzafiato."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "15 min",
     inEvidenza: false
   },
   {
@@ -838,7 +866,7 @@ window.LUOGHI = [
         estratto: "Se stai cercando un’esperienza indimenticabile durante la tua vacanza nel Cilento, le Grotte di Pertosa sono una tappa assolutamente imperdibile."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "60 min",
     inEvidenza: false
   },
   {
@@ -930,7 +958,7 @@ window.LUOGHI = [
         estratto: "L’oasi WWF Grotte del Bussento a Morigerati è una splendida area protetta dal 1995 che si estende per circa 600 ettari all’interno del Parco Nazionale del Cilento e Vallo di Diano, principale geosito inserito all’interno della lista europea dei Geoparchi."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "50 min",
     inEvidenza: false
   },
   {
@@ -948,7 +976,7 @@ window.LUOGHI = [
         estratto: "Un'Oasi di pace, alla fine della Valle del Rio Casaletto, detta Oasi del Capello dove scorre la Cascata dei Capelli di Venere."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "60 min",
     inEvidenza: false
   },
   {
@@ -966,7 +994,7 @@ window.LUOGHI = [
         estratto: "Se vuoi trascorrere una giornata all'insegna della natura e vuoi far divertire i tuoi bambini con tante attività, ti consigliamo di visitare l'oasi naturalistica del fiume Alento a pochi chilometri da Agropoli e Santa Maria di Castellabate."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "50 min",
     inEvidenza: false
   },
   {
@@ -1020,7 +1048,7 @@ window.LUOGHI = [
         estratto: "Il Pianoro di Ciolandrea è stato trasformato dall'amministrazione comunale in un luogo di straordinaria bellezza, che attrae sia gli amanti della natura che i turisti in cerca di un'esperienza unica."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "40 min",
     inEvidenza: false
   },
 
@@ -1040,7 +1068,7 @@ window.LUOGHI = [
         estratto: "Il Museo Archeologico Nazionale di Paestum offre una panoramica completa sulla storia della città, presentando sezioni dedicate all'età preistorica e protostorica, alla fondazione greca di Poseidonia e alla colonia romana di Paestum."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "60 min",
     inEvidenza: false
   },
   {
@@ -1058,7 +1086,7 @@ window.LUOGHI = [
         estratto: "Questo territorio, situato nella parte meridionale della provincia di Salerno , è noto non solo per la sua natura incontaminata e le sue spiagge bandiera blu, ma anche per essere stato uno dei centri principali della Magna Grecia ."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "50 min",
     inEvidenza: false
   },
   {
@@ -1076,7 +1104,7 @@ window.LUOGHI = [
         estratto: "L' Antiquarium a Palinuro è una delle cose da vedere. L'ingresso al museo è gratuito e si possono ammirare reperti archeologici che fanno capire e scoprire l'antica storia di Palinuro."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "15 min a piedi",
     inEvidenza: false
   },
   {
@@ -1094,7 +1122,7 @@ window.LUOGHI = [
         estratto: "La Certosa di Padula, conosciuta anche come Certosa di San Lorenzo, rappresenta il più grandioso monumento monastico del sud Italia e vanta il prestigioso riconoscimento di Patrimonio dell'Umanità dall'UNESCO."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "60 min",
     inEvidenza: false
   },
   {
@@ -1112,7 +1140,7 @@ window.LUOGHI = [
         estratto: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco."
       }
     ],
-    distanzaKm: "",   tempoAuto: "",
+    distanzaKm: "",   tempoAuto: "30 min",
     inEvidenza: false
   },
 

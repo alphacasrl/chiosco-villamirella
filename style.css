@@ -23,6 +23,12 @@
   --blu-scuro: #1a4263;
   --azzurro: #ddeaf6;
   --azzurro-velo: #eef4fa;
+  /* palette della guida cartacea (Canva) */
+  --crema: #f5eacf;
+  --crema-chiaro: #faf4e4;
+  --marrone: #9f7757;
+  --marrone-scuro: #4b2b17;
+  --verde-ok: #1e8a4c;
   --testo: #2c3c4a;
   --titolo: #040b11;
   --bianco: #fff;
@@ -67,12 +73,13 @@ img { -webkit-user-drag: none; user-drag: none; }
 .animato #pannello, .animato #mappa-lato { transition: width .32s ease, flex-basis .32s ease; }
 .solo-mappa #pannello { width: 0; }
 .solo-elenco #mappa-lato { flex: 0 0 0; }
+.solo-elenco #pannello { width: calc(100% - 2rem); }
 
 /* ============================ testata ============================= */
 #testata {
   display: flex; align-items: center; gap: .8rem;
-  padding: .7rem 1rem .6rem; background: var(--bianco);
-  border-bottom: 2px solid var(--azzurro);
+  padding: .7rem 1rem .6rem; background: var(--crema-chiaro);
+  border-bottom: 2px solid var(--crema);
 }
 #testata img { height: 2.2rem; width: auto; }
 #testata .scritte { min-width: 0; flex: 1; }
@@ -150,8 +157,9 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* etichetta "prenotabile in reception" */
 .badge-pren {
   display: inline-flex; align-items: center; gap: .3rem;
-  padding: .12rem .5rem; border-radius: 2rem;
-  background: var(--rosso); color: var(--bianco);
+  padding: .12rem .55rem; border-radius: 2rem;
+  background: #e7f5ec; color: var(--verde-ok);
+  border: 1px solid #b9dfc8;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .52rem;
   text-transform: uppercase; letter-spacing: .05em;
 }
@@ -228,18 +236,17 @@ img { -webkit-user-drag: none; user-drag: none; }
 
 /* pulsanti di ripristino quando una meta' e' chiusa */
 #riapri-elenco, #riapri-mappa {
-  position: absolute; top: .7rem; z-index: 4; display: none;
+  display: none;
   min-height: 3.2rem; padding: 0 1.1rem;
   background: var(--blu); color: var(--bianco); border: none; border-radius: .45rem;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
   box-shadow: var(--ombra); cursor: pointer;
 }
-#riapri-elenco { left: .7rem; }
+#riapri-elenco { position: absolute; left: .7rem; top: .7rem; z-index: 4; }
 .solo-mappa #riapri-elenco { display: block; }
 .solo-mappa #panoramica { top: 4.4rem; }
-/* quando resta solo l'elenco, il ripristino della mappa vive nel pannello */
-#riapri-mappa { right: .7rem; left: auto; }
-.solo-elenco #riapri-mappa { display: block; z-index: 7; }
+#riapri-mappa { position: absolute; right: .8rem; top: 5rem; z-index: 6; }
+.solo-elenco #riapri-mappa { display: block; }
 
 /* =========================== comandi mappa ======================== */
 #comandi {
@@ -316,3 +323,88 @@ img { -webkit-user-drag: none; user-drag: none; }
   border: 2px solid #235784 !important; border-top: none !important;
   color: #235784 !important; font-weight: 700 !important; font-size: 12px !important;
 }
+
+
+/* ===================== SCHERMATA INIZIALE ========================= */
+#home {
+  position: fixed; inset: 0; z-index: 20;
+  background: linear-gradient(180deg, var(--crema-chiaro), var(--crema));
+  display: flex; align-items: center; justify-content: center;
+  overflow-y: auto;
+}
+#home[aria-hidden="true"] { display: none; }
+#home-interno { width: min(60rem, 94%); text-align: center; padding: 1.2rem 0 1.6rem; }
+#home-logo { height: 3.4rem; margin-bottom: .4rem; }
+#home-titolo {
+  font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.9rem;
+  color: var(--marrone-scuro); letter-spacing: -.01em;
+}
+#home-sotto {
+  margin: .3rem auto 1.1rem; max-width: 34rem;
+  font-size: .8rem; line-height: 1.55; color: var(--marrone);
+}
+#mattonelle {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem;
+}
+.mattonella {
+  min-height: 7.2rem; padding: .8rem .6rem .7rem;
+  background: var(--bianco); border: 1px solid #e3d5b8; border-radius: .7rem;
+  box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .55rem;
+  cursor: pointer;
+}
+.mattonella:active { background: var(--crema); }
+.mattonella .cerchio {
+  width: 3.1rem; height: 3.1rem; border-radius: 50%;
+  background: var(--azzurro); color: var(--blu);
+  display: flex; align-items: center; justify-content: center;
+}
+.mattonella .cerchio svg { width: 1.7rem; height: 1.7rem; }
+.mattonella b {
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .72rem;
+  line-height: 1.25; color: var(--marrone-scuro);
+}
+#home-invito {
+  margin-top: 1.2rem; font-size: .66rem; color: var(--marrone);
+  text-transform: uppercase; letter-spacing: .12em;
+  font-family: Mulish, sans-serif; font-weight: 700;
+}
+
+/* ====================== PAGINA INFORMATIVA ======================== */
+#pagina {
+  position: fixed; inset: 0; z-index: 15;
+  background: var(--crema-chiaro);
+  display: flex; flex-direction: column;
+}
+#pagina[aria-hidden="true"] { display: none; }
+#pagina-testata {
+  flex: none; display: flex; align-items: center; gap: .8rem;
+  padding: .7rem 1rem; background: var(--bianco); border-bottom: 2px solid var(--crema);
+}
+#pagina-titolo {
+  flex: 1; text-align: center;
+  font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.15rem;
+  color: var(--marrone-scuro);
+}
+#pagina-corpo {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 1rem; width: min(46rem, 100%); margin: 0 auto;
+}
+#pagina-corpo h3 {
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .95rem;
+  color: var(--marrone-scuro); margin: 1.1rem 0 .4rem;
+}
+#pagina-corpo p { font-size: .8rem; line-height: 1.65; margin: 0 0 .6rem; color: var(--testo); }
+#pagina-corpo .kv {
+  display: flex; gap: 1rem; padding: .5rem .7rem; margin-bottom: .3rem;
+  background: var(--bianco); border-radius: .45rem; font-size: .76rem;
+  border: 1px solid #eadfc6;
+}
+#pagina-corpo .kv b { font-family: Mulish, sans-serif; color: var(--marrone-scuro); flex: none; min-width: 9rem; }
+#pagina-corpo .card {
+  background: var(--bianco); border: 1px solid #eadfc6; border-radius: .55rem;
+  padding: .7rem .85rem; margin-bottom: .5rem; box-shadow: 0 1px 3px rgba(75,43,23,.07);
+}
+#pagina-corpo .card b { font-family: Mulish, sans-serif; font-size: .85rem; color: var(--marrone-scuro); }
+#pagina-corpo .card .dove { font-size: .62rem; color: var(--marrone); text-transform: uppercase; letter-spacing: .04em; margin: .1rem 0 .25rem; }
+#pagina-corpo .card p { margin: 0; font-size: .73rem; }

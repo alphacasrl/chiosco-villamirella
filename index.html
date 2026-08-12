@@ -7,9 +7,30 @@
 <meta name="format-detection" content="telephone=no">
 <title>Villamirella — Palinuro e il Cilento</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=202608121224">
+<link rel="stylesheet" href="style.css?v=202608121245">
 </head>
 <body>
+
+<!-- ============ SCHERMATA INIZIALE (stile guida cartacea) ============ -->
+<div id="home" aria-hidden="false">
+  <div id="home-interno">
+    <img id="home-logo" src="assets/logo-villamirella.svg" alt="Villamirella">
+    <h1 id="home-titolo"></h1>
+    <p id="home-sotto"></p>
+    <div id="mattonelle"></div>
+    <p id="home-invito">Tocca un riquadro per cominciare</p>
+  </div>
+</div>
+
+<!-- ================= PAGINA INFORMATIVA (dalla guida) ================= -->
+<div id="pagina" aria-hidden="true">
+  <header id="pagina-testata">
+    <button class="bt chiaro" id="pagina-home" type="button">‹ Tutte le sezioni</button>
+    <h2 id="pagina-titolo"></h2>
+    <button class="bt" id="pagina-esplora" type="button">Mappa e luoghi</button>
+  </header>
+  <div id="pagina-corpo"></div>
+</div>
 
 <div id="app">
 
@@ -29,6 +50,8 @@
         <span>Ricomincia</span>
       </button>
     </header>
+
+    <button id="riapri-mappa" type="button">Mostra la mappa ›</button>
 
     <nav id="filtri" aria-label="Sezioni"></nav>
 
@@ -75,9 +98,8 @@
     <div id="mappa"></div>
 
     <button id="panoramica" type="button">Torna alla panoramica</button>
-    <!-- ripristino quando una meta' e' collassata -->
+    <!-- ripristino quando l'elenco e' a tutto schermo -->
     <button id="riapri-elenco" type="button">› Mostra l'elenco</button>
-    <button id="riapri-mappa" type="button">‹ Mostra la mappa</button>
 
     <div id="comandi">
       <button class="cmd grande" id="cmd-base" type="button">Mappa</button>
@@ -107,10 +129,11 @@
 
 </div>
 
-<script src="poi.js?v=202608121224"></script>
-<script src="parco.js?v=202608121224"></script>
-<script src="percorsi.js?v=202608121224"></script>
+<script src="guida.js?v=202608121245"></script>
+<script src="poi.js?v=202608121245"></script>
+<script src="parco.js?v=202608121245"></script>
+<script src="percorsi.js?v=202608121245"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
-<script src="app.js?v=202608121224"></script>
+<script src="app.js?v=202608121245"></script>
 </body>
 </html>
