@@ -111,7 +111,7 @@ var TESTI = {
     itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
     ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
     lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
-    meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni'
+    meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni', meteoOggi: 'oggi', meteoUmidita: 'umidità', meteoIndietro: '‹ Tutte le previsioni'
   },
   en: {
     inizio: 'Home', tutteSezioni: '‹ All sections',
@@ -135,7 +135,7 @@ var TESTI = {
     itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
     ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
     lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
-    meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days'
+    meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days', meteoOggi: 'today', meteoUmidita: 'humidity', meteoIndietro: '‹ All forecasts'
   }
 };
 var lingua = 'it';
@@ -1388,39 +1388,39 @@ function meteoPagina() {
     var ora = el('div', 'meteo-adesso');
     ora.innerHTML = '<span class="grande-icona">' + icona(vc.icona) + '</span>' +
       '<div><b>' + Math.round(cur.temperature_2m) + '\u00b0C \u00b7 ' + T2(vc.it, vc.en) + '</b>' +
-      '<span>' + TXT('meteoOra') + ' \u00b7 ' + TXT('meteoVento') + ' ' + Math.round(cur.wind_speed_10m) + ' km/h</span></div>';
+      '<span>' + TXT('meteoOra') + ' \u00b7 ' + TXT('meteoVento') + ' ' + Math.round(cur.wind_speed_10m) + ' km/h' +
+      (cur.relative_humidity_2m !== undefined ? ' · ' + TXT('meteoUmidita') + ' ' + cur.relative_humidity_2m + '%' : '') + '</span></div>';
     corpo.appendChild(ora);
-    /* ora per ora: le prossime 24, in striscia scorrevole */
+    /* le prossime 24 ore, dall'ora corrente in avanti */
     var hh = METEO.dati.hourly;
     if (hh && hh.time && hh.time.length) {
       corpo.appendChild(el('h3', null, TXT('meteoOre')));
-      var striscia = el('div', 'meteo-ore');
-      for (var k = 0; k < hh.time.length; k++) {
-        var vo = meteoVoce(hh.weather_code[k]);
-        var cella = el('div', 'meteo-cella');
-        var pp = hh.precipitation_probability ? hh.precipitation_probability[k] : null;
-        cella.innerHTML = '<b>' + hh.time[k].slice(11, 16) + '</b>' +
-          '<span class="cella-icona">' + icona(vo.icona) + '</span>' +
-          '<span class="cella-gradi">' + Math.round(hh.temperature_2m[k]) + '°</span>' +
-          (pp !== null && pp > 15 ? '<span class="cella-pioggia">' + pp + '%</span>' : '<span class="cella-pioggia"></span>');
-        striscia.appendChild(cella);
+      var da = 0;
+      if (cur.time) {
+        for (var q = 0; q < hh.time.length; q++) { if (hh.time[q] >= cur.time) { da = q; break; } }
       }
-      corpo.appendChild(striscia);
+      corpo.appendChild(strisciaOre(da, 24));
     }
     corpo.appendChild(el('h3', null, TXT('meteoGiorni')));
+    var oggi = cur.time ? cur.time.slice(0, 10) : '';
     for (var i = 0; i < d.time.length; i++) {
       var g = new Date(d.time[i] + 'T12:00:00');
       var nome = g.toLocaleDateString(lingua === 'it' ? 'it-IT' : 'en-GB', { weekday: 'long' });
       nome = nome.charAt(0).toUpperCase() + nome.slice(1);
       var vg = meteoVoce(d.weather_code[i]);
       var r = el('div', 'meteo-riga');
+      var eOggi = d.time[i] === oggi;
       r.innerHTML = '<span class="kv-icona">' + icona(vg.icona) + '</span>' +
-        '<b>' + nome + '</b>' +
+        '<b>' + nome + (eOggi ? ' <em class="oggi">' + TXT('meteoOggi') + '</em>' : '') + '</b>' +
         '<span class="descr">' + T2(vg.it, vg.en) + '</span>' +
         '<span class="gradi">' + Math.round(d.temperature_2m_min[i]) + '\u00b0 / ' +
         Math.round(d.temperature_2m_max[i]) + '\u00b0</span>' +
         '<span class="pioggia">' + (d.precipitation_probability_max[i] !== null
           ? TXT('meteoPioggia') + ' ' + d.precipitation_probability_max[i] + '%' : '') + '</span>';
+      /* un tocco sul giorno apre il suo dettaglio ora per ora */
+      (function (giorno, etichetta) {
+        tocca(r, function () { meteoGiorno(giorno, etichetta); });
+      })(d.time[i], nome + (eOggi ? ' \u00b7 ' + TXT('meteoOggi') : ''));
       corpo.appendChild(r);
     }
     corpo.appendChild(el('p', 'meteo-fonte', TXT('meteoFonte')));
@@ -1429,12 +1429,50 @@ function meteoPagina() {
   n.setAttribute('aria-hidden', 'false');
   mostraHome(false);
 }
+/* una striscia di celle orarie da hh[da], per n ore */
+function strisciaOre(da, n) {
+  var hh = METEO.dati.hourly;
+  var striscia = el('div', 'meteo-ore');
+  var fine = Math.min(da + n, hh.time.length);
+  for (var k = da; k < fine; k++) {
+    var vo = meteoVoce(hh.weather_code[k]);
+    var pp = hh.precipitation_probability ? hh.precipitation_probability[k] : null;
+    var um = hh.relative_humidity_2m ? hh.relative_humidity_2m[k] : null;
+    var cella = el('div', 'meteo-cella');
+    cella.innerHTML = '<b>' + hh.time[k].slice(11, 16) + '</b>' +
+      '<span class="cella-icona">' + icona(vo.icona) + '</span>' +
+      '<span class="cella-gradi">' + Math.round(hh.temperature_2m[k]) + '°</span>' +
+      '<span class="cella-pioggia">' + (pp !== null && pp > 15 ? pp + '%' : '') + '</span>' +
+      '<span class="cella-umidita">' + (um !== null ? um + '%' : '') + '</span>';
+    striscia.appendChild(cella);
+  }
+  return striscia;
+}
+/* il dettaglio orario del giorno scelto dall'elenco */
+function meteoGiorno(giorno, etichetta) {
+  var hh = METEO.dati.hourly;
+  if (!hh || !hh.time) return;
+  var corpo = $('#pagina-corpo');
+  vuota(corpo);
+  var indietro = el('button', 'bt chiaro', TXT('meteoIndietro'));
+  indietro.type = 'button';
+  tocca(indietro, meteoPagina);
+  corpo.appendChild(indietro);
+  corpo.appendChild(el('h3', null, etichetta));
+  var da = -1;
+  for (var q = 0; q < hh.time.length; q++) {
+    if (hh.time[q].slice(0, 10) === giorno) { da = q; break; }
+  }
+  if (da >= 0) corpo.appendChild(strisciaOre(da, 24));
+  corpo.appendChild(el('p', 'meteo-fonte', TXT('meteoFonte')));
+  corpo.scrollTop = 0;
+}
 function meteoAggiorna() {
   var lat = (RESIDENCE && RESIDENCE.lat) || 40.047, lng = (RESIDENCE && RESIDENCE.lng) || 15.297;
   var u = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng +
-    '&current=temperature_2m,weather_code,wind_speed_10m' +
+    '&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m' +
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
-    '&hourly=temperature_2m,weather_code,precipitation_probability&forecast_hours=24' +
+    '&hourly=temperature_2m,weather_code,precipitation_probability,relative_humidity_2m' +
     '&timezone=Europe%2FRome&forecast_days=7';
   fetch(u).then(function (r) { return r.json(); }).then(function (d) {
     METEO.dati = d;
