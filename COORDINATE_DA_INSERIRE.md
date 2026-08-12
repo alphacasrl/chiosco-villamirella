@@ -1,69 +1,87 @@
-# Coordinate da inserire
+# Coordinate
 
-Ogni riga qui sotto corrisponde a una voce di `poi.js`. Prendi le coordinate
-da Google Maps (tasto destro sul punto → i due numeri in cima al menu),
-poi **incolla la riga pronta dentro `poi.js`** al posto di quella che c'è,
-e cambia `verified: false` in `verified: true`.
+Le coordinate sono state ricavate da **OpenStreetMap** (geocoder Nominatim),
+non scritte a mano. Ogni risultato è passato per tre filtri: deve cadere nel
+riquadro del Cilento, deve stare entro una distanza ragionevole dal paese di
+riferimento, e deve essere dell'**oggetto giusto** — una spiaggia deve risultare
+`natural/beach`, non un pontile o un campeggio che porta lo stesso nome.
 
-Finché `verified` è `false` il pin non compare sulla mappa: è voluto.
+Su 43 luoghi: **38 compilati e verificati**, **5 da fare a mano**
+perché OpenStreetMap restituiva un oggetto sbagliato.
 
-| fatto | luogo | categoria | riga da incollare in poi.js |
-|---|---|---|---|
-| ☐ | **Spiaggia delle Saline** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Spiaggia della Ficocella** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Spiaggia del Porto di Capo Palinuro** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Baia della Marinella** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Baia del Buon Dormire** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Spiaggia dell'Arco Naturale** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Cala Bianca** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Spiaggia del Pozzallo** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Porto e Baia degli Infreschi** | Spiagge e cale | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Palinuro** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Centola** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Marina di Camerota** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Pisciotta** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Scario** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Agropoli** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Ascea** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Morigerati** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Padula** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Felitto** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **San Severino di Centola** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Camerota** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Lentiscosa** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Marina di Pisciotta** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Santa Maria di Castellabate** | Borghi e paesi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Grotte di Capo Palinuro** | Grotte e mare | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Grotte di Pertosa-Auletta** | Grotte e mare | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Grotta della Cala** | Grotte e mare | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Grotta del Riparo del Poggio** | Grotte e mare | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Grotta della Serratura** | Grotte e mare | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Parco Nazionale del Cilento** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Oasi WWF di Morigerati** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Cascata dei Capelli di Venere** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Oasi e Diga Alento** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Collina della Molpa** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Monte Bulgheria** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Pianoro di Ciolandrea** | Natura e oasi | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Paestum** | Archeologia e musei | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Area archeologica di Velia** | Archeologia e musei | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Antiquarium di Palinuro** | Archeologia e musei | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Certosa di Padula** | Archeologia e musei | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Museo Ortega a Bosco** | Archeologia e musei | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Santuario del Sacro Monte di Novi Velia** | Santuari | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
-| ☐ | **Santuario di Pietrasanta** | Santuari | `lat: 00.000000,   lng: 00.000000,   verified: true,` |
+## Da fare a mano
+
+Su Google Maps: tasto destro sul punto, i due numeri in cima al menu. Il primo
+è `lat`, il secondo `lng`. Poi cambia `verified: false` in `verified: true`.
+
+| fatto | luogo | perché non è automatico |
+|---|---|---|
+| ☐ | **Spiaggia delle Saline** | Nominatim restituisce il Camping Saline, non la spiaggia |
+| ☐ | **Cala Bianca** | Nominatim restituisce il pontile del porto da cui partono le barche |
+| ☐ | **Porto e Baia degli Infreschi** | Nominatim restituisce un residence sul sentiero, non la baia |
+| ☐ | **Parco Nazionale del Cilento** | e' un'area di 180.000 ettari: un pin singolo sarebbe arbitrario |
+| ☐ | **Museo Ortega a Bosco** | trovato solo il paese di Bosco (40.072886, 15.457116), non il museo |
 
 ## Il residence
 
-Serve per calcolare le distanze e per centrare la mappa all'avvio.
-
-| fatto | punto | riga da incollare |
+| fatto | punto | stato |
 |---|---|---|
-| ☐ | **Residence Villamirella**, Via Isca 2, Palinuro | `lat: 00.000000,` poi `lng: 00.000000,` in `window.RESIDENCE` |
+| ☐ | **Residence Villamirella**, Via Isca 2 | coordinata a livello di strada già inserita, **da confermare**: spostala sull'ingresso esatto |
+
+Serve per centrare la mappa all'avvio e per calcolare le distanze.
+
+## Compilati in automatico — da controllare a campione
+
+Se un pin cade nel posto sbagliato, correggilo qui e aggiorna `notaCoordinate`,
+così resta scritto perché.
+
+| luogo | lat | lng | oggetto trovato su OpenStreetMap |
+|---|---|---|---|
+| Spiaggia della Ficocella | `40.03483` | `15.285596` | OpenStreetMap/Nominatim [beach] |
+| Spiaggia del Porto di Capo Palinuro | `40.029755` | `15.279269` | OpenStreetMap/Nominatim [beach] |
+| Baia della Marinella | `40.029621` | `15.297563` | OpenStreetMap/Nominatim [beach] |
+| Baia del Buon Dormire | `40.02726` | `15.292084` | OpenStreetMap/Nominatim [sand] |
+| Spiaggia dell'Arco Naturale | `40.030868` | `15.308354` | OpenStreetMap/Nominatim [attraction] |
+| Spiaggia del Pozzallo | `39.997172` | `15.407624` | OpenStreetMap/Nominatim [natural/beach] — corretta al secondo giro: la prima risposta era il pontile del porto |
+| Palinuro | `40.034602` | `15.287262` | OpenStreetMap/Nominatim [village] |
+| Centola | `40.066502` | `15.311963` | OpenStreetMap/Nominatim [administrative] |
+| Marina di Camerota | `40.000151` | `15.373751` | OpenStreetMap/Nominatim [village] |
+| Pisciotta | `40.108902` | `15.234561` | OpenStreetMap/Nominatim [administrative] |
+| Scario | `40.054283` | `15.492182` | OpenStreetMap/Nominatim [village] |
+| Agropoli | `40.346905` | `14.996553` | OpenStreetMap/Nominatim [administrative] |
+| Ascea | `40.141602` | `15.18576` | OpenStreetMap/Nominatim [administrative] |
+| Morigerati | `40.139949` | `15.555182` | OpenStreetMap/Nominatim [administrative] |
+| Padula | `40.341642` | `15.658254` | OpenStreetMap/Nominatim [administrative] |
+| Felitto | `40.373507` | `15.243058` | OpenStreetMap/Nominatim [administrative] |
+| San Severino di Centola | `40.089066` | `15.346276` | OpenStreetMap/Nominatim [hamlet] |
+| Camerota | `40.032501` | `15.372765` | OpenStreetMap/Nominatim [administrative] |
+| Lentiscosa | `40.020963` | `15.386612` | OpenStreetMap/Nominatim [village] |
+| Marina di Pisciotta | `40.10383` | `15.226383` | OpenStreetMap/Nominatim [village] |
+| Santa Maria di Castellabate | `40.285563` | `14.947901` | OpenStreetMap/Nominatim [village] |
+| Grotte di Capo Palinuro | `40.031346` | `15.268883` | OpenStreetMap/Nominatim [cave_entrance] |
+| Grotte di Pertosa-Auletta | `40.537046` | `15.455024` | OpenStreetMap/Nominatim [cave_entrance] |
+| Grotta della Cala | `40.000983` | `15.381251` | OpenStreetMap/Nominatim [cave_entrance] |
+| Grotta del Riparo del Poggio | `40.000809` | `15.382516` | OpenStreetMap/Nominatim [bare_rock] |
+| Grotta della Serratura | `39.999049` | `15.386788` | OpenStreetMap/Nominatim [natural/cave_entrance] — corretta al secondo giro: la prima risposta era la spiaggia di Lentiscelle |
+| Oasi WWF di Morigerati | `40.140611` | `15.552694` | OpenStreetMap/Nominatim [ticket] — biglietteria dell'oasi, cioe' l'ingresso per i visitatori |
+| Cascata dei Capelli di Venere | `40.15638` | `15.626426` | OpenStreetMap/Nominatim [waterfall] — OSM la chiama «Fontana Capello» — cascata a Casaletto Spartano |
+| Oasi e Diga Alento | `40.322114` | `15.126223` | OpenStreetMap/Nominatim [natural/water] — corretta al secondo giro: bacino dell'Alento (la prima era uno svincolo) |
+| Collina della Molpa | `40.033098` | `15.303533` | OpenStreetMap/Nominatim [historic/archaeological_site] — corretta al secondo giro: sito archeologico della Molpa |
+| Monte Bulgheria | `40.069769` | `15.43107` | OpenStreetMap/Nominatim [peak] |
+| Pianoro di Ciolandrea | `40.040255` | `15.457363` | OpenStreetMap/Nominatim [locality] |
+| Paestum | `40.421552` | `15.005321` | OpenStreetMap/Nominatim [archaeological_site] |
+| Area archeologica di Velia | `40.160937` | `15.15664` | OpenStreetMap/Nominatim [park] |
+| Antiquarium di Palinuro | `40.034413` | `15.285536` | OpenStreetMap/Nominatim [museum] |
+| Certosa di Padula | `40.337163` | `15.651678` | OpenStreetMap/Nominatim [monastery] |
+| Santuario del Sacro Monte di Novi Velia | `40.216677` | `15.335865` | OpenStreetMap/Nominatim [peak] — punto della vetta del Monte Gelbison, dove sorge il santuario |
+| Santuario di Pietrasanta | `40.047581` | `15.462548` | OpenStreetMap/Nominatim [place_of_worship] |
 
 ## Distanze e tempi (facoltativi)
 
-`distanzaKm` e `tempoAuto` sono vuoti perché il sito non li dichiara.
-Se li vuoi, si compilano a mano allo stesso modo: `distanzaKm: 12,` e
-`tempoAuto: "20 min",`. Lasciarli vuoti non rompe niente: la scheda
-semplicemente non mostra quella riga.
+`distanzaKm` e `tempoAuto` sono vuoti perché il sito non li dichiara. Si
+compilano a mano: `distanzaKm: 12,` e `tempoAuto: "20 min",`. Lasciarli vuoti
+non rompe niente: la scheda semplicemente non mostra quella riga.
+
+---
+
+Dati di localizzazione © OpenStreetMap contributors (ODbL).

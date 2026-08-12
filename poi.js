@@ -36,6 +36,14 @@
    mappa. Non e' un errore, e' voluto: meglio nessun pin che un pin
    sbagliato. La scheda testuale invece si vede lo stesso.
 
+   DA DOVE VENGONO LE COORDINATE GIA' PRESENTI
+   -------------------------------------------
+   Sono state ricavate da OpenStreetMap, non scritte a mano, e ognuna
+   porta in "notaCoordinate" il tipo di oggetto trovato (per esempio
+   natural/beach per una spiaggia). Le voci con lat: null sono quelle in
+   cui OpenStreetMap dava un oggetto sbagliato: la nota dice cosa dava.
+   Se sposti un pin, aggiorna anche la nota, cosi' resta scritto perche'.
+
    Le virgole contano: ogni riga finisce con una virgola tranne l'ultima
    di ogni blocco. Se la pagina resta bianca dopo una modifica, quasi
    sempre manca o avanza una virgola.
@@ -69,9 +77,10 @@ window.SEZIONI = [
 window.RESIDENCE = {
   nome: "Residence Villamirella",
   indirizzo: "Via Isca 2, 84051 Palinuro (SA)",
-  lat: null,
-  lng: null,
-  verified: false
+  lat: 40.048701,
+  lng: 15.299072,
+  verified: false,
+  notaCoordinate: "Via Isca a livello di strada, senza numero civico — DA CONFERMARE dal proprietario"
 };
 
 /* ===================== I LUOGHI SULLA MAPPA ===================== */
@@ -83,6 +92,7 @@ window.LUOGHI = [
     nome: "Spiaggia delle Saline",
     categoria: "spiagge",
     lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce il Camping Saline, non la spiaggia",
     sommario: "Entra in un'oasi di bellezza e tranquillità a Spiaggia Le Saline a Palinuro.",
     immagine: "assets/img/spiaggia-saline.jpg",
     articoli: [
@@ -104,7 +114,8 @@ window.LUOGHI = [
     id: "spiaggia-ficocella",
     nome: "Spiaggia della Ficocella",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.03483",   lng: "15.285596",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
     sommario: "La spiaggia della Ficocella è una delle più piccole spiaggia del Cilento. La spiaggia del Ficocella è anche l’unica spiaggia che si trova vicino al centro di Palinuro . La particolare conformazione di questa spiaggia di Palinuro la rende una delle più affascinanti spiagge della costiera cilentana.",
     immagine: "assets/img/spiaggia-ficocella.jpg",
     articoli: [
@@ -121,7 +132,8 @@ window.LUOGHI = [
     id: "spiaggia-porto",
     nome: "Spiaggia del Porto di Capo Palinuro",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.029755",   lng: "15.279269",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
     sommario: "A Palinuro, la spiaggia del Porto è una delle spiagge del Cilento più apprezzate per la trasparenza del mare. Il porto di Palinuro è un porto di piccole dimensioni che ospita piccoli yacht o pescherecci spesso di proprietà dei pescatori di Palinuro.",
     immagine: "assets/img/spiaggia-porto.jpg",
     articoli: [
@@ -138,7 +150,8 @@ window.LUOGHI = [
     id: "baia-marinella",
     nome: "Baia della Marinella",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.029621",   lng: "15.297563",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
     sommario: "La spiaggia della Marinella si trova di fronte al famoso Scoglio del Coniglio di Palinuro . Tra le spiagge di Palinuro , la spiaggia delle Marinella è quella più immersa nella natura incontaminata e nella macchina mediterranea.",
     immagine: "assets/img/baia-marinella.jpg",
     articoli: [
@@ -155,7 +168,8 @@ window.LUOGHI = [
     id: "buon-dormire",
     nome: "Baia del Buon Dormire",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.02726",   lng: "15.292084",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [sand]",
     sommario: "",
     immagine: "assets/img/buon-dormire.jpg",
     articoli: [],
@@ -166,7 +180,8 @@ window.LUOGHI = [
     id: "arco-naturale",
     nome: "Spiaggia dell'Arco Naturale",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.030868",   lng: "15.308354",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [attraction]",
     sommario: "La spiaggia dell’Arco Naturale si trova a pochi passi dal fiume Mingardo che scorre a Palinuro. La spiaggia con il particolare arco naturale scavato nella roccia è uno dei simboli di Palinuro.",
     immagine: "assets/img/arco-naturale.jpg",
     articoli: [
@@ -184,6 +199,7 @@ window.LUOGHI = [
     nome: "Cala Bianca",
     categoria: "spiagge",
     lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce il pontile del porto da cui partono le barche",
     sommario: "Cala Bianca è una delle spiagge di Marina di Camerota che devi visitare se sei a Marina di Camerota. Nel 2013 Cala Bianca è stata eletta come la spiaggia più bella d’Italia , vincendo il sondaggio di Legambiente “la più bella sei tu”.",
     immagine: "assets/img/cala-bianca.jpg",
     articoli: [
@@ -200,7 +216,8 @@ window.LUOGHI = [
     id: "spiaggia-pozzallo",
     nome: "Spiaggia del Pozzallo",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
+    lat: "39.997172",   lng: "15.407624",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [natural/beach] — corretta al secondo giro: la prima risposta era il pontile del porto",
     sommario: "La spiaggia del Pozzallo è una vera e propria spiaggia da cartolina. Il Pozzallo è una tappa irrinunciabile nel corso di una vacanza nel Cilento. La spiaggia di Pozzallo è un misto di ciottoli bianchi e sabbia.",
     immagine: "assets/img/spiaggia-pozzallo.jpg",
     articoli: [
@@ -218,6 +235,7 @@ window.LUOGHI = [
     nome: "Porto e Baia degli Infreschi",
     categoria: "spiagge",
     lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce un residence sul sentiero, non la baia",
     sommario: "Il Porto degli Infreschi, gioiello marino del Parco Nazionale del Cilento e Vallo di Diano , è un magnifico esempio di porto naturale. Le sue baie, le alte falesie rocciose e le grotte marine di quest’area protetta sono raggiungibili comodamente via mare con escursioni in barca.",
     immagine: "assets/img/porto-infreschi.webp",
     articoli: [
@@ -241,7 +259,8 @@ window.LUOGHI = [
     id: "palinuro",
     nome: "Palinuro",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.034602",   lng: "15.287262",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Palinuro, situato nel cuore del Parco Nazionale del Cilento e Vallo di Diano, è una rinomata località balneare del Cilento meridionale, con una costa intatta che offre meravigliose spiagge con sabbia bianca e rocce, insenature, baie e grotte marine.",
     immagine: "assets/img/palinuro.jpg",
     articoli: [
@@ -263,7 +282,8 @@ window.LUOGHI = [
     id: "centola",
     nome: "Centola",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.066502",   lng: "15.311963",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Centola è un comune della provincia di Salerno, situato nel cuore del Cilento, in Campania. La zona offre un paesaggio vario e incantevole, caratterizzato da una costa rocciosa e incontaminata, spiagge di sabbia finissima e un entroterra ricco di natura e cultura.",
     immagine: "assets/img/centola.webp",
     articoli: [
@@ -285,7 +305,8 @@ window.LUOGHI = [
     id: "marina-di-camerota",
     nome: "Marina di Camerota",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.000151",   lng: "15.373751",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Marina di Camerota si trova nella provincia di Salerno, nella regione meridionale del Parco Nazionale del Cilento e Vallo Di Diano.",
     immagine: "assets/img/marina-di-camerota.jpg",
     articoli: [
@@ -312,7 +333,8 @@ window.LUOGHI = [
     id: "pisciotta",
     nome: "Pisciotta",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.108902",   lng: "15.234561",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Pisciotta domina dall'alto la costa che vada Capo Palinuro ad Ascea, arroccata su una collina per ragioni difensive. Gli abitanti potevano raggiungere la costa tramite un sentiero con scalinate ancora utilizzabili oggi.",
     immagine: "assets/img/pisciotta.webp",
     articoli: [
@@ -329,7 +351,8 @@ window.LUOGHI = [
     id: "scario",
     nome: "Scario",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.054283",   lng: "15.492182",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Scopri Scario, uno dei gioielli del Cilento, un incantevole borgo marinaro situato nel comune di San Giovanni a Piro, affacciato sul Golfo di Policastro. Questo piccolo angolo di paradiso è la destinazione perfetta per gli amanti della natura, del mare cristallino e dell'ospitalità campana.",
     immagine: "assets/img/scario.webp",
     articoli: [
@@ -351,7 +374,8 @@ window.LUOGHI = [
     id: "agropoli",
     nome: "Agropoli",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.346905",   lng: "14.996553",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Agropoli è una città costiera situata in Campania, in Italia, nota per la sua posizione privilegiata sul mar Tirreno e la sua storia antica.",
     immagine: "assets/img/agropoli.jpg",
     articoli: [
@@ -368,7 +392,8 @@ window.LUOGHI = [
     id: "ascea",
     nome: "Ascea",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.141602",   lng: "15.18576",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Ascea è un comune italiano della provincia di Salerno, situato nella regione della Campania. Si trova sulla costa del Mar Tirreno e fa parte del Parco nazionale del Cilento, Vallo di Diano e Alburni.",
     immagine: "assets/img/ascea.jpg",
     articoli: [
@@ -385,7 +410,8 @@ window.LUOGHI = [
     id: "morigerati",
     nome: "Morigerati",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.139949",   lng: "15.555182",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Morigerati è un comune italiano situato nella provincia di Salerno, in Campania. Il paese si trova nella regione del Cilento, un'area conosciuta per le sue bellezze naturali e la tradizione culturale.",
     immagine: "assets/img/morigerati.jpg",
     articoli: [
@@ -402,7 +428,8 @@ window.LUOGHI = [
     id: "padula",
     nome: "Padula",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.341642",   lng: "15.658254",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Il toponimo del borgo, che deriva dalla parola latina \"paludem\" ,suggerisce che in passato si estendeva una palude nella pianura sottostante. Nonostante ciò, la fondazione della città di Cosilinum , l'antica Padula, risale al XII secolo aC. La città fu inseguito occupata dai Lucani e dai Romani.",
     immagine: "assets/img/padula.webp",
     articoli: [
@@ -419,7 +446,8 @@ window.LUOGHI = [
     id: "felitto",
     nome: "Felitto",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.373507",   lng: "15.243058",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Il paese di Felitto è un'oasi di pace e bellezza naturale, situata nel cuore del Parco nazionale del Cilento, Vallo di Diano e Alburni. Con circa 1.200 abitanti, Felitto è un luogo accogliente e pieno di tradizioni, dove puoi immergerti nella natura e nella cultura del Cilento.",
     immagine: "assets/img/felitto.jpg",
     articoli: [
@@ -436,7 +464,8 @@ window.LUOGHI = [
     id: "san-severino",
     nome: "San Severino di Centola",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.089066",   lng: "15.346276",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [hamlet]",
     sommario: "San Severino di Centola rappresenta una delle gemme nascoste della Campania. Situato lungo l'incantevole strada che porta a Palinuro, questo borgo abbandonato offre un'esperienza indimenticabile per gli amanti della natura e dell'arte.",
     immagine: "assets/img/san-severino.jpg",
     articoli: [
@@ -453,7 +482,8 @@ window.LUOGHI = [
     id: "camerota",
     nome: "Camerota",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.032501",   lng: "15.372765",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [administrative]",
     sommario: "Camerota è un piccolo comune della provincia di Salerno, in Campania. Si trova nel cuore del Parco Nazionale del Cilento, un'area nota per le sue bellezze naturali e la sua ricca storia.",
     immagine: "assets/img/camerota.jpg",
     articoli: [
@@ -470,7 +500,8 @@ window.LUOGHI = [
     id: "lentiscosa",
     nome: "Lentiscosa",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.020963",   lng: "15.386612",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Lentiscosa è un antico borgo medievale situato nel cuore del Parco Nazionale del Cilento, Vallo di Diano e Alburni, a pochi chilometri dal mare di Palinuro e da Marina di Camerota .",
     immagine: "assets/img/lentiscosa.jpg",
     articoli: [
@@ -487,7 +518,8 @@ window.LUOGHI = [
     id: "marina-di-pisciotta",
     nome: "Marina di Pisciotta",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.10383",   lng: "15.226383",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Marina di Pisciotta , nel cuore della Costa Cilentana in Campania , è una perla nascosta tra mare cristallino, tradizioni millenarie e paesaggi mozzafiato.",
     immagine: "assets/img/marina-di-pisciotta.webp",
     articoli: [
@@ -504,7 +536,8 @@ window.LUOGHI = [
     id: "santa-maria-castellabate",
     nome: "Santa Maria di Castellabate",
     categoria: "borghi",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.285563",   lng: "14.947901",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Due sono le vie d’accesso a Punta Licosa. La prima è una strada privata che si imbocca da Ogliastro Marina. Si tratta di una strada asfaltata e ben tenuta ma riservata ai soli residenti. Da San Marco di Castellabate c’è però un sentiero che conduce a questa oasi di tranquillità.",
     immagine: "assets/img/santa-maria-castellabate.jpg",
     articoli: [
@@ -523,7 +556,8 @@ window.LUOGHI = [
     id: "grotte-capo-palinuro",
     nome: "Grotte di Capo Palinuro",
     categoria: "grotte",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.031346",   lng: "15.268883",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
     sommario: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee .",
     immagine: "assets/img/grotte-capo-palinuro.jpg",
     articoli: [
@@ -545,7 +579,8 @@ window.LUOGHI = [
     id: "grotte-pertosa",
     nome: "Grotte di Pertosa-Auletta",
     categoria: "grotte",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.537046",   lng: "15.455024",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
     sommario: "Se stai cercando un’esperienza indimenticabile durante la tua vacanza nel Cilento, le Grotte di Pertosa sono una tappa assolutamente imperdibile.",
     immagine: "assets/img/grotte-pertosa.jpg",
     articoli: [
@@ -562,7 +597,8 @@ window.LUOGHI = [
     id: "grotta-della-cala",
     nome: "Grotta della Cala",
     categoria: "grotte",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.000983",   lng: "15.381251",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
     sommario: "La prima ad aprirsi, a pochi metri dal mare, è la Grotta della Cala. Composta da un’ante grotta e da un retro grotta, collegati da una strozzatura. La forma di questa caverna ricorda una clessidra.",
     immagine: "assets/img/grotta-della-cala.webp",
     articoli: [
@@ -579,7 +615,8 @@ window.LUOGHI = [
     id: "riparo-del-poggio",
     nome: "Grotta del Riparo del Poggio",
     categoria: "grotte",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.000809",   lng: "15.382516",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [bare_rock]",
     sommario: "Su uno sperone di natura calcarea, esse formavano in origine un’unica caverna. La cavità più piccola, corrispondente all’attuale Grotta, fungeva da drenaggio di una grotta enorme. L’uomo di Neanderthal trovava riparo al suo interno.",
     immagine: "assets/img/riparo-del-poggio.webp",
     articoli: [
@@ -596,7 +633,8 @@ window.LUOGHI = [
     id: "grotta-serratura",
     nome: "Grotta della Serratura",
     categoria: "grotte",
-    lat: null,   lng: null,   verified: false,
+    lat: "39.999049",   lng: "15.386788",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [natural/cave_entrance] — corretta al secondo giro: la prima risposta era la spiaggia di Lentiscelle",
     sommario: "quella della serratura di una porta. Abbastanza profonda, la grotta è stata abitata durante il Paleolitico superiore e il Neolitico.",
     immagine: "assets/img/grotta-serratura.webp",
     articoli: [
@@ -616,6 +654,7 @@ window.LUOGHI = [
     nome: "Parco Nazionale del Cilento",
     categoria: "natura",
     lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO — e' un'area di 180.000 ettari: un pin singolo sarebbe arbitrario",
     sommario: "Il Parco Nazionale del Cilento è un luogo ideale per chi cerca una vacanza immersi nella natura, nella storia e nel relax. La zona è ricca di siti archeologici di grande importanza come Paestum e Velia, due antiche città della Magna Grecia, e le grotte preistoriche di Marina di Camerota.",
     immagine: "assets/img/parco-nazionale.jpg",
     articoli: [
@@ -632,7 +671,8 @@ window.LUOGHI = [
     id: "oasi-morigerati",
     nome: "Oasi WWF di Morigerati",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.140611",   lng: "15.552694",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [ticket] — biglietteria dell'oasi, cioe' l'ingresso per i visitatori",
     sommario: "L’oasi WWF Grotte del Bussento a Morigerati è una splendida area protetta dal 1995 che si estende per circa 600 ettari all’interno del Parco Nazionale del Cilento e Vallo di Diano, principale geosito inserito all’interno della lista europea dei Geoparchi.",
     immagine: "assets/img/oasi-morigerati.jpg",
     articoli: [
@@ -649,7 +689,8 @@ window.LUOGHI = [
     id: "capelli-di-venere",
     nome: "Cascata dei Capelli di Venere",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.15638",   lng: "15.626426",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [waterfall] — OSM la chiama «Fontana Capello» — cascata a Casaletto Spartano",
     sommario: "Un'Oasi di pace, alla fine della Valle del Rio Casaletto, detta Oasi del Capello dove scorre la Cascata dei Capelli di Venere.",
     immagine: "assets/img/capelli-di-venere.jpg",
     articoli: [
@@ -666,7 +707,8 @@ window.LUOGHI = [
     id: "oasi-alento",
     nome: "Oasi e Diga Alento",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.322114",   lng: "15.126223",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [natural/water] — corretta al secondo giro: bacino dell'Alento (la prima era uno svincolo)",
     sommario: "Se vuoi trascorrere una giornata all'insegna della natura e vuoi far divertire i tuoi bambini con tante attività, ti consigliamo di visitare l'oasi naturalistica del fiume Alento a pochi chilometri da Agropoli e Santa Maria di Castellabate.",
     immagine: "assets/img/oasi-alento.jpg",
     articoli: [
@@ -683,7 +725,8 @@ window.LUOGHI = [
     id: "collina-molpa",
     nome: "Collina della Molpa",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.033098",   lng: "15.303533",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [historic/archaeological_site] — corretta al secondo giro: sito archeologico della Molpa",
     sommario: "Se sei in vacanza a Palinuro e ami la natura, non perdere l’occasione di fare trekking sulla Collina della Molpa , un vero gioiello naturalistico situato nel cuore del Parco Nazionale del Cilento .",
     immagine: "assets/img/collina-molpa.jpg",
     articoli: [
@@ -700,7 +743,8 @@ window.LUOGHI = [
     id: "monte-bulgheria",
     nome: "Monte Bulgheria",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.069769",   lng: "15.43107",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [peak]",
     sommario: "Una delle più belle montagne del Cilento, in verità non altissimo, ma con i suoi 1225m e una stupefacente posizione geografica, il Monte Bulgheria è una mano distesa che permette all’appennino di toccare il mare.",
     immagine: "assets/img/monte-bulgheria.webp",
     articoli: [
@@ -717,7 +761,8 @@ window.LUOGHI = [
     id: "pianoro-ciolandrea",
     nome: "Pianoro di Ciolandrea",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.040255",   lng: "15.457363",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [locality]",
     sommario: "Il Pianoro di Ciolandrea è stato trasformato dall'amministrazione comunale in un luogo di straordinaria bellezza, che attrae sia gli amanti della natura che i turisti in cerca di un'esperienza unica.",
     immagine: "assets/img/pianoro-ciolandrea.webp",
     articoli: [
@@ -736,7 +781,8 @@ window.LUOGHI = [
     id: "paestum",
     nome: "Paestum",
     categoria: "archeologia",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.421552",   lng: "15.005321",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [archaeological_site]",
     sommario: "Il Museo Archeologico Nazionale di Paestum offre una panoramica completa sulla storia della città, presentando sezioni dedicate all'età preistorica e protostorica, alla fondazione greca di Poseidonia e alla colonia romana di Paestum.",
     immagine: "assets/img/paestum.jpg",
     articoli: [
@@ -753,7 +799,8 @@ window.LUOGHI = [
     id: "velia",
     nome: "Area archeologica di Velia",
     categoria: "archeologia",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.160937",   lng: "15.15664",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [park]",
     sommario: "Questo territorio, situato nella parte meridionale della provincia di Salerno , è noto non solo per la sua natura incontaminata e le sue spiagge bandiera blu, ma anche per essere stato uno dei centri principali della Magna Grecia .",
     immagine: "assets/img/velia.jpg",
     articoli: [
@@ -770,7 +817,8 @@ window.LUOGHI = [
     id: "antiquarium",
     nome: "Antiquarium di Palinuro",
     categoria: "archeologia",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.034413",   lng: "15.285536",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [museum]",
     sommario: "L' Antiquarium a Palinuro è una delle cose da vedere. L'ingresso al museo è gratuito e si possono ammirare reperti archeologici che fanno capire e scoprire l'antica storia di Palinuro.",
     immagine: "assets/img/antiquarium.jpg",
     articoli: [
@@ -787,7 +835,8 @@ window.LUOGHI = [
     id: "certosa-padula",
     nome: "Certosa di Padula",
     categoria: "archeologia",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.337163",   lng: "15.651678",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [monastery]",
     sommario: "La Certosa di Padula, conosciuta anche come Certosa di San Lorenzo, rappresenta il più grandioso monumento monastico del sud Italia e vanta il prestigioso riconoscimento di Patrimonio dell'Umanità dall'UNESCO.",
     immagine: "assets/img/certosa-padula.jpg",
     articoli: [
@@ -805,6 +854,7 @@ window.LUOGHI = [
     nome: "Museo Ortega a Bosco",
     categoria: "archeologia",
     lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO — trovato solo il paese di Bosco (40.072886, 15.457116), non il museo",
     sommario: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco.",
     immagine: "assets/img/museo-ortega.jpg",
     articoli: [
@@ -823,7 +873,8 @@ window.LUOGHI = [
     id: "novi-velia",
     nome: "Santuario del Sacro Monte di Novi Velia",
     categoria: "santuari",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.216677",   lng: "15.335865",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [peak] — punto della vetta del Monte Gelbison, dove sorge il santuario",
     sommario: "Svettante sulla cima del monte Gelbison , a 1705 metri sul mare, il Santuario della Madonna del Sacro Monte di Novi Velia è il faro spirituale che irradia la sua luce esercitando una forte attrattiva sugli abitanti delle montagne e delle valli cilentane.",
     immagine: "assets/img/novi-velia.webp",
     articoli: [
@@ -840,7 +891,8 @@ window.LUOGHI = [
     id: "pietrasanta",
     nome: "Santuario di Pietrasanta",
     categoria: "santuari",
-    lat: null,   lng: null,   verified: false,
+    lat: "40.047581",   lng: "15.462548",   verified: true,
+    notaCoordinate: "OpenStreetMap/Nominatim [place_of_worship]",
     sommario: "Il Santuario della Madonna di Pietrasanta è un luogo di preghiera e di fede situato a pochi chilometri da San Giovanni a Piro, nel cuore del Parco Nazionale del Cilento, Vallo di Diano e Alburni. La costruzione del santuario risale al 1600 e la sua architettura è un esempio di barocco cilentano.",
     immagine: "assets/img/pietrasanta.webp",
     articoli: [
