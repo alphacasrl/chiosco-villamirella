@@ -67,7 +67,8 @@ var CONFIG = {
   /* colori dei pin per categoria (gli stessi delle etichette a sinistra) */
   COLORI: {
     spiagge: '#1a87c9', borghi: '#c96a2b', grotte: '#7057c9',
-    natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8'
+    natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8',
+    ristoranti: '#d64550', negozi: '#5b7d8c'
   },
   COLORE_SCELTO: '#dd350f',
   COLORE_CASA: '#dd350f',
@@ -76,7 +77,8 @@ var CONFIG = {
   PITCH_INCLINATO: 55,
   BORDO_PANORAMICA: 80,
 
-  IDLE_MS: 120000,      /* dopo 2 minuti fermi si ricomincia da capo */
+  IDLE_MS: 120000,      /* dopo 2 minuti fermi si torna alla schermata iniziale */
+  STANDBY_MS: 600000,   /* dopo 10 minuti parte il video di attesa */
   GRUPPO_INIZIALE: 'mare'
 };
 
@@ -146,6 +148,8 @@ function perId(id) {
   return null;
 }
 function nomeCategoria(id) {
+  if (id === 'ristoranti') return 'Ristorante';
+  if (id === 'negozi') return 'Negozio';
   for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) return CATEGORIE[i].nome;
   return id;
 }
@@ -174,8 +178,17 @@ function inEvidenza() {
   return r;
 }
 
+function spiaggeEMare() {
+  /* la gita in barca (prenotabile) apre la sezione, poi tutte le spiagge */
+  var r = [], i;
+  for (i = 0; i < ESPERIENZE.length; i++) if (ESPERIENZE[i].inEvidenza) r.push(voceEsp(ESPERIENZE[i]));
+  var prima = luoghiDiCategoria('spiagge').sort(function (a, b) {
+    return (b.dato.inEvidenza ? 1 : 0) - (a.dato.inEvidenza ? 1 : 0);
+  });
+  return r.concat(prima);
+}
 var GRUPPI = [
-  { id: 'mare',       nome: nomeSezione('mare', 'In primo piano'),   cat: null, voci: inEvidenza },
+  { id: 'mare',       nome: 'Spiagge e mare', cat: 'spiagge', voci: spiaggeEMare },
   { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'),   cat: null, voci: function () { return espDiTipo('itinerario'); } },
   { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), cat: null, voci: function () { return espDiTipo('esperienza'); } },
   { id: 'guide',      nome: nomeSezione('guide', 'Guide'),           cat: null, voci: function () { return espDiTipo('guida'); } }
@@ -183,10 +196,35 @@ var GRUPPI = [
 (function () {
   for (var i = 0; i < CATEGORIE.length; i++) {
     (function (c) {
+      if (c.id === 'spiagge') return;   /* fuse in "Spiagge e mare" */
       GRUPPI.push({ id: 'cat:' + c.id, nome: c.nome, cat: c.id,
                     voci: function () { return luoghiDiCategoria(c.id); } });
     })(CATEGORIE[i]);
   }
+  /* gruppi dalla guida: ristoranti e negozi georiferiti */
+  var G = window.GUIDA || {};
+  ['ristoranti', 'negozi'].forEach(function (pid) {
+    var pag = (G.PAGINE || {})[pid];
+    if (!pag || !pag.mappa) return;
+    var pseudo = [];
+    (pag.blocchi || []).forEach(function (b) {
+      if (!b.card) return;
+      pseudo.push({
+        id: 'g-' + pid + '-' + pseudo.length,
+        nome: b.card.nome, categoria: pid,
+        lat: (b.card.lat !== undefined ? b.card.lat : null),
+        lng: (b.card.lng !== undefined ? b.card.lng : null),
+        verified: b.card.lat !== undefined,
+        sommario: b.card.testo || '',
+        dove: b.card.dove || '',
+        immagine: b.card.foto || '',
+        articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
+      });
+    });
+    pseudo.forEach(function (l) { LUOGHI.push(l); });
+    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid,
+                  voci: function () { return pseudo.map(voceLuogo); } });
+  });
 })();
 
 function luoghiDelGruppo(g) {
@@ -330,6 +368,7 @@ function apriDettaglio(v) {
       if (km !== null) riga('Distanza in linea d’aria', km.toFixed(1) + ' km');
     }
     if (d.tempoAuto) riga('In auto', d.tempoAuto);
+    if (d.dove) riga('Dove', d.dove);
     if (d.lidi) riga('Lidi sulla spiaggia', d.lidi);
   } else if (v.tipo === 'esperienza') {
     var rif = d.luoghi || [], nomi = [];
@@ -699,13 +738,12 @@ function applicaTerreno() {
       mappa.setTerrain(null);
     }
   } catch (e) {}
-  $('#cmd-3d').className = 'cmd grande' + (stato.terreno ? ' acceso' : '');
+  var b3 = $('#cmd-3d');
+  b3.textContent = 'Vista 3D';
+  b3.className = 'cmd grande' + (stato.terreno ? ' acceso' : '');
 }
 
 function applicaVista() {
-  /* il pulsante dice DOVE SI VA, non dove si e' */
-  $('#cmd-vista').textContent = stato.inclinata ? "Vista dall'alto" : 'Vista inclinata';
-  $('#cmd-vista').className = 'cmd grande' + (stato.inclinata ? ' acceso' : '');
   if (mappa && stato.mappaPronta) {
     mappa.easeTo({ pitch: stato.inclinata ? CONFIG.PITCH_INCLINATO : 0, duration: 700 });
   }
@@ -837,8 +875,12 @@ function aggiornaBussola() {
    Comandi
    ===================================================================== */
 tocca($('#cmd-base'), cambiaBase);
-tocca($('#cmd-3d'), function () { stato.terreno = !stato.terreno; applicaTerreno(); });
-tocca($('#cmd-vista'), function () { stato.inclinata = !stato.inclinata; applicaVista(); });
+tocca($('#cmd-3d'), function () {
+  stato.terreno = !stato.terreno;
+  stato.inclinata = stato.terreno;   /* rilievo e inclinazione vanno insieme */
+  applicaTerreno();
+  applicaVista();
+});
 tocca($('#cmd-piu'),  function () { if (mappa) mappa.zoomIn({ duration: 400 }); });
 tocca($('#cmd-meno'), function () { if (mappa) mappa.zoomOut({ duration: 400 }); });
 tocca($('#cmd-casa'), vaiAlResidence);
@@ -904,6 +946,13 @@ function mostraPagina(id) {
         r.appendChild(el('span', null, b.kv[j][1]));
         corpo.appendChild(r);
       }
+    } else if (b.img) {
+      var fig = el('div', 'figura');
+      var fim = el('img');
+      fim.src = b.img; fim.alt = '';
+      fig.appendChild(fim);
+      if (b.didascalia) fig.appendChild(el('p', null, b.didascalia));
+      corpo.appendChild(fig);
     } else if (b.card) {
       var c = el('div', 'card');
       c.appendChild(el('b', null, b.card.nome));
@@ -932,25 +981,37 @@ function apriSezione(idGruppo) {
   $('#home-sotto').textContent = ben.sotto || '';
   var griglia = $('#mattonelle');
   var m = GUIDA.MATTONELLE || [];
+  var fascia = null;
   for (var i = 0; i < m.length; i++) {
-    if (m[i].gruppo) { griglia.appendChild(el('div', 'gruppo-mattonelle', m[i].gruppo)); continue; }
+    if (m[i].gruppo) {
+      griglia.appendChild(el('div', 'gruppo-mattonelle', m[i].gruppo));
+      fascia = el('div', 'fascia');
+      griglia.appendChild(fascia);
+      continue;
+    }
     (function (v) {
       var b = el('button', 'mattonella');
       b.type = 'button';
       var c = el('div', 'cerchio');
-      c.innerHTML = icona(v.icona);
+      if (v.img) {
+        var im = el('img');
+        im.src = v.img; im.alt = '';
+        c.appendChild(im);
+        c.className = 'cerchio con-img';
+      } else {
+        c.innerHTML = icona(v.icona);
+      }
       b.appendChild(c);
       b.appendChild(el('b', null, v.nome));
       tocca(b, function () {
         if (v.pagina) mostraPagina(v.pagina);
         else if (v.sezione) apriSezione(v.sezione);
       });
-      griglia.appendChild(b);
+      (fascia || griglia).appendChild(b);
     })(m[i]);
   }
   tocca($('#pagina-home'), function () { mostraHome(true); });
   tocca($('#sez-home'), function () { chiudiDettaglio(); mostraHome(true); });
-  tocca($('#pagina-esplora'), function () { apriSezione(stato.gruppo); });
 })();
 
 /* ------------------------ RICOMINCIA ------------------------------ */
@@ -976,12 +1037,27 @@ function ricomincia() {
 }
 tocca($('#reset'), ricomincia);
 
-/* dopo 2 minuti senza tocchi si riparte da capo, da soli */
+/* 2 minuti fermi -> schermata iniziale; 10 minuti -> video di attesa */
 (function () {
-  var t = null;
+  var t = null, ts = null;
+  var standby = $('#standby'), video = $('#standby-video');
+  function entraStandby() {
+    ricomincia();
+    standby.setAttribute('aria-hidden', 'false');
+    if (video) { try { video.currentTime = 0; var p = video.play(); if (p && p['catch']) p['catch'](function(){}); } catch (e) {} }
+  }
+  function esciStandby() {
+    if (standby.getAttribute('aria-hidden') === 'false') {
+      standby.setAttribute('aria-hidden', 'true');
+      if (video) { try { video.pause(); } catch (e) {} }
+    }
+  }
   function azzera() {
+    esciStandby();
     if (t) clearTimeout(t);
+    if (ts) clearTimeout(ts);
     t = setTimeout(ricomincia, CONFIG.IDLE_MS);
+    ts = setTimeout(entraStandby, CONFIG.STANDBY_MS);
   }
   ['pointerdown', 'pointerup', 'wheel', 'touchstart'].forEach(function (ev) {
     document.addEventListener(ev, azzera, { passive: true });

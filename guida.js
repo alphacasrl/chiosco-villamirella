@@ -28,25 +28,24 @@ window.GUIDA = {
      "gruppo" crea un'intestazione sopra il blocco di mattonelle. */
   MATTONELLE: [
     { gruppo: "Esplora il territorio" },
-    { id: "mare",        nome: "Il mare di Palinuro",   icona: "barca",      sezione: "mare" },
-    { id: "spiagge",     nome: "Spiagge e cale",        icona: "spiagge",    sezione: "cat:spiagge" },
-    { id: "borghi",      nome: "Borghi e paesi",        icona: "posti",      sezione: "cat:borghi" },
-    { id: "grotte",      nome: "Grotte e mare",         icona: "grotta",     sezione: "cat:grotte" },
-    { id: "natura",      nome: "Natura e oasi",         icona: "natura",     sezione: "cat:natura" },
-    { id: "archeologia", nome: "Archeologia e musei",   icona: "tempio",     sezione: "cat:archeologia" },
-    { id: "santuari",    nome: "Santuari",              icona: "santuario",  sezione: "cat:santuari" },
-    { id: "itinerari",   nome: "Itinerari",             icona: "sentiero",   sezione: "itinerari" },
-    { id: "esperienze",  nome: "Esperienze",            icona: "stella",     sezione: "esperienze" },
-    { id: "guide",       nome: "Guide",                 icona: "libro",      sezione: "guide" },
+    { id: "mare",        nome: "Spiagge e mare",    img: "assets/icone/spiagge.png",           sezione: "mare" },
+    { id: "borghi",      nome: "Borghi e paesi",    img: "assets/icone/posti-da-visitare.png", sezione: "cat:borghi" },
+    { id: "grotte",      nome: "Grotte",            icona: "grotta",                           sezione: "cat:grotte" },
+    { id: "natura",      nome: "Natura e oasi",     icona: "natura",                           sezione: "cat:natura" },
+    { id: "archeologia", nome: "Archeologia",       icona: "tempio",                           sezione: "cat:archeologia" },
+    { id: "santuari",    nome: "Santuari",          icona: "santuario",                        sezione: "cat:santuari" },
+    { id: "itinerari",   nome: "Itinerari",         img: "assets/icone/indicazioni-stradali.png", sezione: "itinerari" },
+    { id: "esperienze",  nome: "Esperienze",        icona: "stella",                           sezione: "esperienze" },
+    { id: "guide",       nome: "Guide",             icona: "libro",                            sezione: "guide" },
     { gruppo: "Il tuo soggiorno" },
-    { id: "checkin",     nome: "Check-in e check-out",  icona: "chiave",     pagina: "checkin" },
-    { id: "wifi",        nome: "WiFi",                  icona: "wifi",       pagina: "wifi" },
-    { id: "regole",      nome: "Regole della casa",     icona: "regole",     pagina: "regole" },
-    { id: "ristoranti",  nome: "Ristoranti",            icona: "ristorante", pagina: "ristoranti" },
-    { id: "negozi",      nome: "Supermercati e negozi", icona: "negozio",    pagina: "negozi" },
-    { id: "muoversi",    nome: "Come muoversi",         icona: "bus",        pagina: "muoversi" },
-    { id: "faq",         nome: "Domande frequenti",     icona: "faq",        pagina: "faq" },
-    { id: "contatti",    nome: "Contatti",              icona: "telefono",   pagina: "contatti" }
+    { id: "checkin",     nome: "Check-in / out",    img: "assets/icone/check-in-out.png",      pagina: "checkin" },
+    { id: "wifi",        nome: "WiFi",              img: "assets/icone/wifi.png",              pagina: "wifi" },
+    { id: "regole",      nome: "Regole della casa", img: "assets/icone/regole-della-casa.png", pagina: "regole" },
+    { id: "ristoranti",  nome: "Ristoranti",        img: "assets/icone/ristoranti.png",        sezione: "g:ristoranti" },
+    { id: "negozi",      nome: "Negozi",            img: "assets/icone/supermercati.png",      sezione: "g:negozi" },
+    { id: "muoversi",    nome: "Come muoversi",     img: "assets/icone/come-muoversi.png",     pagina: "muoversi" },
+    { id: "faq",         nome: "Domande frequenti", img: "assets/icone/faq.png",               pagina: "faq" },
+    { id: "contatti",    nome: "Contatti",          icona: "telefono",                         pagina: "contatti" }
   ],
 
   PAGINE: {
@@ -65,6 +64,7 @@ window.GUIDA = {
       titolo: "Rete WiFi",
       blocchi: [
         { kv: [["Nome della rete", "primulapalinuri"], ["Password", "VMresidence"]] },
+        { img: "assets/wifi-qr.png", didascalia: "Inquadra il codice con la fotocamera del telefono per collegarti subito." },
         { p: "La rete copre gli alloggi e le aree comuni del residence." }
       ]
     },
@@ -109,45 +109,47 @@ window.GUIDA = {
 
     ristoranti: {
       titolo: "Ristoranti",
+      mappa: true,
       blocchi: [
         { t: "A Palinuro" },
-        { card: { nome: "Ristorante Core a Core", dove: "Zona Faro — 8 min di macchina",
+        { card: { nome: "Ristorante Core a Core", foto: "assets/img/rist-core-a-core.jpg", lat: 40.028099, lng: 15.287849, dove: "Zona Faro — 8 min di macchina",
           testo: "Cucina tradizionale prevalentemente a base di pesce, con materie prime selezionate e un'ampia carta dei vini." } },
-        { card: { nome: "Pizzeria Veracemente", dove: "Via Santa Maria — 5 min di macchina",
+        { card: { nome: "Pizzeria Veracemente", foto: "assets/img/rist-veracemente.jpg", lat: 40.032906, lng: 15.287663, dove: "Via Santa Maria — 5 min di macchina",
           testo: "Il posto ideale per un'autentica pizza napoletana, con ingredienti di qualità e impasti leggeri, in un ambiente informale." } },
-        { card: { nome: "Agriturismo Isca delle Donne", dove: "Via Isca delle Donne — 2 min di macchina",
+        { card: { nome: "Agriturismo Isca delle Donne", foto: "assets/img/rist-isca-delle-donne.jpg", lat: 40.039185, lng: 15.297598, dove: "Via Isca delle Donne — 2 min di macchina",
           testo: "Immerso in un'atmosfera bucolica, serve piatti della tradizione cilentana con materie prime proprie." } },
         { t: "A Pisciotta (10–18 min)" },
-        { card: { nome: "Ristorante 3 Gufi", dove: "Via Roma — 15 min di macchina",
+        { card: { nome: "Ristorante 3 Gufi", foto: "assets/img/rist-3-gufi.jpg", dove: "Via Roma — 15 min di macchina",
           testo: "Ottima cucina con piatti innovativi e prodotti di prima qualità." } },
-        { card: { nome: "Malabar", dove: "Traversa Passariello — 18 min di macchina",
+        { card: { nome: "Malabar", foto: "assets/img/rist-malabar.jpg", dove: "Traversa Passariello — 18 min di macchina",
           testo: "Ricette di pesce servite in sala o sulla terrazza vista mare, in un'atmosfera informale." } },
-        { card: { nome: "Ristorante Angelina", dove: "Piazza Michelangelo Pagano — 15 min di macchina",
+        { card: { nome: "Ristorante Angelina", foto: "assets/img/rist-angelina.jpg", dove: "Piazza Michelangelo Pagano — 15 min di macchina",
           testo: "Nel cuore del centro storico, proposte semplici di buona materia prima, ben eseguite ed economiche." } },
         { t: "A Marina di Camerota (10–18 min)" },
-        { card: { nome: "La Cantina del Marchese", dove: "Via del Marchese — 10 min di macchina",
+        { card: { nome: "La Cantina del Marchese", foto: "assets/img/rist-cantina-marchese.jpg", lat: 40.000694, lng: 15.373441, dove: "Via del Marchese — 10 min di macchina",
           testo: "Piatti e vini del Cilento serviti in una taverna con volte, pietra a vista e arredi di legno." } },
-        { card: { nome: "Brera – L'orto del mare", dove: "Via S. Alfonso — 10 min di macchina",
+        { card: { nome: "Brera – L'orto del mare", foto: "assets/img/rist-brera.jpg", lat: 39.999126, lng: 15.371847, dove: "Via S. Alfonso — 10 min di macchina",
           testo: "Locale curato dove gustare piatti di mare freschissimi e sapori mediterranei rivisitati con creatività." } },
-        { card: { nome: "Kon Tiki 2.0", dove: "Via Variante Castello — 18 min di macchina",
+        { card: { nome: "Kon Tiki 2.0", foto: "assets/img/rist-kon-tiki.jpg", lat: 40.00164, lng: 15.375975, dove: "Via Variante Castello — 18 min di macchina",
           testo: "Ideale per una buona pizza in un ambiente vivace e informale, a pochi passi dal mare." } }
       ]
     },
 
     negozi: {
       titolo: "Supermercati e negozi",
+      mappa: true,
       blocchi: [
         { t: "Supermercati" },
-        { card: { nome: "Decò", dove: "Palinuro — 1 min a piedi", testo: "" } },
-        { card: { nome: "Todis", dove: "Palinuro — 1 min di macchina", testo: "" } },
-        { card: { nome: "Eté", dove: "Palinuro — 3 min di macchina", testo: "" } },
-        { card: { nome: "Mensana alimentari", dove: "Palinuro — 3 min di macchina", testo: "" } },
+        { card: { nome: "Decò", foto: "assets/img/negozio-deco.jpg", lat: 40.046555, lng: 15.298006, dove: "Palinuro — 1 min a piedi", testo: "" } },
+        { card: { nome: "Todis", foto: "assets/img/negozio-todis.jpg", lat: 40.04238, lng: 15.300809, dove: "Palinuro — 1 min di macchina", testo: "" } },
+        { card: { nome: "Eté", foto: "assets/img/negozio-ete.jpg", lat: 40.039629, lng: 15.310564, dove: "Palinuro — 3 min di macchina", testo: "" } },
+        { card: { nome: "Mensana alimentari", foto: "assets/img/negozio-mensana.jpg", lat: 40.039177, lng: 15.288385, dove: "Palinuro — 3 min di macchina", testo: "" } },
         { t: "Sapori del territorio" },
-        { card: { nome: "La Calabrisella", dove: "Via Santa Maria — 5 min di macchina",
+        { card: { nome: "La Calabrisella", foto: "assets/img/negozio-calabrisella.jpg", lat: 40.033126, lng: 15.288192, dove: "Via Santa Maria — 5 min di macchina",
           testo: "Pescheria storica di Palinuro con ottimo pesce fresco e pescato locale." } },
-        { card: { nome: "Punto Carni Romano", dove: "Via Acqua del Lauro — 2 min di macchina",
+        { card: { nome: "Punto Carni Romano", foto: "assets/img/negozio-punto-carni.jpg", lat: 40.037587, lng: 15.288908, dove: "Via Acqua del Lauro — 2 min di macchina",
           testo: "Carni selezionate di alta qualità, preparazioni fresche e specialità locali, ideali per le grigliate." } },
-        { card: { nome: "Cilenterie", dove: "Corso Carlo Pisacane — 5 min di macchina",
+        { card: { nome: "Cilenterie", foto: "assets/img/negozio-cilenterie.jpg", lat: 40.033592, lng: 15.286972, dove: "Corso Carlo Pisacane — 5 min di macchina",
           testo: "Negozio di specialità del Cilento e articoli da regalo." } }
       ]
     },
@@ -178,9 +180,9 @@ window.GUIDA = {
         { p: "Siamo sempre al tuo fianco. Per assistenza, suggerimenti o consigli per vivere al meglio il Cilento, contattaci in qualsiasi momento — o passa in reception." },
         { kv: [
           ["Telefono", "0974 938097"],
-          ["Cellulare", "347 877 9894"],
           ["Cellulare", "379 182 5227"],
-          ["Cellulare", "347 877 9616"],
+          ["Mirella", "347 877 9894"],
+          ["Carmelo", "347 877 9616"],
           ["Indirizzo", "Via Isca 2, 84051 Palinuro (SA)"]
         ]},
         { t: "Ti è piaciuto il soggiorno?" },

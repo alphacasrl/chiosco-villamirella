@@ -7,15 +7,34 @@
 <meta name="format-detection" content="telephone=no">
 <title>Villamirella — Palinuro e il Cilento</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=202608121254">
+<link rel="stylesheet" href="style.css?v=202608121318">
 </head>
 <body>
+
+<!-- ================== ATTESA: video con invito al tocco ================== -->
+<div id="standby" aria-hidden="true">
+  <video id="standby-video" muted loop playsinline preload="none" poster="assets/standby-poster.jpg">
+    <source src="assets/standby.mp4" type="video/mp4">
+  </video>
+  <div id="standby-velo">
+    <img src="assets/logo-villamirella-bianco.svg" alt="Villamirella">
+    <p class="grande">Scopri Palinuro e il Cilento</p>
+    <div id="standby-mano" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11.5V5.7a1.7 1.7 0 0 1 3.4 0v5.1M12.4 10.3a1.6 1.6 0 0 1 3.2.3v1.2M15.6 11.5a1.6 1.6 0 0 1 3.2.4v3.3c0 3.6-2.4 6.3-6 6.3h-1.4c-2 0-3.4-.8-4.5-2.4l-3-4.4a1.6 1.6 0 0 1 2.6-1.8l1.5 2"/>
+      </svg>
+    </div>
+    <p class="invito">Tocca lo schermo per cominciare</p>
+  </div>
+</div>
 
 <!-- ============ SCHERMATA INIZIALE (stile guida cartacea) ============ -->
 <div id="home" aria-hidden="false">
   <div id="home-interno">
-    <img id="home-logo" src="assets/logo-villamirella.svg" alt="Villamirella">
-    <h1 id="home-titolo"></h1>
+    <div id="home-testa">
+      <img id="home-logo" src="assets/logo-villamirella.svg" alt="Villamirella">
+      <h1 id="home-titolo"></h1>
+    </div>
     <p id="home-sotto"></p>
     <div id="mattonelle"></div>
     <p id="home-invito">Tocca un riquadro per cominciare</p>
@@ -27,7 +46,7 @@
   <header id="pagina-testata">
     <button class="bt chiaro" id="pagina-home" type="button">‹ Tutte le sezioni</button>
     <h2 id="pagina-titolo"></h2>
-    <button class="bt" id="pagina-esplora" type="button">Mappa e luoghi</button>
+
   </header>
   <div id="pagina-corpo"></div>
 </div>
@@ -47,7 +66,7 @@
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z" fill="currentColor"/>
         </svg>
-        <span>Ricomincia</span>
+        <span>Inizio</span>
       </button>
     </header>
 
@@ -107,7 +126,6 @@
     <div id="comandi">
       <button class="cmd grande" id="cmd-base" type="button">Mappa</button>
       <button class="cmd grande" id="cmd-3d" type="button">Rilievo 3D</button>
-      <button class="cmd grande" id="cmd-vista" type="button">Vista dall'alto</button>
       <div class="gruppo">
         <button class="cmd" id="cmd-piu" type="button" aria-label="Ingrandisci">+</button>
         <button class="cmd" id="cmd-meno" type="button" aria-label="Rimpicciolisci">−</button>
@@ -132,11 +150,11 @@
 
 </div>
 
-<script src="guida.js?v=202608121254"></script>
-<script src="poi.js?v=202608121254"></script>
-<script src="parco.js?v=202608121254"></script>
-<script src="percorsi.js?v=202608121254"></script>
+<script src="guida.js?v=202608121318"></script>
+<script src="poi.js?v=202608121318"></script>
+<script src="parco.js?v=202608121318"></script>
+<script src="percorsi.js?v=202608121318"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
-<script src="app.js?v=202608121254"></script>
+<script src="app.js?v=202608121318"></script>
 </body>
 </html>

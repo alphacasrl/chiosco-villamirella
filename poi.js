@@ -92,7 +92,7 @@ window.LUOGHI = [
     nome: "Spiaggia delle Saline",
     categoria: "spiagge",
     lat: "40.05601",   lng: "15.282363",   verified: true,
-    notaCoordinate: "campo sportivo di Palinuro, punto indicato dal titolare come accesso alla spiaggia",
+    notaCoordinate: "pin della guida ufficiale Villamirella (link Guidami qui)",
     sommario: "Entra in un'oasi di bellezza e tranquillità a Spiaggia Le Saline a Palinuro.",
     immagine: "assets/img/spiaggia-saline.jpg",
     articoli: [
@@ -133,7 +133,7 @@ window.LUOGHI = [
     nome: "Spiaggia del Porto di Capo Palinuro",
     categoria: "spiagge",
     lat: "40.029775",   lng: "15.278646",   verified: true,
-    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia del Porto»",
+    notaCoordinate: "pin della guida ufficiale Villamirella (link Guidami qui)",
     sommario: "A Palinuro, la spiaggia del Porto è una delle spiagge del Cilento più apprezzate per la trasparenza del mare. Il porto di Palinuro è un porto di piccole dimensioni che ospita piccoli yacht o pescherecci spesso di proprietà dei pescatori di Palinuro.",
     immagine: "assets/img/spiaggia-porto.jpg",
     articoli: [
@@ -154,7 +154,7 @@ window.LUOGHI = [
     lat: "40.0296",   lng: "15.296774",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia Marinella»",
     sommario: "La spiaggia della Marinella si trova di fronte al famoso Scoglio del Coniglio di Palinuro . Tra le spiagge di Palinuro , la spiaggia delle Marinella è quella più immersa nella natura incontaminata e nella macchina mediterranea.",
-    immagine: "",
+    immagine: "assets/img/baia-marinella.jpg",
     articoli: [
       {
         titolo: "Le spiagge di Palinuro: la nostra guida",
@@ -174,7 +174,7 @@ window.LUOGHI = [
     lat: "40.025687",   lng: "15.291607",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia del Buondormire di mare», quella davanti allo Scoglio del Coniglio",
     sommario: "Protetta dalle rocce e raggiungibile solo in barca. Una delle spiagge più affascinanti e suggestive del Cilento. Questa baia, con la sua sabbia fine e dorata, è un vero gioiello naturale.",
-    immagine: "",
+    immagine: "assets/img/buon-dormire.jpg",
     articoli: [],
     distanzaKm: "",   tempoAuto: "solo in barca",
     inEvidenza: true
@@ -205,7 +205,7 @@ window.LUOGHI = [
     lat: "39.997243",   lng: "15.413433",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia Cala Bianca» — non il pontile omonimo del porto",
     sommario: "Cala Bianca è una delle spiagge di Marina di Camerota che devi visitare se sei a Marina di Camerota. Nel 2013 Cala Bianca è stata eletta come la spiaggia più bella d’Italia , vincendo il sondaggio di Legambiente “la più bella sei tu”.",
-    immagine: "",
+    immagine: "assets/img/cala-bianca.jpg",
     articoli: [
       {
         titolo: "Le spiagge di Marina di Camerota",
@@ -223,7 +223,7 @@ window.LUOGHI = [
     lat: "39.997172",   lng: "15.407624",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [natural/beach] — corretta al secondo giro: la prima risposta era il pontile del porto",
     sommario: "La spiaggia del Pozzallo è una vera e propria spiaggia da cartolina. Il Pozzallo è una tappa irrinunciabile nel corso di una vacanza nel Cilento. La spiaggia di Pozzallo è un misto di ciottoli bianchi e sabbia.",
-    immagine: "",
+    immagine: "assets/img/spiaggia-pozzallo.jpg",
     articoli: [
       {
         titolo: "Le spiagge di Marina di Camerota",
@@ -265,7 +265,7 @@ window.LUOGHI = [
     lat: 40.022182,   lng: 15.324142,   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia Cala del Céfalo»",
     sommario: "La spiaggia della Cala del Cefalo tra Palinuro e Marina di Camerota rappresenta uno dei tratti costieri più belli e ricchi di storia del Mediterraneo. Si tratta di una spiaggia di sabbia e ciottoli lunga circa 5 km.",
-    immagine: "",
+    immagine: "assets/img/cala-del-cefalo.jpg",
     articoli: [],
     distanzaKm: "",   tempoAuto: "5 min",
     inEvidenza: false
@@ -277,7 +277,7 @@ window.LUOGHI = [
     lat: 40.000492,   lng: 15.366057,   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia della Calanca»",
     sommario: "Si trova praticamente all'inizio dell'abitato di Marina di Camerota. La spiaggia è sabbiosa e il suo fondale digrada molto lentamente e questo la rende ottima per i bambini.",
-    immagine: "",
+    immagine: "assets/img/la-calanca.jpg",
     articoli: [],
     distanzaKm: "",   tempoAuto: "16 min",
     inEvidenza: false
@@ -494,7 +494,7 @@ window.LUOGHI = [
     nome: "San Severino di Centola",
     categoria: "borghi",
     lat: "40.089066",   lng: "15.346276",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [hamlet]",
+    notaCoordinate: "pin della guida ufficiale Villamirella (link Guidami qui)",
     sommario: "San Severino di Centola rappresenta una delle gemme nascoste della Campania. Situato lungo l'incantevole strada che porta a Palinuro, questo borgo abbandonato offre un'esperienza indimenticabile per gli amanti della natura e dell'arte.",
     immagine: "assets/img/san-severino.jpg",
     articoli: [
@@ -1130,7 +1130,7 @@ window.LUOGHI = [
     nome: "Museo Ortega a Bosco",
     categoria: "archeologia",
     lat: "40.072886",   lng: "15.457116",   verified: true,
-    notaCoordinate: "APPROSSIMATA al centro dell'abitato di Bosco: il museo non risulta mappato su OpenStreetMap",
+    notaCoordinate: "pin della guida ufficiale Villamirella (link Guidami qui) — VERIFICATO, prima era approssimato al paese di Bosco",
     sommario: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco.",
     immagine: "",
     articoli: [

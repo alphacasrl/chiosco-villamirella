@@ -43,6 +43,8 @@
   --c-natura: #2f9e60;
   --c-archeologia: #b5892f;
   --c-santuari: #9550a8;
+  --c-ristoranti: #d64550;
+  --c-negozi: #5b7d8c;
   font-size: 24px;   /* ricalcolata da app.js */
 }
 
@@ -329,48 +331,57 @@ img { -webkit-user-drag: none; user-drag: none; }
 #home {
   position: fixed; inset: 0; z-index: 20;
   background: linear-gradient(180deg, var(--crema-chiaro), var(--crema));
-  display: flex; align-items: center; justify-content: center;
-  overflow-y: auto;
+  display: flex; align-items: stretch; justify-content: center;
+  overflow: hidden;                      /* MAI scorrere: e' la vetrina */
 }
 #home[aria-hidden="true"] { display: none; }
-#home-interno { width: min(60rem, 94%); text-align: center; padding: 1.2rem 0 1.6rem; }
-#home-logo { height: 3.4rem; margin-bottom: .4rem; }
+#home-interno {
+  width: 96%; height: 100%; text-align: center;
+  display: flex; flex-direction: column; justify-content: space-evenly;
+  padding: .6rem 0;
+}
+#home-testa { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+#home-logo { height: 2.8rem; }
 #home-titolo {
-  font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.9rem;
+  font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.6rem;
   color: var(--marrone-scuro); letter-spacing: -.01em;
 }
 #home-sotto {
-  margin: .3rem auto 1.1rem; max-width: 34rem;
-  font-size: .8rem; line-height: 1.55; color: var(--marrone);
+  margin: 0 auto; max-width: 44rem;
+  font-size: .72rem; line-height: 1.4; color: var(--marrone);
 }
-#mattonelle {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: .6rem;
+#mattonelle { display: flex; flex-direction: column; gap: .45rem; }
+#mattonelle .fascia {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: .55rem;
 }
 .gruppo-mattonelle {
-  grid-column: 1 / -1; text-align: left; margin-top: .5rem;
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .68rem;
+  text-align: left;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .62rem;
   text-transform: uppercase; letter-spacing: .12em; color: var(--marrone);
+  margin: .3rem 0 .1rem;
 }
 .mattonella {
-  min-height: 6.6rem; padding: .8rem .6rem .7rem;
+  min-height: 6.4rem; padding: .6rem .4rem .55rem;
   background: var(--bianco); border: 1px solid #e3d5b8; border-radius: .7rem;
   box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .55rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem;
   cursor: pointer;
 }
 .mattonella:active { background: var(--crema); }
 .mattonella .cerchio {
-  width: 3.1rem; height: 3.1rem; border-radius: 50%;
+  width: 3rem; height: 3rem; border-radius: 50%;
   background: var(--azzurro); color: var(--blu);
   display: flex; align-items: center; justify-content: center;
 }
+.mattonella .cerchio.con-img { background: transparent; border-radius: 0; width: 3.3rem; height: 3.3rem; }
+.mattonella .cerchio img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .mattonella .cerchio svg { width: 1.7rem; height: 1.7rem; }
 .mattonella b {
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .72rem;
-  line-height: 1.25; color: var(--marrone-scuro);
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .62rem;
+  line-height: 1.2; color: var(--marrone-scuro);
 }
 #home-invito {
-  margin-top: 1.2rem; font-size: .66rem; color: var(--marrone);
+  font-size: .62rem; color: var(--marrone);
   text-transform: uppercase; letter-spacing: .12em;
   font-family: Mulish, sans-serif; font-weight: 700;
 }
@@ -413,3 +424,37 @@ img { -webkit-user-drag: none; user-drag: none; }
 #pagina-corpo .card b { font-family: Mulish, sans-serif; font-size: .85rem; color: var(--marrone-scuro); }
 #pagina-corpo .card .dove { font-size: .62rem; color: var(--marrone); text-transform: uppercase; letter-spacing: .04em; margin: .1rem 0 .25rem; }
 #pagina-corpo .card p { margin: 0; font-size: .73rem; }
+#pagina-corpo .figura { text-align: center; margin: .8rem 0; }
+#pagina-corpo .figura img {
+  width: 11rem; height: 11rem; object-fit: contain;
+  background: var(--bianco); border: 1px solid #eadfc6; border-radius: .6rem; padding: .6rem;
+}
+#pagina-corpo .figura p { font-size: .68rem; color: var(--marrone); margin-top: .35rem; }
+
+
+/* ===================== ATTESA (video + invito) ===================== */
+#standby {
+  position: fixed; inset: 0; z-index: 30; background: #000;
+}
+#standby[aria-hidden="true"] { display: none; }
+#standby-video { width: 100%; height: 100%; object-fit: cover; }
+#standby-velo {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(4,11,17,.25), rgba(4,11,17,.55));
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding-bottom: 3.2rem; text-align: center; color: #fff;
+}
+#standby-velo img { height: 3rem; margin-bottom: .8rem; filter: drop-shadow(0 1px 6px rgba(0,0,0,.5)); }
+#standby-velo .grande {
+  margin: 0; font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.7rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,.6);
+}
+#standby-mano { margin: 1rem 0 .2rem; color: #fff; animation: tocca-mano 1.6s ease-in-out infinite; }
+#standby-velo .invito {
+  margin: 0; font-family: Mulish, sans-serif; font-weight: 700; font-size: .95rem;
+  text-transform: uppercase; letter-spacing: .14em; text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
+@keyframes tocca-mano {
+  0%, 100% { transform: translateY(0) scale(1); opacity: .95; }
+  50%      { transform: translateY(.5rem) scale(.92); opacity: .65; }
+}
