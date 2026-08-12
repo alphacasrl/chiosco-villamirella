@@ -188,16 +188,17 @@ function spiaggeEMare() {
   return r.concat(prima);
 }
 var GRUPPI = [
-  { id: 'mare',       nome: 'Spiagge e mare', cat: 'spiagge', voci: spiaggeEMare },
-  { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'),   cat: null, voci: function () { return espDiTipo('itinerario'); } },
-  { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), cat: null, voci: function () { return espDiTipo('esperienza'); } },
-  { id: 'guide',      nome: nomeSezione('guide', 'Guide'),           cat: null, voci: function () { return espDiTipo('guida'); } }
+  { id: 'mare',       nome: 'Spiagge e mare', cat: 'spiagge', icona: 'mare', voci: spiaggeEMare },
+  { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'),   cat: null, icona: 'itinerari', voci: function () { return espDiTipo('itinerario'); } },
+  { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), cat: null, icona: 'esperienze', voci: function () { return espDiTipo('esperienza'); } }
 ];
 (function () {
   for (var i = 0; i < CATEGORIE.length; i++) {
     (function (c) {
       if (c.id === 'spiagge') return;   /* fuse in "Spiagge e mare" */
-      GRUPPI.push({ id: 'cat:' + c.id, nome: c.nome, cat: c.id,
+      var IC = { borghi: 'borghi', grotte: 'grotte', natura: 'natura',
+                 archeologia: 'archeologia', santuari: 'santuari' };
+      GRUPPI.push({ id: 'cat:' + c.id, nome: c.nome, cat: c.id, icona: IC[c.id] || 'borghi',
                     voci: function () { return luoghiDiCategoria(c.id); } });
     })(CATEGORIE[i]);
   }
@@ -222,7 +223,7 @@ var GRUPPI = [
       });
     });
     pseudo.forEach(function (l) { LUOGHI.push(l); });
-    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid,
+    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid, icona: pid,
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
 })();
@@ -271,11 +272,10 @@ function disegnaFiltri() {
   var g = gruppoCorrente();
   var n = $('#sez-nome');
   vuota(n);
-  if (g.cat) {
-    var p = el('span', 'pallino');
-    p.style.background = colore(g.cat);
-    n.appendChild(p);
-  }
+  var c = el('span', 'sez-icona');
+  c.innerHTML = icona(g.icona || 'borghi');
+  if (g.cat) c.style.color = colore(g.cat);
+  n.appendChild(c);
   n.appendChild(el('span', null, g.nome));
 }
 
@@ -863,12 +863,38 @@ function aggiornaBussola() {
     app.addEventListener('transitionend', poi, { once: true });
     setTimeout(poi, 420);
   }
-  window.__assetta = assetta;   /* usata anche dal ripristino e dal reset */
+  window.__assetta = assetta;   /* usata anche dal reset */
 
-  tocca($('#verso-sinistra'), function () { assetta('solo-mappa'); });
-  tocca($('#verso-destra'), function () { assetta('solo-elenco'); });
-  tocca($('#riapri-elenco'), function () { assetta(null); });
-  tocca($('#riapri-mappa'), function () { assetta(null); });
+  /* i due tastini centrali fanno TUTTO: aprire, chiudere, tornare.
+     Le etichette dicono sempre cosa succedera' al prossimo tocco. */
+  function aggiornaFrecce() {
+    var sm = app.classList.contains('solo-mappa');
+    var se = app.classList.contains('solo-elenco');
+    var sx = $('#verso-sinistra'), dx = $('#verso-destra');
+    sx.style.display = se ? 'none' : '';
+    dx.style.display = sm ? 'none' : '';
+    sx.querySelector('em').innerHTML = sm ? '' : 'mappa<br>intera';
+    dx.querySelector('em').innerHTML = se ? '' : 'elenco<br>intero';
+    sx.setAttribute('aria-label', sm ? 'Riapri l\'elenco' : 'Mappa a tutto schermo');
+    dx.setAttribute('aria-label', se ? 'Riapri la mappa' : 'Elenco a tutto schermo');
+    /* quando una meta' e' chiusa, l'unica freccia visibile punta al ritorno */
+    sx.classList.toggle('ritorno', sm);
+    dx.classList.toggle('ritorno', se);
+    sx.querySelector('svg path').setAttribute('d', sm ? 'M10 6l6 6-6 6' : 'M14 6l-6 6 6 6');
+    dx.querySelector('svg path').setAttribute('d', se ? 'M14 6l-6 6 6 6' : 'M10 6l6 6-6 6');
+    if (sm) sx.querySelector('em').innerHTML = 'apri<br>elenco';
+    if (se) dx.querySelector('em').innerHTML = 'apri<br>mappa';
+  }
+  window.__aggiornaFrecce = aggiornaFrecce;
+  tocca($('#verso-sinistra'), function () {
+    assetta(app.classList.contains('solo-mappa') ? null : 'solo-mappa');
+    setTimeout(aggiornaFrecce, 30);
+  });
+  tocca($('#verso-destra'), function () {
+    assetta(app.classList.contains('solo-elenco') ? null : 'solo-elenco');
+    setTimeout(aggiornaFrecce, 30);
+  });
+  aggiornaFrecce();
 })();
 
 /* =====================================================================
@@ -889,6 +915,7 @@ tocca($('#det-indietro'), function () { chiudiDettaglio(); });
 tocca($('#det-mappa'), function () {
   if (stato.aperta) volaSu(stato.aperta);
   window.__assetta(null);
+  if (window.__aggiornaFrecce) window.__aggiornaFrecce();
 });
 
 /* =====================================================================
@@ -898,24 +925,27 @@ var GUIDA = window.GUIDA || { MATTONELLE: [], PAGINE: {}, benvenuto: {} };
 
 /* icone disegnate a mano: linee semplici, niente emoji (font incerti su webOS) */
 var ICONE = {
-  posti:      '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/>',
-  spiagge:    '<path d="M3 18c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><path d="M3 13.5c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><circle cx="17.5" cy="6" r="2.6"/>',
-  barca:      '<path d="M4 15h16l-2.5 4h-11z"/><path d="M12 4v11"/><path d="M12 5c4 1.5 6 4 6.5 8"/>',
-  sentiero:   '<path d="M5 20c6 0 2-7 8-7s2-7 6-7"/><circle cx="19" cy="4.5" r="1.6"/><circle cx="5" cy="20" r="1.6"/>',
-  ristorante: '<path d="M7 3v7M4.5 3v4.5a2.5 2.5 0 0 0 5 0V3"/><path d="M7 10v11"/><path d="M16 3c-2 1.5-2.7 5-2.7 8H16v10"/>',
-  negozio:    '<path d="M4 8l1.4-4h13.2L20 8"/><path d="M4 8h16v3a3 3 0 0 1-6 0 3 3 0 0 1-5 0 3 3 0 0 1-5 0z"/><path d="M6 13.5V20h12v-6.5"/>',
-  bus:        '<rect x="5" y="3.5" width="14" height="13" rx="2.4"/><path d="M5 9h14"/><circle cx="8.6" cy="19" r="1.6"/><circle cx="15.4" cy="19" r="1.6"/>',
-  chiave:     '<circle cx="8" cy="8" r="4.2"/><path d="M11 11l9 9"/><path d="M16.5 16.5l2.6-2.6M19 19l2-2"/>',
-  regole:     '<rect x="5" y="3" width="14" height="18" rx="1.8"/><path d="M9 8h6M9 12h6M9 16h4"/>',
-  wifi:       '<path d="M3 9.5C8 4.8 16 4.8 21 9.5"/><path d="M6.2 13c3.4-3.2 8.2-3.2 11.6 0"/><path d="M9.4 16.4c1.6-1.5 3.6-1.5 5.2 0"/><circle cx="12" cy="19.4" r="1.4"/>',
-  faq:        '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1.1"/>',
-  telefono:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
-  grotta:     '<path d="M3 20h18"/><path d="M4 20V12a8 8 0 0 1 16 0v8"/><path d="M9.5 20v-4a2.5 2.5 0 0 1 5 0v4"/>',
-  natura:     '<path d="M12 21V9"/><path d="M12 9C7 9 4.5 5.5 4.5 3c4 0 7.5 1.5 7.5 6z"/><path d="M12 13c0-4.5 3.5-6 7.5-6 0 2.5-2.5 6-7.5 6z"/>',
-  tempio:     '<path d="M4 8l8-4.5L20 8"/><path d="M5 8h14"/><path d="M6.5 8v8M10 8v8M14 8v8M17.5 8v8"/><path d="M4 18.5h16M3 21h18"/>',
-  santuario:  '<path d="M12 3v4M10 5h4"/><path d="M7 21v-8.5L12 8l5 4.5V21"/><path d="M10.5 21v-4h3v4"/><path d="M4 21h16"/>',
-  stella:     '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/>',
-  libro:      '<path d="M12 6c-2-1.6-4.5-2-8-2v14c3.5 0 6 .4 8 2 2-1.6 4.5-2 8-2V4c-3.5 0-6 .4-8 2z"/><path d="M12 6v14"/>'
+  /* un solo tratto (1.8, punte tonde) per tutte: la coerenza e' il disegno */
+  mare:       '<path d="M12 3.5v6"/><path d="M4 9.5a8 8 0 0 1 16 0z"/><path d="M12 9.5V19"/><path d="M12 19c0 1.4 1 2 2.4 2"/><path d="M7.5 9.3C7.5 6 9 3.9 12 3.5c3 .4 4.5 2.5 4.5 5.8"/>',
+  borghi:     '<path d="M3.5 20.5v-8l4-3 4 3v8"/><path d="M11.5 20.5v-11l4.5-3.5 4.5 3.5v11"/><path d="M3 20.5h18"/><path d="M7 20.5v-3.4h1.6v3.4M15 20.5v-3.6h2v3.6"/><path d="M14.2 12h1.6M14.2 9h1.6"/>',
+  grotte:     '<path d="M3.5 20.5c0-7.5 3.6-13 8.5-13s8.5 5.5 8.5 13"/><path d="M8.8 20.5c0-3.6 1.3-6 3.2-6s3.2 2.4 3.2 6"/><path d="M2.5 20.5h19"/>',
+  natura:     '<path d="M12 21v-8.5"/><path d="M12 12.5C7.5 12.5 5 9.5 4.5 5c4.5.5 7.5 3 7.5 7.5z"/><path d="M12 10.5c0-3.5 2.5-6 7.5-6.5-.5 4.5-3 7-7.5 7z"/><path d="M8.5 21h7"/>',
+  archeologia:'<path d="M4 8.5L12 4l8 4.5"/><path d="M5 8.5h14"/><path d="M6.5 8.5V17M10.2 8.5V17M13.8 8.5V17M17.5 8.5V17"/><path d="M5 17h14"/><path d="M3.5 20.5h17"/>',
+  santuari:   '<path d="M12 3v3.6M10.3 4.8h3.4"/><path d="M12 6.6l-5 4.4v9.5h10V11z"/><path d="M12 20.5v-3.6a1.8 1.8 0 0 0 0-.01"/><path d="M10.2 20.5v-3.2a1.8 1.8 0 0 1 3.6 0v3.2"/><path d="M4.5 20.5h15"/>',
+  itinerari:  '<path d="M6 20.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4z"/><path d="M18 8a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 18 8z"/><path d="M8 18.3h6.5a3.4 3.4 0 0 0 0-6.8H9.5a3.4 3.4 0 0 1 0-6.8H16"/>',
+  esperienze: '<path d="M12 3.8l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 9.5l5.4-.8z"/>',
+  guide:      '<path d="M12 6.2C10 4.7 7.6 4.2 4 4.2v14.6c3.6 0 6 .5 8 2 2-1.5 4.4-2 8-2V4.2c-3.6 0-6 .5-8 2z"/><path d="M12 6.2v14.6"/><path d="M6.5 8.5c1.4.1 2.5.3 3.5.8M6.5 11.5c1.4.1 2.5.3 3.5.8M14 9.3c1-.5 2.1-.7 3.5-.8M14 12.3c1-.5 2.1-.7 3.5-.8"/>',
+  checkin:    '<circle cx="8.2" cy="7.8" r="3.8"/><path d="M10.9 10.5L20.5 20"/><path d="M15.7 15.2l2.4-2.4M18.4 18l1.9-1.9"/>',
+  wifi:       '<path d="M3 9.5C8 4.8 16 4.8 21 9.5"/><path d="M6.2 13c3.4-3.2 8.2-3.2 11.6 0"/><path d="M9.4 16.4c1.6-1.5 3.6-1.5 5.2 0"/><circle cx="12" cy="19.4" r="1.3" fill="currentColor" stroke="none"/>',
+  regole:     '<rect x="5" y="3.5" width="14" height="17" rx="1.8"/><path d="M8.5 8.2h7M8.5 12h7M8.5 15.8h4.5"/>',
+  ristoranti: '<path d="M7.2 3.5v7.2M4.8 3.5v4.3a2.4 2.4 0 0 0 4.8 0V3.5"/><path d="M7.2 10.7v9.8"/><path d="M16.4 3.6c-2 1.4-2.8 4.7-2.8 7.7h2.8v9.2"/>',
+  negozi:     '<path d="M4.5 8l1.3-3.8h12.4L19.5 8"/><path d="M4.5 8h15v2.6a2.7 2.7 0 0 1-5.3.4 2.7 2.7 0 0 1-4.4 0 2.7 2.7 0 0 1-5.3-.4z"/><path d="M6.3 13.6v6.9h11.4v-6.9"/><path d="M10 20.5v-4.4h4v4.4"/>',
+  muoversi:   '<rect x="5" y="3.8" width="14" height="12.4" rx="2.4"/><path d="M5 9.2h14"/><path d="M8 13.4h.01M16 13.4h.01"/><circle cx="8.6" cy="19.2" r="1.4"/><circle cx="15.4" cy="19.2" r="1.4"/>',
+  faq:        '<circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
+  contatti:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
+  casa:       '<path d="M4 11.5L12 4.5l8 7"/><path d="M6.3 10v10h11.4V10"/><path d="M10 20v-5h4v5"/>',
+  mappa:      '<path d="M9 4.5L4 6.3v13.2L9 17.7l6 1.8 5-1.8V4.5L15 6.3z"/><path d="M9 4.5v13.2M15 6.3v13.2"/>',
+  elenco:     '<path d="M8.5 6h11M8.5 12h11M8.5 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor" stroke="none"/>'
 };
 function icona(nome) {
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
@@ -993,20 +1023,15 @@ function apriSezione(idGruppo) {
       var b = el('button', 'mattonella');
       b.type = 'button';
       var c = el('div', 'cerchio');
-      if (v.img) {
-        var im = el('img');
-        im.src = v.img; im.alt = '';
-        c.appendChild(im);
-        c.className = 'cerchio con-img';
-      } else {
-        c.innerHTML = icona(v.icona);
-      }
+      c.innerHTML = icona(v.icona);
+      if (v.colore) { c.style.color = v.colore; c.style.background = v.colore + '22'; }
       b.appendChild(c);
       b.appendChild(el('b', null, v.nome));
       tocca(b, function () {
         if (v.pagina) mostraPagina(v.pagina);
         else if (v.sezione) apriSezione(v.sezione);
       });
+      /* niente doppioni di stile: il colore arriva dai gruppi */
       (fascia || griglia).appendChild(b);
     })(m[i]);
   }
@@ -1026,6 +1051,7 @@ function ricomincia() {
   disegnaElenco();
   $('#elenco').scrollTop = 0;
   window.__assetta(null);
+  if (window.__aggiornaFrecce) window.__aggiornaFrecce();
   if (mappa && stato.mappaPronta) {
     applicaTerreno();
     applicaVista();

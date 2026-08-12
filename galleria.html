@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestione foto — Chiosco Villamirella</title>
+<style>
+/* Pagina di SERVIZIO per il gestore: non e' raggiungibile dal chiosco.
+   Mostra ogni voce con la sua foto attuale e prepara i file sostitutivi. */
+:root { font-size: 16px; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 1.2rem; background: #faf4e4; color: #2c3c4a;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+h1 { font-size: 1.3rem; color: #4b2b17; margin: 0 0 .3rem; }
+.istruzioni { background: #fff; border: 1px solid #e3d5b8; border-radius: .5rem;
+  padding: .8rem 1rem; margin-bottom: 1rem; font-size: .85rem; line-height: 1.6; max-width: 60rem; }
+.istruzioni b { color: #4b2b17; }
+.istruzioni code { background: #f5eacf; padding: .05rem .3rem; border-radius: .2rem; }
+#griglia { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .8rem; }
+.voce { background: #fff; border: 1px solid #e3d5b8; border-radius: .5rem; padding: .6rem; }
+.voce.senza { outline: 3px solid #dd350f55; }
+.voce img.attuale { width: 100%; height: 8rem; object-fit: cover; border-radius: .35rem; background: #ddeaf6; }
+.voce .vuota { width: 100%; height: 8rem; border-radius: .35rem; background: #f5eacf;
+  display: flex; align-items: center; justify-content: center; color: #9f7757; font-size: .8rem; }
+.voce b { display: block; font-size: .85rem; color: #4b2b17; margin: .4rem 0 .05rem; }
+.voce .tipo { font-size: .65rem; color: #9f7757; text-transform: uppercase; letter-spacing: .05em; }
+.voce .file { font-size: .68rem; color: #666; word-break: break-all; margin: .2rem 0 .4rem; }
+.voce input[type=file] { width: 100%; font-size: .7rem; }
+.voce .scarica { display: none; margin-top: .4rem; width: 100%; padding: .45rem;
+  background: #1e8a4c; color: #fff; border: none; border-radius: .35rem;
+  font-weight: 700; cursor: pointer; }
+#filtro { margin-bottom: .8rem; padding: .5rem .8rem; font-size: .9rem; width: 20rem;
+  border: 1px solid #e3d5b8; border-radius: .4rem; }
+</style>
+</head>
+<body>
+<h1>Gestione foto del chiosco</h1>
+<div class="istruzioni">
+  Qui vedi <b>ogni voce del chiosco con la foto che sta usando adesso</b>; le voci
+  <span style="color:#dd350f">bordate di rosso</span> non hanno foto.
+  Per cambiarne una:
+  <b>1.</b> scegli l'immagine dal tuo computer col pulsante della voce —
+  <b>2.</b> premi <b>Scarica col nome giusto</b>: ottieni il file gia' rinominato —
+  <b>3.</b> caricalo nella cartella <code>assets/img</code> del repository
+  (su GitHub: apri la cartella → <i>Add file → Upload files</i> → trascina → <i>Commit</i>),
+  confermando la sostituzione se il file esiste gia'.
+  Dopo un minuto il chiosco usa la foto nuova. Non serve toccare il codice:
+  il nome del file e' il legame.
+  <br><br>
+  <b>Consiglio:</b> foto orizzontali, almeno 720 pixel di larghezza. Il formato deve
+  essere <code>.jpg</code> (se il tuo file e' .png o .heic va convertito prima).
+</div>
+<input id="filtro" type="search" placeholder="Cerca una voce…">
+<div id="griglia"></div>
+
+<script src="poi.js"></script>
+<script src="guida.js"></script>
+<script>
+(function () {
+'use strict';
+var voci = [];
+(window.LUOGHI || []).forEach(function (l) {
+  voci.push({ nome: l.nome, tipo: 'Luogo — ' + l.categoria, img: l.immagine,
+              atteso: l.immagine || ('assets/img/' + l.id + '.jpg') });
+});
+(window.ESPERIENZE || []).forEach(function (e) {
+  voci.push({ nome: e.nome, tipo: e.tipo, img: e.immagine,
+              atteso: e.immagine || ('assets/img/' + e.id + '.jpg') });
+});
+var G = window.GUIDA || {};
+['ristoranti', 'negozi'].forEach(function (pid) {
+  var p = (G.PAGINE || {})[pid];
+  if (!p) return;
+  (p.blocchi || []).forEach(function (b) {
+    if (b.card) voci.push({ nome: b.card.nome, tipo: pid, img: b.card.foto,
+                            atteso: b.card.foto || '' });
+  });
+});
+var griglia = document.getElementById('griglia');
+function disegna(filtro) {
+  griglia.innerHTML = '';
+  voci.forEach(function (v) {
+    if (filtro && v.nome.toLowerCase().indexOf(filtro) < 0) return;
+    var box = document.createElement('div');
+    box.className = 'voce' + (v.img ? '' : ' senza');
+    if (v.img) {
+      var im = document.createElement('img');
+      im.className = 'attuale'; im.src = v.img; im.loading = 'lazy';
+      box.appendChild(im);
+    } else {
+      var d = document.createElement('div');
+      d.className = 'vuota'; d.textContent = 'senza foto';
+      box.appendChild(d);
+    }
+    var b = document.createElement('b'); b.textContent = v.nome; box.appendChild(b);
+    var t = document.createElement('div'); t.className = 'tipo'; t.textContent = v.tipo; box.appendChild(t);
+    var f = document.createElement('div'); f.className = 'file';
+    f.textContent = v.atteso ? v.atteso.replace('assets/img/', 'file: ') : 'aggiungi prima il campo immagine in poi.js/guida.js';
+    box.appendChild(f);
+    if (v.atteso) {
+      var inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/jpeg,image/png';
+      var sc = document.createElement('button');
+      sc.className = 'scarica'; sc.textContent = 'Scarica col nome giusto';
+      inp.addEventListener('change', function () {
+        if (!inp.files.length) return;
+        var url = URL.createObjectURL(inp.files[0]);
+        var anteprima = box.querySelector('img.attuale');
+        if (!anteprima) {
+          anteprima = document.createElement('img');
+          anteprima.className = 'attuale';
+          box.replaceChild(anteprima, box.querySelector('.vuota'));
+        }
+        anteprima.src = url;
+        sc.style.display = 'block';
+        sc.onclick = function () {
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = v.atteso.replace('assets/img/', '');
+          a.click();
+        };
+      });
+      box.appendChild(inp);
+      box.appendChild(sc);
+    }
+    griglia.appendChild(box);
+  });
+}
+disegna('');
+document.getElementById('filtro').addEventListener('input', function () {
+  disegna(this.value.toLowerCase());
+});
+})();
+</script>
+</body>
+</html>
