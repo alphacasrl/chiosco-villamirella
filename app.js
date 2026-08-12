@@ -108,7 +108,8 @@ var TESTI = {
     lenta: 'Connessione lenta: alcune parti della mappa potrebbero mancare.',
     itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
     ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
-    lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0'
+    lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
+    meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com'
   },
   en: {
     inizio: 'Home', tutteSezioni: '‹ All sections',
@@ -131,7 +132,8 @@ var TESTI = {
     lenta: 'Slow connection: parts of the map may be missing.',
     itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
     ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
-    lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty'
+    lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
+    meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com'
   }
 };
 var lingua = 'it';
@@ -1044,6 +1046,14 @@ var ICONE = {
   faq:        '<circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
   contatti:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
   salute:     '<circle cx="12" cy="12" r="8.6"/><path d="M12 8v8M8 12h8"/>',
+  mSole:      '<circle cx="12" cy="12" r="4.2"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/>',
+  mSoleNuvole:'<circle cx="8.5" cy="8" r="3"/><path d="M8.5 2.8v1.6M3.3 8h1.6M4.8 4.3l1.1 1.1M12.2 4.3l-1.1 1.1"/><path d="M8 20.5h9.5a3.5 3.5 0 0 0 .6-6.95A5 5 0 0 0 8.6 13 3.8 3.8 0 0 0 8 20.5z"/>',
+  mNuvola:    '<path d="M7 19.5h10.5a4 4 0 0 0 .7-7.94A5.5 5.5 0 0 0 7.5 11 4.3 4.3 0 0 0 7 19.5z"/>',
+  mNebbia:    '<path d="M4 9.5h16M6 13h13M4.5 16.5h14M7.5 20h9"/>',
+  mPioggerella:'<path d="M7 15h10.5a3.6 3.6 0 0 0 .6-7.15A5 5 0 0 0 7.6 7.6 3.8 3.8 0 0 0 7 15z"/><path d="M9 17.5l-.6 1.6M13 17.5l-.6 1.6M17 17.5l-.6 1.6"/>',
+  mPioggia:   '<path d="M7 14h10.5a3.6 3.6 0 0 0 .6-7.15A5 5 0 0 0 7.6 6.6 3.8 3.8 0 0 0 7 14z"/><path d="M9.5 16.5L8.3 20M13.5 16.5L12.3 20M17.5 16.5L16.3 20"/>',
+  mNeve:      '<path d="M7 14h10.5a3.6 3.6 0 0 0 .6-7.15A5 5 0 0 0 7.6 6.6 3.8 3.8 0 0 0 7 14z"/><path d="M9 17.2h.01M12.5 19h.01M16 17.2h.01M10.8 20.6h.01M14.3 16h.01" stroke-width="2.4"/>',
+  mTemporale: '<path d="M7 13.5h10.5a3.6 3.6 0 0 0 .6-7.15A5 5 0 0 0 7.6 6.1 3.8 3.8 0 0 0 7 13.5z"/><path d="M12.8 14l-2.6 3.8h2.8L10.6 21"/>',
   riciclo:    '<path d="M12 4l2.8 4.8h-5.6z"/><path d="M6.5 9.5L4 14l3.4 5h3.2"/><path d="M17.5 9.5L20 14l-3.4 5h-3.2"/><path d="M8.5 19l-1.4-2.2M15.5 19l1.4-2.2M12 6.5V4.6"/>',
   luce:       '<path d="M9.5 18h5"/><path d="M10 21h4"/><path d="M8 11a4 4 0 1 1 8 0c0 2-1.4 2.8-1.8 4.3h-4.4C9.4 13.8 8 13 8 11z"/><path d="M12 2.5v1.6M5 5l1.2 1.2M19 5l-1.2 1.2"/>',
   frigo:      '<rect x="7" y="3" width="10" height="18" rx="1.4"/><path d="M7 10h10"/><path d="M9.5 6v2M9.5 13v3"/>',
@@ -1218,8 +1228,12 @@ function impostaLingua(nuova) {
   disegnaElenco();
   if (window.__aggiornaFrecce) window.__aggiornaFrecce();
   if (stato.aperta) apriDettaglio(stato.aperta);
+  meteoWidget();
   var pg = $('#pagina');
-  if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) mostraPagina(pg.__pid);
+  if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) {
+    if (pg.__pid === '__meteo__') meteoPagina();
+    else mostraPagina(pg.__pid);
+  }
 }
 (function () {
   var bit = $('#lingua-it'), ben = $('#lingua-en');
@@ -1324,6 +1338,93 @@ window.addEventListener('online', function () {
   ro.observe(document.documentElement);
   ro.observe($('#mappa-lato'));
 })();
+
+/* =====================================================================
+   METEO — Open-Meteo (nessuna chiave, attribuzione obbligatoria).
+   Widget sobrio sulla home; il tocco apre la scheda con 7 giorni.
+   Niente data e ora correnti a schermo, per scelta.
+   ===================================================================== */
+var METEO = { dati: null };
+/* codici WMO -> icona e descrizione nelle due lingue */
+function meteoVoce(codice) {
+  var C = [
+    [[0], 'mSole', 'Sereno', 'Clear'],
+    [[1, 2], 'mSoleNuvole', 'Poco nuvoloso', 'Partly cloudy'],
+    [[3], 'mNuvola', 'Coperto', 'Overcast'],
+    [[45, 48], 'mNebbia', 'Nebbia', 'Fog'],
+    [[51, 53, 55, 56, 57], 'mPioggerella', 'Pioggerella', 'Drizzle'],
+    [[61, 63, 65, 66, 67, 80, 81, 82], 'mPioggia', 'Pioggia', 'Rain'],
+    [[71, 73, 75, 77, 85, 86], 'mNeve', 'Neve', 'Snow'],
+    [[95, 96, 99], 'mTemporale', 'Temporale', 'Thunderstorm']
+  ];
+  for (var i = 0; i < C.length; i++) {
+    if (C[i][0].indexOf(codice) >= 0) return { icona: C[i][1], it: C[i][2], en: C[i][3] };
+  }
+  return { icona: 'mNuvola', it: '', en: '' };
+}
+function meteoWidget() {
+  var w = $('#meteo-widget');
+  if (!w || !METEO.dati || !METEO.dati.current) { if (w) w.hidden = true; return; }
+  var cur = METEO.dati.current;
+  var v = meteoVoce(cur.weather_code);
+  w.hidden = false;
+  w.innerHTML = '<span class="meteo-icona">' + icona(v.icona) + '</span>' +
+    '<span class="meteo-gradi">' + Math.round(cur.temperature_2m) + '\u00b0</span>';
+  w.setAttribute('aria-label', TXT('meteoTitolo'));
+}
+function meteoPagina() {
+  var n = $('#pagina');
+  n.__pid = '__meteo__';
+  $('#pagina-titolo').textContent = TXT('meteoTitolo');
+  var corpo = $('#pagina-corpo');
+  vuota(corpo);
+  if (!METEO.dati || !METEO.dati.daily) {
+    corpo.appendChild(el('p', null, TXT('offline')));
+  } else {
+    var cur = METEO.dati.current, d = METEO.dati.daily;
+    var vc = meteoVoce(cur.weather_code);
+    var ora = el('div', 'meteo-adesso');
+    ora.innerHTML = '<span class="grande-icona">' + icona(vc.icona) + '</span>' +
+      '<div><b>' + Math.round(cur.temperature_2m) + '\u00b0C \u00b7 ' + T2(vc.it, vc.en) + '</b>' +
+      '<span>' + TXT('meteoOra') + ' \u00b7 ' + TXT('meteoVento') + ' ' + Math.round(cur.wind_speed_10m) + ' km/h</span></div>';
+    corpo.appendChild(ora);
+    for (var i = 0; i < d.time.length; i++) {
+      var g = new Date(d.time[i] + 'T12:00:00');
+      var nome = g.toLocaleDateString(lingua === 'it' ? 'it-IT' : 'en-GB', { weekday: 'long' });
+      nome = nome.charAt(0).toUpperCase() + nome.slice(1);
+      var vg = meteoVoce(d.weather_code[i]);
+      var r = el('div', 'meteo-riga');
+      r.innerHTML = '<span class="kv-icona">' + icona(vg.icona) + '</span>' +
+        '<b>' + nome + '</b>' +
+        '<span class="descr">' + T2(vg.it, vg.en) + '</span>' +
+        '<span class="gradi">' + Math.round(d.temperature_2m_min[i]) + '\u00b0 / ' +
+        Math.round(d.temperature_2m_max[i]) + '\u00b0</span>' +
+        '<span class="pioggia">' + (d.precipitation_probability_max[i] !== null
+          ? TXT('meteoPioggia') + ' ' + d.precipitation_probability_max[i] + '%' : '') + '</span>';
+      corpo.appendChild(r);
+    }
+    corpo.appendChild(el('p', 'meteo-fonte', TXT('meteoFonte')));
+  }
+  corpo.scrollTop = 0;
+  n.setAttribute('aria-hidden', 'false');
+  mostraHome(false);
+}
+function meteoAggiorna() {
+  var lat = (RESIDENCE && RESIDENCE.lat) || 40.047, lng = (RESIDENCE && RESIDENCE.lng) || 15.297;
+  var u = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng +
+    '&current=temperature_2m,weather_code,wind_speed_10m' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&timezone=Europe%2FRome&forecast_days=7';
+  fetch(u).then(function (r) { return r.json(); }).then(function (d) {
+    METEO.dati = d;
+    meteoWidget();
+    if ($('#pagina').__pid === '__meteo__' &&
+        $('#pagina').getAttribute('aria-hidden') === 'false') meteoPagina();
+  })['catch'](function () { /* niente rete: il widget resta con l'ultimo dato */ });
+}
+tocca($('#meteo-widget'), meteoPagina);
+meteoAggiorna();
+setInterval(meteoAggiorna, 30 * 60 * 1000);   /* ogni mezz'ora */
 
 /* =====================================================================
    Partenza

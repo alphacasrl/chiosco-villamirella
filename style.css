@@ -525,3 +525,43 @@ img { -webkit-user-drag: none; user-drag: none; }
 .kv-icona { display: inline-flex; width: 1.35rem; height: 1.35rem; color: var(--blu); flex: none; margin-right: .1rem; }
 .kv-icona svg { width: 100%; height: 100%; }
 #pagina-corpo .kv { align-items: flex-start; }
+
+
+/* ======================= meteo ======================= */
+/* sulla home: monocromo, nessuno sfondo, volutamente discreto */
+#meteo-widget {
+  position: fixed; top: .9rem; left: .9rem; z-index: 21;
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--marrone); padding: .4rem .5rem;
+}
+#meteo-widget[hidden] { display: none; }
+#meteo-widget .meteo-icona { display: inline-flex; width: 1.9rem; height: 1.9rem; }
+#meteo-widget .meteo-icona svg { width: 100%; height: 100%; }
+#meteo-widget .meteo-gradi {
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: 1.05rem;
+}
+#meteo-widget:active { opacity: .6; }
+#home[aria-hidden="true"] ~ #meteo-widget,
+#home[aria-hidden="true"] #meteo-widget { display: none; }
+
+/* scheda previsioni */
+.meteo-adesso {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--bianco); border: 1px solid #eadfc6;
+  padding: .8rem 1rem; margin-bottom: .7rem;
+}
+.meteo-adesso .grande-icona { display: inline-flex; width: 3rem; height: 3rem; color: var(--blu); }
+.meteo-adesso .grande-icona svg { width: 100%; height: 100%; }
+.meteo-adesso b { display: block; font-family: Mulish, sans-serif; font-size: 1.05rem; color: var(--marrone-scuro); }
+.meteo-adesso span { font-size: .68rem; color: var(--marrone); }
+.meteo-riga {
+  display: flex; align-items: center; gap: .7rem;
+  background: var(--bianco); border: 1px solid #eadfc6;
+  padding: .55rem .8rem; margin-bottom: .3rem; font-size: .76rem;
+}
+.meteo-riga b { font-family: Mulish, sans-serif; color: var(--marrone-scuro); min-width: 6.5rem; }
+.meteo-riga .descr { flex: 1; color: var(--testo); }
+.meteo-riga .gradi { font-family: Mulish, sans-serif; font-weight: 700; color: var(--blu); }
+.meteo-riga .pioggia { min-width: 7rem; text-align: right; font-size: .64rem; color: var(--marrone); }
+.meteo-fonte { font-size: .6rem; color: var(--marrone); margin-top: .6rem; }
