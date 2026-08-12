@@ -568,7 +568,7 @@ window.LUOGHI = [
     lat: "40.285563",   lng: "14.947901",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Due sono le vie d’accesso a Punta Licosa. La prima è una strada privata che si imbocca da Ogliastro Marina. Si tratta di una strada asfaltata e ben tenuta ma riservata ai soli residenti. Da San Marco di Castellabate c’è però un sentiero che conduce a questa oasi di tranquillità.",
-    immagine: "",
+    immagine: "assets/img/santa-maria-castellabate.jpg",
     articoli: [
       {
         titolo: "Santa Maria di Castellabate: Punta Licosa",
@@ -1132,7 +1132,7 @@ window.LUOGHI = [
     lat: "40.072886",   lng: "15.457116",   verified: true,
     notaCoordinate: "pin della guida ufficiale Villamirella (link Guidami qui) — VERIFICATO, prima era approssimato al paese di Bosco",
     sommario: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco.",
-    immagine: "",
+    immagine: "assets/img/museo-ortega.jpg",
     articoli: [
       {
         titolo: "La casa Ortega a Bosco",
