@@ -134,6 +134,25 @@ function scala() {
 }
 scala();
 window.addEventListener('resize', scala);
+/* L'evento resize della finestra non basta: il riquadro della mappa puo'
+   cambiare misura anche senza che la finestra cambi (font che arrivano,
+   pannello che si apre). Un osservatore sul contenitore copre tutti i
+   casi; e' smorzato perche' ridisegnare la mappa a ogni frame e' troppo
+   per la GPU del monitor. */
+(function () {
+  if (typeof ResizeObserver !== 'function') return;
+  var att = null;
+  var ro = new ResizeObserver(function () {
+    if (att) clearTimeout(att);
+    att = setTimeout(function () {
+      scala();
+      if (typeof mappa !== 'undefined' && mappa) mappa.resize();
+    }, 120);
+  });
+  ro.observe(document.documentElement);
+  var lato = document.getElementById('mappa-lato');
+  if (lato) ro.observe(lato);
+})();
 
 /* =====================================================================
    Dati: dai due elenchi di poi.js ricavo i gruppi della colonna sinistra
@@ -453,6 +472,10 @@ function avvia() {
 
   mappa.on('load', function () {
     stato.mappaPronta = true;
+    /* se la mappa e' stata costruita prima che il layout fosse assestato
+       (font ancora in arrivo, pannello a larghezza zero) il canvas resta
+       alla misura di ripiego 400x300 e non si riprende piu': provato. */
+    mappa.resize();
     applicaTerreno();
     marcaResidence();
     aggiornaPin();
