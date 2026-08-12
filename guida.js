@@ -18,7 +18,7 @@
 window.GUIDA = {
 
   benvenuto: {
-    titolo: "Benvenuto!",       titolo_en: "Welcome!",
+    titolo: "Benvenuti!",       titolo_en: "Welcome!",
     sotto: "Un'oasi di relax nel cuore del Cilento, dove natura, comfort e ospitalità si incontrano.",
     sotto_en: "An oasis of relaxation in the heart of Cilento, where nature, comfort and hospitality come together."
   },

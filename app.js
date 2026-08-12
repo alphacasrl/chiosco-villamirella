@@ -1171,7 +1171,7 @@ function apriSezione(idGruppo) {
 }
 function disegnaHome() {
   var ben = GUIDA.benvenuto || {};
-  $('#home-titolo').textContent = T2(ben.titolo, ben.titolo_en) || 'Benvenuto!';
+  $('#home-titolo').textContent = T2(ben.titolo, ben.titolo_en) || 'Benvenuti!';
   $('#home-sotto').textContent = T2(ben.sotto, ben.sotto_en) || '';
   $('#home-invito').textContent = TXT('invito');
   var griglia = $('#mattonelle');
