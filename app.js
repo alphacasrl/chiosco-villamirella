@@ -53,6 +53,8 @@ var CONFIG = {
      strisce vicino alla camera. A questi zoom la differenza di
      dettaglio del rilievo non si percepisce. */
   TERRENO_3D: true,
+  /* all'apertura la mappa e' PIATTA, vista dall'alto: il 3D si sceglie */
+  AVVIO_3D: false,
   TERRENO_TILES: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
   TERRENO_ATTRIB: 'Rilievo: AWS Terrain Tiles',
   TERRENO_MAXZOOM: 12,
@@ -318,7 +320,7 @@ var stato = {
   gruppo: CONFIG.GRUPPO_INIZIALE,
   aperta: null,
   base: CONFIG.BASE_INIZIALE,
-  terreno: CONFIG.TERRENO_3D,
+  terreno: CONFIG.AVVIO_3D,
   inclinata: false,
   mappaPronta: false
 };
@@ -1249,7 +1251,7 @@ function ricomincia() {
   /* cambiaBase() commuta: chiamarla solo se non siamo gia' sulla base iniziale */
   if (stato.base !== CONFIG.BASE_INIZIALE) cambiaBase();
   stato.gruppo = CONFIG.GRUPPO_INIZIALE;
-  stato.terreno = CONFIG.TERRENO_3D;
+  stato.terreno = CONFIG.AVVIO_3D;
   stato.inclinata = false;
   chiudiDettaglio();
   disegnaFiltri();
