@@ -1313,6 +1313,17 @@ tocca($('#reset'), ricomincia);
     }
   }
   window.__provaStandby = entraStandby;   /* per collaudo manuale dalla console */
+  /* tasto segreto: tre tocchi rapidi nell'angolo in basso a sinistra */
+  (function () {
+    var n = $('#angolo-segreto');
+    if (!n) return;
+    var tocchi = 0, primo = 0;
+    n.addEventListener('pointerup', function () {
+      var ora = Date.now();
+      if (ora - primo > 1500) { tocchi = 0; primo = ora; }
+      if (++tocchi >= 3) { tocchi = 0; setTimeout(entraStandby, 50); }
+    });
+  })();
   function azzera() {
     esciStandby();
     if (t) clearTimeout(t);

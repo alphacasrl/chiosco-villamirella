@@ -606,3 +606,9 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* durante lo standby l'app sotto non viene composta: solo il video lavora */
 body.in-standby #app, body.in-standby #home,
 body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
+
+/* angolo di servizio: invisibile ma toccabile, sotto nessun altro comando */
+#angolo-segreto {
+  position: fixed; left: 0; bottom: 0; width: 3.4rem; height: 3.4rem;
+  z-index: 27; background: transparent;
+}
