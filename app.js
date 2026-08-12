@@ -342,7 +342,10 @@ function apriDettaglio(v) {
     r.appendChild(el('span', null, val));
     righe.appendChild(r);
   }
-  if (v.tipo === 'luogo') {
+  /* il Parco e' un'area: una "distanza dal centro" di un territorio di
+     180.000 ettari sarebbe un numero senza significato */
+  var eArea = (v.tipo === 'luogo' && v.dato.id === 'parco-nazionale');
+  if (v.tipo === 'luogo' && !eArea) {
     if (d.distanzaKm !== '' && d.distanzaKm !== null && d.distanzaKm !== undefined) {
       riga('Distanza dal residence', d.distanzaKm + ' km');
     } else {
