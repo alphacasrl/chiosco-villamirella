@@ -612,3 +612,8 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
   position: fixed; left: 0; bottom: 0; width: 3.4rem; height: 3.4rem;
   z-index: 27; background: transparent;
 }
+
+.data-giorno { font-weight: 400; font-size: .64rem; color: var(--marrone); }
+.meteo-riga.ora b { min-width: 3.2rem; }
+.meteo-riga.ora .umid { min-width: 6.5rem; text-align: right; font-size: .62rem; color: #7d9db5; }
+.meteo-riga.ora { cursor: default; }

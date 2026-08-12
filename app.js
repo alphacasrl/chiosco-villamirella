@@ -1446,11 +1446,12 @@ function meteoPagina() {
       var g = new Date(d.time[i] + 'T12:00:00');
       var nome = g.toLocaleDateString(lingua === 'it' ? 'it-IT' : 'en-GB', { weekday: 'long' });
       nome = nome.charAt(0).toUpperCase() + nome.slice(1);
+      var dataB = g.toLocaleDateString(lingua === 'it' ? 'it-IT' : 'en-GB', { day: 'numeric', month: 'long' });
       var vg = meteoVoce(d.weather_code[i]);
       var r = el('div', 'meteo-riga');
       var eOggi = d.time[i] === oggi;
       r.innerHTML = '<span class="kv-icona">' + icona(vg.icona) + '</span>' +
-        '<b>' + nome + (eOggi ? ' <em class="oggi">' + TXT('meteoOggi') + '</em>' : '') + '</b>' +
+        '<b>' + nome + ' <span class="data-giorno">' + dataB + '</span>' + (eOggi ? ' <em class="oggi">' + TXT('meteoOggi') + '</em>' : '') + '</b>' +
         '<span class="descr">' + T2(vg.it, vg.en) + '</span>' +
         '<span class="gradi">' + Math.round(d.temperature_2m_min[i]) + '\u00b0 / ' +
         Math.round(d.temperature_2m_max[i]) + '\u00b0</span>' +
@@ -1459,7 +1460,7 @@ function meteoPagina() {
       /* un tocco sul giorno apre il suo dettaglio ora per ora */
       (function (giorno, etichetta) {
         tocca(r, function () { meteoGiorno(giorno, etichetta); });
-      })(d.time[i], nome + (eOggi ? ' \u00b7 ' + TXT('meteoOggi') : ''));
+      })(d.time[i], nome + ' ' + dataB + (eOggi ? ' \u00b7 ' + TXT('meteoOggi') : ''));
       corpo.appendChild(r);
     }
     corpo.appendChild(el('p', 'meteo-fonte', TXT('meteoFonte')));
@@ -1502,7 +1503,22 @@ function meteoGiorno(giorno, etichetta) {
   for (var q = 0; q < hh.time.length; q++) {
     if (hh.time[q].slice(0, 10) === giorno) { da = q; break; }
   }
-  if (da >= 0) corpo.appendChild(strisciaOre(da, 24));
+  if (da >= 0) {
+    var fine = Math.min(da + 24, hh.time.length);
+    for (var k = da; k < fine; k++) {
+      var vo = meteoVoce(hh.weather_code[k]);
+      var pp = hh.precipitation_probability ? hh.precipitation_probability[k] : null;
+      var um = hh.relative_humidity_2m ? hh.relative_humidity_2m[k] : null;
+      var r = el('div', 'meteo-riga ora');
+      r.innerHTML = '<b>' + hh.time[k].slice(11, 16) + '</b>' +
+        '<span class="kv-icona">' + icona(vo.icona) + '</span>' +
+        '<span class="descr">' + T2(vo.it, vo.en) + '</span>' +
+        '<span class="gradi">' + Math.round(hh.temperature_2m[k]) + '°</span>' +
+        '<span class="pioggia">' + (pp !== null && pp > 15 ? TXT('meteoPioggia') + ' ' + pp + '%' : '') + '</span>' +
+        '<span class="umid">' + (um !== null ? TXT('meteoUmidita') + ' ' + um + '%' : '') + '</span>';
+      corpo.appendChild(r);
+    }
+  }
   corpo.appendChild(el('p', 'meteo-fonte', TXT('meteoFonte')));
   corpo.scrollTop = 0;
 }
