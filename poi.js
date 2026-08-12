@@ -114,8 +114,8 @@ window.LUOGHI = [
     id: "spiaggia-ficocella",
     nome: "Spiaggia della Ficocella",
     categoria: "spiagge",
-    lat: "40.03483",   lng: "15.285596",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
+    lat: "40.034769",   lng: "15.285517",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia Ficocella degli uomini» (esiste anche la gemella «delle donne» 60 m a nord)",
     sommario: "La spiaggia della Ficocella è una delle più piccole spiaggia del Cilento. La spiaggia del Ficocella è anche l’unica spiaggia che si trova vicino al centro di Palinuro . La particolare conformazione di questa spiaggia di Palinuro la rende una delle più affascinanti spiagge della costiera cilentana.",
     immagine: "assets/img/spiaggia-ficocella.jpg",
     articoli: [
@@ -132,8 +132,8 @@ window.LUOGHI = [
     id: "spiaggia-porto",
     nome: "Spiaggia del Porto di Capo Palinuro",
     categoria: "spiagge",
-    lat: "40.029755",   lng: "15.279269",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
+    lat: "40.029775",   lng: "15.278646",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia del Porto»",
     sommario: "A Palinuro, la spiaggia del Porto è una delle spiagge del Cilento più apprezzate per la trasparenza del mare. Il porto di Palinuro è un porto di piccole dimensioni che ospita piccoli yacht o pescherecci spesso di proprietà dei pescatori di Palinuro.",
     immagine: "assets/img/spiaggia-porto.jpg",
     articoli: [
@@ -150,10 +150,10 @@ window.LUOGHI = [
     id: "baia-marinella",
     nome: "Baia della Marinella",
     categoria: "spiagge",
-    lat: "40.029621",   lng: "15.297563",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [beach]",
+    lat: "40.0296",   lng: "15.296774",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia Marinella»",
     sommario: "La spiaggia della Marinella si trova di fronte al famoso Scoglio del Coniglio di Palinuro . Tra le spiagge di Palinuro , la spiaggia delle Marinella è quella più immersa nella natura incontaminata e nella macchina mediterranea.",
-    immagine: "assets/img/baia-marinella.jpg",
+    immagine: "",
     articoli: [
       {
         titolo: "Le spiagge di Palinuro: la nostra guida",
@@ -162,16 +162,17 @@ window.LUOGHI = [
       }
     ],
     distanzaKm: "",   tempoAuto: "",
+    prenotabileInReception: true,
     inEvidenza: true
   },
   {
     id: "buon-dormire",
     nome: "Baia del Buon Dormire",
     categoria: "spiagge",
-    lat: "40.02726",   lng: "15.292084",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [sand]",
+    lat: "40.025687",   lng: "15.291607",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia del Buondormire di mare», quella davanti allo Scoglio del Coniglio",
     sommario: "",
-    immagine: "assets/img/buon-dormire.jpg",
+    immagine: "",
     articoli: [],
     distanzaKm: "",   tempoAuto: "",
     inEvidenza: true
@@ -180,8 +181,8 @@ window.LUOGHI = [
     id: "arco-naturale",
     nome: "Spiaggia dell'Arco Naturale",
     categoria: "spiagge",
-    lat: "40.030868",   lng: "15.308354",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [attraction]",
+    lat: "40.030819",   lng: "15.307818",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «Spiaggia dell'Arco Naturale»",
     sommario: "La spiaggia dell’Arco Naturale si trova a pochi passi dal fiume Mingardo che scorre a Palinuro. La spiaggia con il particolare arco naturale scavato nella roccia è uno dei simboli di Palinuro.",
     immagine: "assets/img/arco-naturale.jpg",
     articoli: [
@@ -201,7 +202,7 @@ window.LUOGHI = [
     lat: "39.997243",   lng: "15.413433",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia Cala Bianca» — non il pontile omonimo del porto",
     sommario: "Cala Bianca è una delle spiagge di Marina di Camerota che devi visitare se sei a Marina di Camerota. Nel 2013 Cala Bianca è stata eletta come la spiaggia più bella d’Italia , vincendo il sondaggio di Legambiente “la più bella sei tu”.",
-    immagine: "assets/img/cala-bianca.jpg",
+    immagine: "",
     articoli: [
       {
         titolo: "Le spiagge di Marina di Camerota",
@@ -219,7 +220,7 @@ window.LUOGHI = [
     lat: "39.997172",   lng: "15.407624",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [natural/beach] — corretta al secondo giro: la prima risposta era il pontile del porto",
     sommario: "La spiaggia del Pozzallo è una vera e propria spiaggia da cartolina. Il Pozzallo è una tappa irrinunciabile nel corso di una vacanza nel Cilento. La spiaggia di Pozzallo è un misto di ciottoli bianchi e sabbia.",
-    immagine: "assets/img/spiaggia-pozzallo.jpg",
+    immagine: "",
     articoli: [
       {
         titolo: "Le spiagge di Marina di Camerota",
@@ -237,7 +238,7 @@ window.LUOGHI = [
     lat: "39.998918",   lng: "15.42702",   verified: true,
     notaCoordinate: "OpenStreetMap [natural/bay] «Baia degli Infreschi»",
     sommario: "Il Porto degli Infreschi, gioiello marino del Parco Nazionale del Cilento e Vallo di Diano , è un magnifico esempio di porto naturale. Le sue baie, le alte falesie rocciose e le grotte marine di quest’area protetta sono raggiungibili comodamente via mare con escursioni in barca.",
-    immagine: "assets/img/porto-infreschi.webp",
+    immagine: "",
     articoli: [
       {
         titolo: "Le grotte di Marina di Camerota",
@@ -539,7 +540,7 @@ window.LUOGHI = [
     lat: "40.285563",   lng: "14.947901",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [village]",
     sommario: "Due sono le vie d’accesso a Punta Licosa. La prima è una strada privata che si imbocca da Ogliastro Marina. Si tratta di una strada asfaltata e ben tenuta ma riservata ai soli residenti. Da San Marco di Castellabate c’è però un sentiero che conduce a questa oasi di tranquillità.",
-    immagine: "assets/img/santa-maria-castellabate.jpg",
+    immagine: "",
     articoli: [
       {
         titolo: "Santa Maria di Castellabate: Punta Licosa",
@@ -553,19 +554,266 @@ window.LUOGHI = [
 
   /* ---------- GROTTE E MARE ---------- */
   {
-    id: "grotte-capo-palinuro",
-    nome: "Grotte di Capo Palinuro",
+    id: "grotta-del-buondormire",
+    nome: "Grotta del Buondormire",
     categoria: "grotte",
-    lat: "40.031346",   lng: "15.268883",   verified: true,
-    notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
-    sommario: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee .",
-    immagine: "assets/img/grotte-capo-palinuro.jpg",
+    lat: "40.028005",   lng: "15.293636",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta del Buondormire»",
+    sommario: "",
+    immagine: "",
     articoli: [
       {
-        titolo: "Immersioni a Palinuro",
-        url: "https://www.villamirella.it/cilento/immersioni-alle-grotte-di-palinuro",
-        estratto: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee ."
-      },
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-d-argento",
+    nome: "Grotta d'argento",
+    categoria: "grotte",
+    lat: "40.02436",   lng: "15.276691",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta d'argento»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-della-cernia",
+    nome: "Grotta della Cernia",
+    categoria: "grotte",
+    lat: "40.024484",   lng: "15.271035",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta della Cernia»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-dell-uomo-morto",
+    nome: "Grotta dell'uomo morto",
+    categoria: "grotte",
+    lat: "40.031352",   lng: "15.271383",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta dell'uomo morto»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-di-zia-anna",
+    nome: "Grotta di Zia Anna",
+    categoria: "grotte",
+    lat: "40.029324",   lng: "15.267971",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta di Zia Anna»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-dei-porci",
+    nome: "Grotta dei Porci",
+    categoria: "grotte",
+    lat: "40.029777",   lng: "15.301085",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta dei Porci»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-dei-pertusi",
+    nome: "Grotta dei Pertusi",
+    categoria: "grotte",
+    lat: "40.023056",   lng: "15.289115",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta dei Pertusi»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-dei-monaci",
+    nome: "Grotta dei Monaci",
+    categoria: "grotte",
+    lat: "40.024897",   lng: "15.283306",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta dei Monaci»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-sulfurea",
+    nome: "Grotta Sulfurea",
+    categoria: "grotte",
+    lat: "40.024708",   lng: "15.282947",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta Sulfurea»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-del-sangue",
+    nome: "Grotta del Sangue",
+    categoria: "grotte",
+    lat: "40.024077",   lng: "15.277098",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta del Sangue»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-delle-ossa",
+    nome: "Grotta delle Ossa",
+    categoria: "grotte",
+    lat: "40.029836",   lng: "15.303645",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta delle Ossa»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-azzurra",
+    nome: "Grotta Azzurra",
+    categoria: "grotte",
+    lat: "40.031346",   lng: "15.268883",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta Azzurra»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-delle-ciavole",
+    nome: "Grotta delle Ciavole",
+    categoria: "grotte",
+    lat: "40.024164",   lng: "15.292283",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta delle Ciavole»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-punta-della-galera",
+    nome: "Grotta Punta della Galera",
+    categoria: "grotte",
+    lat: "40.02302",   lng: "15.288349",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta Punta della Galera»",
+    sommario: "",
+    immagine: "",
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "grotta-del-lago",
+    nome: "Grotta del lago",
+    categoria: "grotte",
+    lat: "40.024565",   lng: "15.282436",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/cave_entrance] «Grotta del lago»",
+    sommario: "",
+    immagine: "",
+    articoli: [
       {
         titolo: "Tour in barca: le grotte di Palinuro",
         url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
@@ -600,7 +848,7 @@ window.LUOGHI = [
     lat: "40.000983",   lng: "15.381251",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [cave_entrance]",
     sommario: "La prima ad aprirsi, a pochi metri dal mare, è la Grotta della Cala. Composta da un’ante grotta e da un retro grotta, collegati da una strozzatura. La forma di questa caverna ricorda una clessidra.",
-    immagine: "assets/img/grotta-della-cala.webp",
+    immagine: "",
     articoli: [
       {
         titolo: "Le grotte di Marina di Camerota",
@@ -618,7 +866,7 @@ window.LUOGHI = [
     lat: "40.000809",   lng: "15.382516",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [bare_rock]",
     sommario: "Su uno sperone di natura calcarea, esse formavano in origine un’unica caverna. La cavità più piccola, corrispondente all’attuale Grotta, fungeva da drenaggio di una grotta enorme. L’uomo di Neanderthal trovava riparo al suo interno.",
-    immagine: "assets/img/riparo-del-poggio.webp",
+    immagine: "",
     articoli: [
       {
         titolo: "Le grotte di Marina di Camerota",
@@ -636,7 +884,7 @@ window.LUOGHI = [
     lat: "39.999049",   lng: "15.386788",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [natural/cave_entrance] — corretta al secondo giro: la prima risposta era la spiaggia di Lentiscelle",
     sommario: "quella della serratura di una porta. Abbastanza profonda, la grotta è stata abitata durante il Paleolitico superiore e il Neolitico.",
-    immagine: "assets/img/grotta-serratura.webp",
+    immagine: "",
     articoli: [
       {
         titolo: "Le grotte di Marina di Camerota",
@@ -856,7 +1104,7 @@ window.LUOGHI = [
     lat: "40.072886",   lng: "15.457116",   verified: true,
     notaCoordinate: "APPROSSIMATA al centro dell'abitato di Bosco: il museo non risulta mappato su OpenStreetMap",
     sommario: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco.",
-    immagine: "assets/img/museo-ortega.jpg",
+    immagine: "",
     articoli: [
       {
         titolo: "La casa Ortega a Bosco",
@@ -894,7 +1142,7 @@ window.LUOGHI = [
     lat: "40.047581",   lng: "15.462548",   verified: true,
     notaCoordinate: "OpenStreetMap/Nominatim [place_of_worship]",
     sommario: "Il Santuario della Madonna di Pietrasanta è un luogo di preghiera e di fede situato a pochi chilometri da San Giovanni a Piro, nel cuore del Parco Nazionale del Cilento, Vallo di Diano e Alburni. La costruzione del santuario risale al 1600 e la sua architettura è un esempio di barocco cilentano.",
-    immagine: "assets/img/pietrasanta.webp",
+    immagine: "assets/img/pietrasanta.jpg",
     articoli: [
       {
         titolo: "Pianoro di Ciolandrea e santuario di Pietrasanta",
@@ -921,7 +1169,7 @@ window.ESPERIENZE = [
     tipo: "itinerario",
     sommario: "Il percorso, che si snoda tra la vegetazione mediterranea e le scogliere a picco sul mare, è lungo circa 3 km e presenta una difficoltà media. Il sentiero dei fortini è stato realizzato su un tracciato che un tempo era utilizzato dalle truppe militari per proteggere la costa dai pirati saraceni.",
     immagine: "assets/img/sentiero-fortini.jpg",
-    luoghi: ["grotte-capo-palinuro"],
+    luoghi: ["grotta-azzurra"],
     prenotabileInReception: false,
     inEvidenza: false,
     articoli: [
@@ -971,7 +1219,7 @@ window.ESPERIENZE = [
     nome: "Trekking sul Monte Bulgheria",
     tipo: "itinerario",
     sommario: "Una delle più belle montagne del Cilento, in verità non altissimo, ma con i suoi 1225m e una stupefacente posizione geografica, il Monte Bulgheria è una mano distesa che permette all’appennino di toccare il mare.",
-    immagine: "assets/img/trekking-bulgheria.webp",
+    immagine: "",
     luoghi: ["monte-bulgheria"],
     prenotabileInReception: false,
     inEvidenza: false,
@@ -1025,7 +1273,7 @@ window.ESPERIENZE = [
     tipo: "esperienza",
     sommario: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto.",
     immagine: "assets/img/gita-grotte.jpg",
-    luoghi: ["grotte-capo-palinuro"],
+    luoghi: ["grotta-azzurra", "grotta-del-sangue", "grotta-d-argento", "grotta-sulfurea", "grotta-delle-ossa", "grotta-dei-monaci", "grotta-della-cernia"],
     prenotabileInReception: true,
     inEvidenza: true,
     articoli: [
@@ -1040,16 +1288,16 @@ window.ESPERIENZE = [
     id: "immersioni",
     nome: "Immersioni alle grotte di Palinuro",
     tipo: "esperienza",
-    sommario: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione.",
+    sommario: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee .",
     immagine: "assets/img/immersioni.jpg",
-    luoghi: ["grotte-capo-palinuro"],
+    luoghi: ["grotta-azzurra"],
     prenotabileInReception: false,
     inEvidenza: false,
     articoli: [
       {
         titolo: "Immersioni a Palinuro",
         url: "https://www.villamirella.it/cilento/immersioni-alle-grotte-di-palinuro",
-        estratto: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione."
+        estratto: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee ."
       }
     ]
   },
@@ -1162,7 +1410,7 @@ window.ESPERIENZE = [
     nome: "Spiagge a misura di bambino",
     tipo: "guida",
     sommario: "Le neomamme tendono a porsi troppe domande prima di intraprendere un viaggio con un bambino. Che senso ha farlo viaggiare a quest'età se poi non si ricorderà nulla? La classica scusa che usano le mamme per coprire le proprie paure.",
-    immagine: "assets/img/guida-bambini.jpg",
+    immagine: "",
     luoghi: [],
     prenotabileInReception: false,
     inEvidenza: false,

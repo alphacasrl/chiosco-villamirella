@@ -6,7 +6,7 @@ riquadro del Cilento, deve stare entro una distanza ragionevole dal paese di
 riferimento, e deve essere dell'**oggetto giusto** — una spiaggia deve risultare
 `natural/beach`, non un pontile o un campeggio che porta lo stesso nome.
 
-Su 43 luoghi: **43 compilati e verificati**, **0 da fare a mano**
+Su 57 luoghi: **57 compilati e verificati**, **0 da fare a mano**
 perché OpenStreetMap restituiva un oggetto sbagliato.
 
 ## Da fare a mano
@@ -33,11 +33,11 @@ così resta scritto perché.
 | luogo | lat | lng | oggetto trovato su OpenStreetMap |
 |---|---|---|---|
 | Spiaggia delle Saline | `40.05601` | `15.282363` | campo sportivo di Palinuro, punto indicato dal titolare come accesso alla spiaggia |
-| Spiaggia della Ficocella | `40.03483` | `15.285596` | OpenStreetMap/Nominatim [beach] |
-| Spiaggia del Porto di Capo Palinuro | `40.029755` | `15.279269` | OpenStreetMap/Nominatim [beach] |
-| Baia della Marinella | `40.029621` | `15.297563` | OpenStreetMap/Nominatim [beach] |
-| Baia del Buon Dormire | `40.02726` | `15.292084` | OpenStreetMap/Nominatim [sand] |
-| Spiaggia dell'Arco Naturale | `40.030868` | `15.308354` | OpenStreetMap/Nominatim [attraction] |
+| Spiaggia della Ficocella | `40.034769` | `15.285517` | OpenStreetMap [natural/beach] «Spiaggia Ficocella degli uomini» (esiste anche la gemella «delle donne» 60 m a nord) |
+| Spiaggia del Porto di Capo Palinuro | `40.029775` | `15.278646` | OpenStreetMap [natural/beach] «Spiaggia del Porto» |
+| Baia della Marinella | `40.0296` | `15.296774` | OpenStreetMap [natural/beach] «spiaggia Marinella» |
+| Baia del Buon Dormire | `40.025687` | `15.291607` | OpenStreetMap [natural/beach] «spiaggia del Buondormire di mare», quella davanti allo Scoglio del Coniglio |
+| Spiaggia dell'Arco Naturale | `40.030819` | `15.307818` | OpenStreetMap [natural/beach] «Spiaggia dell'Arco Naturale» |
 | Cala Bianca | `39.997243` | `15.413433` | OpenStreetMap [natural/beach] «spiaggia Cala Bianca» — non il pontile omonimo del porto |
 | Spiaggia del Pozzallo | `39.997172` | `15.407624` | OpenStreetMap/Nominatim [natural/beach] — corretta al secondo giro: la prima risposta era il pontile del porto |
 | Porto e Baia degli Infreschi | `39.998918` | `15.42702` | OpenStreetMap [natural/bay] «Baia degli Infreschi» |
@@ -56,7 +56,21 @@ così resta scritto perché.
 | Lentiscosa | `40.020963` | `15.386612` | OpenStreetMap/Nominatim [village] |
 | Marina di Pisciotta | `40.10383` | `15.226383` | OpenStreetMap/Nominatim [village] |
 | Santa Maria di Castellabate | `40.285563` | `14.947901` | OpenStreetMap/Nominatim [village] |
-| Grotte di Capo Palinuro | `40.031346` | `15.268883` | OpenStreetMap/Nominatim [cave_entrance] |
+| Grotta del Buondormire | `40.028005` | `15.293636` | OpenStreetMap [natural/cave_entrance] «Grotta del Buondormire» |
+| Grotta d'argento | `40.02436` | `15.276691` | OpenStreetMap [natural/cave_entrance] «Grotta d'argento» |
+| Grotta della Cernia | `40.024484` | `15.271035` | OpenStreetMap [natural/cave_entrance] «Grotta della Cernia» |
+| Grotta dell'uomo morto | `40.031352` | `15.271383` | OpenStreetMap [natural/cave_entrance] «Grotta dell'uomo morto» |
+| Grotta di Zia Anna | `40.029324` | `15.267971` | OpenStreetMap [natural/cave_entrance] «Grotta di Zia Anna» |
+| Grotta dei Porci | `40.029777` | `15.301085` | OpenStreetMap [natural/cave_entrance] «Grotta dei Porci» |
+| Grotta dei Pertusi | `40.023056` | `15.289115` | OpenStreetMap [natural/cave_entrance] «Grotta dei Pertusi» |
+| Grotta dei Monaci | `40.024897` | `15.283306` | OpenStreetMap [natural/cave_entrance] «Grotta dei Monaci» |
+| Grotta Sulfurea | `40.024708` | `15.282947` | OpenStreetMap [natural/cave_entrance] «Grotta Sulfurea» |
+| Grotta del Sangue | `40.024077` | `15.277098` | OpenStreetMap [natural/cave_entrance] «Grotta del Sangue» |
+| Grotta delle Ossa | `40.029836` | `15.303645` | OpenStreetMap [natural/cave_entrance] «Grotta delle Ossa» |
+| Grotta Azzurra | `40.031346` | `15.268883` | OpenStreetMap [natural/cave_entrance] «Grotta Azzurra» |
+| Grotta delle Ciavole | `40.024164` | `15.292283` | OpenStreetMap [natural/cave_entrance] «Grotta delle Ciavole» |
+| Grotta Punta della Galera | `40.02302` | `15.288349` | OpenStreetMap [natural/cave_entrance] «Grotta Punta della Galera» |
+| Grotta del lago | `40.024565` | `15.282436` | OpenStreetMap [natural/cave_entrance] «Grotta del lago» |
 | Grotte di Pertosa-Auletta | `40.537046` | `15.455024` | OpenStreetMap/Nominatim [cave_entrance] |
 | Grotta della Cala | `40.000983` | `15.381251` | OpenStreetMap/Nominatim [cave_entrance] |
 | Grotta del Riparo del Poggio | `40.000809` | `15.382516` | OpenStreetMap/Nominatim [bare_rock] |

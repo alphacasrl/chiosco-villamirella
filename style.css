@@ -1,13 +1,12 @@
 /* =====================================================================
    Chiosco Villamirella — foglio di stile
    ---------------------------------------------------------------------
-   Colori, font e forme vengono dal CSS del sito villamirella.it
-   (variabili --primary-button #235784, --secondary-background #ddeaf6,
-   titoli Mulish, testo Open Sans, bottoni ad angolo vivo).
+   Colori e font vengono dal CSS di villamirella.it (blu #235784,
+   azzurro #ddeaf6, Mulish per i titoli, Open Sans per il testo).
+   I bottoni d'azione restano ad angolo vivo come sul sito; schede,
+   foto e comandi hanno angoli morbidi per non sembrare un cruscotto.
 
-   Misure: TUTTO in rem. La radice e' calcolata da app.js come
-   innerWidth/64, cioe' 24px sul monitor del chiosco (1536 px logici).
-   Cambiando schermo l'interfaccia si scala da sola.
+   Misure in rem. La radice e' innerWidth/64 (24px sul monitor 1536px).
    ===================================================================== */
 
 @font-face { font-family: Mulish; font-weight: 700; font-display: swap;
@@ -20,16 +19,25 @@
   src: url("assets/fonts/opensans-600.woff2") format("woff2"); }
 
 :root {
-  --blu: #235784;              /* --primary-button del sito */
+  --blu: #235784;
   --blu-scuro: #1a4263;
-  --azzurro: #ddeaf6;          /* --secondary-background */
-  --testo: #2c3c4a;            /* --primary-text */
-  --titolo: #040b11;           /* --secondary-text */
+  --azzurro: #ddeaf6;
+  --azzurro-velo: #eef4fa;
+  --testo: #2c3c4a;
+  --titolo: #040b11;
   --bianco: #fff;
   --grigio: #e8ebed;
-  --bordo: #cfdae5;
-  --ombra: 0 1px 3px rgba(4, 11, 17, .18);   /* volutamente minima: la GPU e' debole */
-  font-size: 24px;                            /* ricalcolata da app.js */
+  --bordo: #d5e0ea;
+  --rosso: #dd350f;
+  --ombra: 0 1px 4px rgba(4, 11, 17, .14);
+  /* colori delle categorie: gli stessi dei pin sulla mappa */
+  --c-spiagge: #1a87c9;
+  --c-borghi: #c96a2b;
+  --c-grotte: #7057c9;
+  --c-natura: #2f9e60;
+  --c-archeologia: #b5892f;
+  --c-santuari: #9550a8;
+  font-size: 24px;   /* ricalcolata da app.js */
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -39,11 +47,10 @@ html, body {
   background: var(--bianco); color: var(--testo);
   font-family: "Open Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-size: .85rem; line-height: 1.6;
-  /* lockdown: niente selezione, niente trascinamento, niente rimbalzo */
   -webkit-user-select: none; user-select: none;
   -webkit-touch-callout: none;
   overscroll-behavior: none;
-  touch-action: manipulation;   /* toglie lo zoom da doppio tap sulla pagina */
+  touch-action: manipulation;
 }
 h1, h2, h3 { font-family: Mulish, sans-serif; color: var(--titolo); margin: 0; line-height: 1.2; }
 img { -webkit-user-drag: none; user-drag: none; }
@@ -52,109 +59,147 @@ img { -webkit-user-drag: none; user-drag: none; }
 #app { display: flex; height: 100%; width: 100%; }
 #pannello {
   width: 42%; min-width: 0; height: 100%;
-  display: flex; flex-direction: column; background: var(--bianco);
+  display: flex; flex-direction: column; background: var(--azzurro-velo);
   position: relative; overflow: hidden;
 }
-#mappa-lato { flex: 1; min-width: 0; height: 100%; position: relative; background: #0f2733; }
+#mappa-lato { flex: 1; min-width: 0; height: 100%; position: relative; background: #0f2733; overflow: hidden; }
 #mappa { position: absolute; inset: 0; }
-
-/* durante l'animazione di apertura/chiusura */
 .animato #pannello, .animato #mappa-lato { transition: width .32s ease, flex-basis .32s ease; }
+.solo-mappa #pannello { width: 0; }
+.solo-elenco #mappa-lato { flex: 0 0 0; }
 
 /* ============================ testata ============================= */
 #testata {
   display: flex; align-items: center; gap: .8rem;
-  padding: .7rem 1rem .6rem; border-bottom: 2px solid var(--azzurro);
+  padding: .7rem 1rem .6rem; background: var(--bianco);
+  border-bottom: 2px solid var(--azzurro);
 }
 #testata img { height: 2.2rem; width: auto; }
-#testata .scritte { min-width: 0; }
-#testata h1 { font-size: 1.05rem; font-weight: 900; letter-spacing: -.01em; }
-#testata p { margin: 0; font-size: .62rem; color: var(--blu); letter-spacing: .04em; text-transform: uppercase; }
+#testata .scritte { min-width: 0; flex: 1; }
+#testata h1 { font-size: 1.02rem; font-weight: 900; letter-spacing: -.01em; }
+#testata p { margin: 0; font-size: .58rem; color: var(--blu); letter-spacing: .05em; text-transform: uppercase; }
+
+/* il grande pulsante per ricominciare */
+#reset {
+  flex: none; min-height: 3.2rem; padding: .4rem 1.1rem;
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--blu); color: var(--bianco);
+  border: none; border-radius: .45rem; cursor: pointer;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
+  box-shadow: var(--ombra);
+}
+#reset:active { background: var(--blu-scuro); }
 
 /* ============================= filtri ============================= */
 #filtri {
-  display: flex; gap: .4rem; padding: .6rem 1rem;
+  display: flex; gap: .45rem; padding: .6rem 1rem;
   overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
-  border-bottom: 1px solid var(--bordo); flex: none;
+  background: var(--bianco); border-bottom: 1px solid var(--bordo); flex: none;
 }
 #filtri::-webkit-scrollbar { display: none; }
 .chip {
   flex: none; min-height: 3rem; padding: .5rem 1.1rem;
-  display: inline-flex; align-items: center; white-space: nowrap;
-  font-family: Mulish, sans-serif; font-size: .8rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
+  font-family: Mulish, sans-serif; font-size: .78rem; font-weight: 700;
   color: var(--blu); background: var(--azzurro);
-  border: 2px solid var(--azzurro); border-radius: 0;   /* angolo vivo: firma del sito */
+  border: 2px solid var(--azzurro); border-radius: 2rem;
   cursor: pointer;
 }
+.chip .pallino { width: .55rem; height: .55rem; border-radius: 50%; flex: none; }
 .chip[aria-pressed="true"] { background: var(--blu); border-color: var(--blu); color: var(--bianco); }
 
 /* ============================= elenco ============================= */
-#elenco { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2rem; }
+#elenco { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: .3rem .8rem 2rem; }
 #elenco::-webkit-scrollbar { width: .4rem; }
-#elenco::-webkit-scrollbar-thumb { background: var(--bordo); }
+#elenco::-webkit-scrollbar-thumb { background: var(--bordo); border-radius: .2rem; }
 
 .sezione-titolo {
-  font-family: Mulish, sans-serif; font-size: .68rem; font-weight: 700;
+  font-family: Mulish, sans-serif; font-size: .66rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: .1em; color: var(--blu);
-  padding: 1rem 1rem .3rem; background: var(--bianco);
+  padding: .9rem .3rem .35rem;
 }
 .scheda {
   display: flex; gap: .8rem; align-items: stretch;
-  padding: .55rem 1rem; min-height: 3.6rem; cursor: pointer;
-  border-bottom: 1px solid var(--grigio); background: var(--bianco);
+  padding: .55rem; min-height: 4.6rem; cursor: pointer;
+  background: var(--bianco); border: 1px solid var(--bordo);
+  border-radius: .55rem; margin-bottom: .5rem; box-shadow: var(--ombra);
 }
 .scheda:active { background: var(--azzurro); }
-.scheda.evidenziata { background: var(--azzurro); box-shadow: inset .25rem 0 0 var(--blu); }
+.scheda.evidenziata { background: var(--azzurro); border-color: var(--blu); box-shadow: inset .25rem 0 0 var(--blu); }
 .scheda .foto {
-  width: 4.4rem; height: 3.3rem; flex: none; object-fit: cover;
-  background: var(--grigio); display: block;
+  width: 5.2rem; height: 3.9rem; flex: none; object-fit: cover;
+  background: var(--azzurro); border-radius: .4rem; display: block;
+}
+.scheda .foto.segnaposto {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--blu); font-family: Mulish, sans-serif; font-weight: 900; font-size: 1.4rem;
 }
 .scheda .corpo { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-.scheda h3 { font-size: .92rem; font-weight: 700; }
-.scheda .meta { font-size: .6rem; color: var(--blu); text-transform: uppercase; letter-spacing: .05em; }
+.scheda h3 { font-size: .9rem; font-weight: 700; }
+.scheda .meta {
+  font-size: .58rem; color: var(--blu); text-transform: uppercase;
+  letter-spacing: .05em; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+}
+.scheda .meta .pallino { width: .5rem; height: .5rem; border-radius: 50%; }
 .scheda p {
-  margin: .15rem 0 0; font-size: .68rem; line-height: 1.45; color: var(--testo);
+  margin: .12rem 0 0; font-size: .66rem; line-height: 1.45; color: var(--testo);
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .vuoto { padding: 2rem 1rem; color: #7d8b97; font-size: .8rem; }
 
+/* etichetta "prenotabile in reception" */
+.badge-pren {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .12rem .5rem; border-radius: 2rem;
+  background: var(--rosso); color: var(--bianco);
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .52rem;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.badge-pren svg { flex: none; }
+
 /* =========================== dettaglio ============================ */
 #dettaglio {
-  position: absolute; inset: 0; background: var(--bianco);
+  position: absolute; inset: 0; background: var(--azzurro-velo);
   display: flex; flex-direction: column;
   transform: translateX(100%); transition: transform .28s ease;
   z-index: 5;
 }
 #dettaglio.aperto { transform: translateX(0); }
 #dettaglio .scorri { flex: 1; overflow-y: auto; }
-#dettaglio .copertina { width: 100%; height: 9rem; object-fit: cover; background: var(--grigio); display: block; }
-#dettaglio .testo { padding: .9rem 1.1rem 2rem; }
-#dettaglio h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: .2rem; }
-#dettaglio .categoria { font-size: .62rem; color: var(--blu); text-transform: uppercase; letter-spacing: .08em; }
-#dettaglio .sommario { font-size: .88rem; line-height: 1.6; margin: .7rem 0 0; }
-#dettaglio .righe { margin-top: .9rem; border-top: 1px solid var(--bordo); }
+.copertina-cornice { padding: .7rem .9rem 0; }
+#dettaglio .copertina {
+  width: 100%; height: 9.5rem; object-fit: cover; display: block;
+  background: var(--azzurro); border-radius: .6rem; box-shadow: var(--ombra);
+}
+#dettaglio .testo { padding: .8rem 1.1rem 2rem; }
+#dettaglio h2 { font-size: 1.45rem; font-weight: 900; margin: .1rem 0 .2rem; }
+#dettaglio .categoria { font-size: .6rem; color: var(--blu); text-transform: uppercase; letter-spacing: .08em; }
+#dettaglio .sommario { font-size: .86rem; line-height: 1.6; margin: .6rem 0 0; }
+#dettaglio .righe { margin-top: .9rem; }
 #dettaglio .riga {
   display: flex; justify-content: space-between; gap: 1rem;
-  padding: .45rem 0; border-bottom: 1px solid var(--grigio); font-size: .75rem;
+  padding: .45rem .6rem; font-size: .72rem;
+  background: var(--bianco); border-radius: .4rem; margin-bottom: .3rem;
 }
 #dettaglio .riga b { font-family: Mulish, sans-serif; color: var(--titolo); }
-.prenotabile {
-  margin-top: .9rem; padding: .7rem .9rem; background: var(--azzurro);
-  border-left: .3rem solid var(--blu);
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .82rem; color: var(--blu-scuro);
+#det-prenotabile .badge-pren { font-size: .62rem; padding: .35rem .8rem; margin-top: .5rem; }
+.articolo {
+  margin-top: .8rem; padding: .7rem .8rem;
+  background: var(--bianco); border-radius: .5rem; box-shadow: var(--ombra);
 }
-.articolo { margin-top: 1rem; padding-top: .8rem; border-top: 1px solid var(--bordo); }
-.articolo h4 { font-family: Mulish, sans-serif; font-size: .85rem; font-weight: 700; color: var(--titolo); margin: 0 0 .25rem; }
-.articolo p { margin: 0; font-size: .72rem; line-height: 1.55; }
+.articolo h4 { font-family: Mulish, sans-serif; font-size: .82rem; font-weight: 700; color: var(--titolo); margin: 0 0 .25rem; }
+.articolo p { margin: 0; font-size: .7rem; line-height: 1.55; }
 .avviso-vuoto { font-size: .72rem; color: #7d8b97; font-style: italic; margin-top: .6rem; }
+.nota-percorso { font-size: .62rem; color: #7d8b97; margin-top: .6rem; }
 
-#dettaglio .piede { flex: none; display: flex; gap: .5rem; padding: .6rem 1rem; border-top: 2px solid var(--azzurro); }
+#dettaglio .piede { flex: none; display: flex; gap: .5rem; padding: .6rem 1rem; background: var(--bianco); border-top: 2px solid var(--azzurro); }
 
 /* =========================== bottoni ============================== */
 .bt {
-  min-height: 3rem; min-width: 3rem; padding: .6rem 1.4rem;
+  min-height: 3.2rem; min-width: 3rem; padding: .6rem 1.4rem;
   font-family: Mulish, sans-serif; font-size: .8rem; font-weight: 600;
-  border-radius: 0; border: 1px solid var(--blu); cursor: pointer;
+  border-radius: 0;   /* angolo vivo: la firma dei bottoni del sito */
+  border: 1px solid var(--blu); cursor: pointer;
   background: var(--blu); color: var(--bianco);
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
 }
@@ -164,86 +209,110 @@ img { -webkit-user-drag: none; user-drag: none; }
 
 /* ========================== divisorio ============================= */
 #divisorio {
-  flex: none; width: 1.1rem; background: var(--azzurro); cursor: col-resize;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem;
-  touch-action: none;   /* il trascinamento lo gestiamo noi */
+  flex: none; width: 2rem; background: var(--azzurro); cursor: col-resize;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem;
+  touch-action: none;
   border-left: 1px solid var(--bordo); border-right: 1px solid var(--bordo);
 }
-#divisorio .presa { width: .25rem; height: 3rem; background: var(--blu); opacity: .45; }
+#divisorio .presa { width: .28rem; height: 3.2rem; background: var(--blu); opacity: .4; border-radius: .2rem; }
 #divisorio .freccia {
-  width: 1.6rem; height: 2.6rem; margin-left: -.3rem;
-  background: var(--blu); color: var(--bianco); border: none; border-radius: 0;
-  font-size: .8rem; line-height: 1; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  width: 1.9rem; min-height: 4.6rem; padding: .3rem 0;
+  background: var(--blu); color: var(--bianco); border: none; border-radius: .4rem;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: .15rem;
+}
+#divisorio .freccia em {
+  font-style: normal; font-family: Mulish, sans-serif; font-weight: 700;
+  font-size: .42rem; line-height: 1.25; text-transform: uppercase; letter-spacing: .03em;
 }
 #divisorio .freccia:active { background: var(--blu-scuro); }
+
+/* pulsanti di ripristino quando una meta' e' chiusa */
+#riapri-elenco, #riapri-mappa {
+  position: absolute; top: .7rem; z-index: 4; display: none;
+  min-height: 3.2rem; padding: 0 1.1rem;
+  background: var(--blu); color: var(--bianco); border: none; border-radius: .45rem;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
+  box-shadow: var(--ombra); cursor: pointer;
+}
+#riapri-elenco { left: .7rem; }
+.solo-mappa #riapri-elenco { display: block; }
+.solo-mappa #panoramica { top: 4.4rem; }
+/* quando resta solo l'elenco, il ripristino della mappa vive nel pannello */
+#riapri-mappa { right: .7rem; left: auto; }
+.solo-elenco #riapri-mappa { display: block; z-index: 7; }
 
 /* =========================== comandi mappa ======================== */
 #comandi {
   position: absolute; right: .7rem; top: .7rem; z-index: 3;
-  display: flex; flex-direction: column; gap: .4rem; align-items: flex-end;
+  display: flex; flex-direction: column; gap: .45rem; align-items: flex-end;
 }
 .cmd {
-  min-width: 3rem; min-height: 3rem; padding: 0 .7rem;
-  background: rgba(255,255,255,.94); color: var(--blu);
-  border: 1px solid var(--bordo); border-radius: 0;
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .85rem;
+  min-width: 3.2rem; min-height: 3.2rem; padding: 0 .7rem;
+  background: rgba(255,255,255,.95); color: var(--blu);
+  border: 1px solid var(--bordo); border-radius: .45rem;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .82rem;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
   box-shadow: var(--ombra);
 }
 .cmd:active { background: var(--blu); color: var(--bianco); }
 .cmd.acceso { background: var(--blu); color: var(--bianco); border-color: var(--blu); }
-.cmd.grande { min-width: 7.5rem; }
+.cmd.grande { min-width: 8.2rem; }
 #comandi .gruppo { display: flex; flex-direction: column; gap: 1px; }
+#comandi .gruppo .cmd:first-child { border-radius: .45rem .45rem 0 0; }
+#comandi .gruppo .cmd:last-child { border-radius: 0 0 .45rem .45rem; }
 
 #panoramica {
   position: absolute; left: .7rem; top: .7rem; z-index: 3;
-  min-height: 3rem; padding: 0 1.1rem;
-  background: var(--blu); color: var(--bianco); border: none; border-radius: 0;
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .82rem;
+  min-height: 3.2rem; padding: 0 1.1rem;
+  background: var(--blu); color: var(--bianco); border: none; border-radius: .45rem;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
   box-shadow: var(--ombra); cursor: pointer;
-  display: none;    /* compare solo quando serve */
+  display: none;
 }
 #panoramica.mostra { display: block; }
 
-/* ============================== pin =============================== */
-.pin {
-  position: relative; display: flex; flex-direction: column; align-items: center;
-  cursor: pointer; touch-action: manipulation;
-  /* area toccabile generosa: sul chiosco si punta col dito, non col mouse */
-  padding: .5rem .5rem 0; margin: -.5rem -.5rem 0;
+/* ------------------------- bussola ------------------------------- */
+#bussola {
+  width: 4.6rem; height: 4.6rem; touch-action: none; cursor: grab;
+  background: rgba(255,255,255,.95); border: 1px solid var(--bordo);
+  border-radius: 50%; box-shadow: var(--ombra);
+  display: flex; align-items: center; justify-content: center;
 }
-.pin .bollo {
-  width: 1.1rem; height: 1.1rem; border-radius: 50%;
-  background: var(--blu); border: .16rem solid var(--bianco);
-  box-shadow: 0 1px 2px rgba(0,0,0,.4);
+#bussola-disco {
+  position: relative; width: 3.9rem; height: 3.9rem; border-radius: 50%;
+  border: 2px solid var(--azzurro);
+  will-change: transform;
 }
-.pin .targa {
-  margin-top: .18rem; padding: .1rem .4rem; max-width: 8rem;
-  background: rgba(255,255,255,.93); color: var(--titolo);
-  font-family: Mulish, sans-serif; font-weight: 700; font-size: .58rem; line-height: 1.25;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  border-bottom: .14rem solid var(--blu);
+#bussola .tacca {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-family: Mulish, sans-serif; font-weight: 900; font-size: .62rem; color: #8aa2b5;
 }
-.pin.attivo { z-index: 10; }
-.pin.attivo .bollo { width: 1.5rem; height: 1.5rem; background: #dd350f; }
-.pin.attivo .targa { background: #dd350f; color: var(--bianco); border-bottom-color: #92240a; max-width: 12rem; }
-.pin.casa .bollo { background: var(--bianco); border-color: var(--blu); width: 1rem; height: 1rem; }
-.pin.casa .targa { border-bottom-color: var(--titolo); }
+#bussola .tacca.nord { top: .1rem; color: var(--rosso); font-size: .78rem; }
+#bussola .tacca.est  { top: 50%; left: auto; right: .25rem; transform: translateY(-50%); }
+#bussola .tacca.sud  { bottom: .1rem; top: auto; }
+#bussola .tacca.ovest{ top: 50%; left: .25rem; transform: translateY(-50%); }
+#bussola-ago {
+  position: absolute; left: 50%; top: 50%; width: .32rem; height: 1.5rem;
+  margin-left: -.16rem; margin-top: -1.4rem;
+  background: linear-gradient(var(--rosso) 50%, #9db4c6 50%);
+  border-radius: .16rem;
+  transform-origin: 50% 87%;
+}
 
 /* ============================ avvisi ============================== */
 #avviso {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: 1rem; z-index: 6;
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 2.6rem; z-index: 6;
   max-width: 80%; padding: .55rem 1rem; background: var(--titolo); color: var(--bianco);
-  font-size: .72rem; display: none;
+  font-size: .72rem; border-radius: .45rem; display: none;
 }
 #avviso.mostra { display: block; }
 
-/* attribuzioni: obbligatorie, ma discrete */
+/* attribuzioni e righello */
 .maplibregl-ctrl-attrib { font-size: 10px !important; line-height: 1.4 !important; }
 .maplibregl-ctrl-attrib a { color: #2c3c4a !important; }
 .maplibregl-ctrl-bottom-right { z-index: 2 !important; }
-
-/* stato collassato: il lato ridotto sparisce del tutto */
-.solo-mappa #pannello { width: 0; border: none; }
-.solo-elenco #mappa-lato { flex: 0 0 0; }
+.maplibregl-ctrl-scale {
+  background: rgba(255,255,255,.85) !important;
+  border: 2px solid #235784 !important; border-top: none !important;
+  color: #235784 !important; font-weight: 700 !important; font-size: 12px !important;
+}

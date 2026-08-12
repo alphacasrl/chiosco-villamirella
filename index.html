@@ -22,6 +22,12 @@
         <h1>Palinuro e il Cilento</h1>
         <p>Guida del Residence Villamirella</p>
       </div>
+      <button id="reset" type="button" aria-label="Ricomincia dall'inizio">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z" fill="currentColor"/>
+        </svg>
+        <span>Ricomincia</span>
+      </button>
     </header>
 
     <nav id="filtri" aria-label="Sezioni"></nav>
@@ -31,12 +37,14 @@
     <!-- scheda di dettaglio: scorre sopra l'elenco, non apre pagine esterne -->
     <article id="dettaglio" aria-hidden="true">
       <div class="scorri">
-        <img class="copertina" id="det-foto" alt="">
+        <div class="copertina-cornice">
+          <img class="copertina" id="det-foto" alt="">
+        </div>
         <div class="testo">
           <div class="categoria" id="det-categoria"></div>
           <h2 id="det-nome"></h2>
-          <p class="sommario" id="det-sommario"></p>
           <div id="det-prenotabile"></div>
+          <p class="sommario" id="det-sommario"></p>
           <div class="righe" id="det-righe"></div>
           <div id="det-articoli"></div>
         </div>
@@ -51,9 +59,15 @@
 
   <!-- =========================== DIVISORIO =========================== -->
   <div id="divisorio" role="separator" aria-label="Sposta la divisione">
-    <button class="freccia" id="verso-sinistra" type="button" aria-label="Allarga la mappa">‹</button>
+    <button class="freccia" id="verso-sinistra" type="button" aria-label="Mappa a tutto schermo">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14 6l-6 6 6 6" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+      <em>mappa<br>intera</em>
+    </button>
     <div class="presa"></div>
-    <button class="freccia" id="verso-destra" type="button" aria-label="Allarga i contenuti">›</button>
+    <button class="freccia" id="verso-destra" type="button" aria-label="Elenco a tutto schermo">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M10 6l6 6-6 6" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+      <em>elenco<br>intero</em>
+    </button>
   </div>
 
   <!-- ============================= DESTRA ============================= -->
@@ -61,16 +75,31 @@
     <div id="mappa"></div>
 
     <button id="panoramica" type="button">Torna alla panoramica</button>
+    <!-- ripristino quando una meta' e' collassata -->
+    <button id="riapri-elenco" type="button">› Mostra l'elenco</button>
+    <button id="riapri-mappa" type="button">‹ Mostra la mappa</button>
 
     <div id="comandi">
-      <button class="cmd grande" id="cmd-base" type="button">Satellite</button>
+      <button class="cmd grande" id="cmd-base" type="button">Mappa</button>
       <button class="cmd grande" id="cmd-3d" type="button">Rilievo 3D</button>
+      <button class="cmd grande" id="cmd-vista" type="button">Vista dall'alto</button>
       <div class="gruppo">
         <button class="cmd" id="cmd-piu" type="button" aria-label="Ingrandisci">+</button>
         <button class="cmd" id="cmd-meno" type="button" aria-label="Rimpicciolisci">−</button>
       </div>
-      <button class="cmd" id="cmd-nord" type="button" aria-label="Rimetti il nord in alto">N</button>
-      <button class="cmd" id="cmd-casa" type="button" aria-label="Vai al residence">⌂</button>
+      <!-- bussola: si trascina per ruotare, un tocco rimette il nord -->
+      <div id="bussola" role="slider" aria-label="Rotazione della mappa" aria-valuemin="0" aria-valuemax="360" aria-valuenow="0">
+        <div id="bussola-disco">
+          <div class="tacca nord">N</div>
+          <div class="tacca est">E</div>
+          <div class="tacca sud">S</div>
+          <div class="tacca ovest">O</div>
+          <div id="bussola-ago"></div>
+        </div>
+      </div>
+      <button class="cmd" id="cmd-casa" type="button" aria-label="Vai al residence">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 4l8 7h-2.4v8h-4v-5h-3.2v5h-4v-8H4z" fill="currentColor"/></svg>
+      </button>
     </div>
 
     <div id="avviso" role="status"></div>
@@ -80,6 +109,7 @@
 
 <script src="poi.js"></script>
 <script src="parco.js"></script>
+<script src="percorsi.js"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
 <script src="app.js"></script>
 </body>
