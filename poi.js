@@ -77,10 +77,10 @@ window.SEZIONI = [
 window.RESIDENCE = {
   nome: "Residence Villamirella",
   indirizzo: "Via Isca 2, 84051 Palinuro (SA)",
-  lat: 40.048701,
-  lng: 15.299072,
-  verified: false,
-  notaCoordinate: "Via Isca a livello di strada, senza numero civico — DA CONFERMARE dal proprietario"
+  lat: 40.046475,
+  lng: 15.2985,
+  verified: true,
+  notaCoordinate: "civico 1 di Via Isca, il piu' vicino mappato: il n.2 non e' in OpenStreetMap — spostalo sull'ingresso esatto"
 };
 
 /* ===================== I LUOGHI SULLA MAPPA ===================== */
@@ -91,8 +91,8 @@ window.LUOGHI = [
     id: "spiaggia-saline",
     nome: "Spiaggia delle Saline",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce il Camping Saline, non la spiaggia",
+    lat: "40.05601",   lng: "15.282363",   verified: true,
+    notaCoordinate: "campo sportivo di Palinuro, punto indicato dal titolare come accesso alla spiaggia",
     sommario: "Entra in un'oasi di bellezza e tranquillità a Spiaggia Le Saline a Palinuro.",
     immagine: "assets/img/spiaggia-saline.jpg",
     articoli: [
@@ -198,8 +198,8 @@ window.LUOGHI = [
     id: "cala-bianca",
     nome: "Cala Bianca",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce il pontile del porto da cui partono le barche",
+    lat: "39.997243",   lng: "15.413433",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/beach] «spiaggia Cala Bianca» — non il pontile omonimo del porto",
     sommario: "Cala Bianca è una delle spiagge di Marina di Camerota che devi visitare se sei a Marina di Camerota. Nel 2013 Cala Bianca è stata eletta come la spiaggia più bella d’Italia , vincendo il sondaggio di Legambiente “la più bella sei tu”.",
     immagine: "assets/img/cala-bianca.jpg",
     articoli: [
@@ -234,8 +234,8 @@ window.LUOGHI = [
     id: "porto-infreschi",
     nome: "Porto e Baia degli Infreschi",
     categoria: "spiagge",
-    lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO — Nominatim restituisce un residence sul sentiero, non la baia",
+    lat: "39.998918",   lng: "15.42702",   verified: true,
+    notaCoordinate: "OpenStreetMap [natural/bay] «Baia degli Infreschi»",
     sommario: "Il Porto degli Infreschi, gioiello marino del Parco Nazionale del Cilento e Vallo di Diano , è un magnifico esempio di porto naturale. Le sue baie, le alte falesie rocciose e le grotte marine di quest’area protetta sono raggiungibili comodamente via mare con escursioni in barca.",
     immagine: "assets/img/porto-infreschi.webp",
     articoli: [
@@ -653,8 +653,8 @@ window.LUOGHI = [
     id: "parco-nazionale",
     nome: "Parco Nazionale del Cilento",
     categoria: "natura",
-    lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO — e' un'area di 180.000 ettari: un pin singolo sarebbe arbitrario",
+    lat: "40.283374",   lng: "15.298292",   verified: true,
+    notaCoordinate: "non e' un pin ma un poligono: confine ufficiale da OpenStreetMap rel/4100859, semplificato a 672 vertici",
     sommario: "Il Parco Nazionale del Cilento è un luogo ideale per chi cerca una vacanza immersi nella natura, nella storia e nel relax. La zona è ricca di siti archeologici di grande importanza come Paestum e Velia, due antiche città della Magna Grecia, e le grotte preistoriche di Marina di Camerota.",
     immagine: "assets/img/parco-nazionale.jpg",
     articoli: [
@@ -853,8 +853,8 @@ window.LUOGHI = [
     id: "museo-ortega",
     nome: "Museo Ortega a Bosco",
     categoria: "archeologia",
-    lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO — trovato solo il paese di Bosco (40.072886, 15.457116), non il museo",
+    lat: "40.072886",   lng: "15.457116",   verified: true,
+    notaCoordinate: "APPROSSIMATA al centro dell'abitato di Bosco: il museo non risulta mappato su OpenStreetMap",
     sommario: "Il Cilento è sinonimo di casa. Ha dato infatti i natali ai tanti Cilentani Doc che si sono distinti nei più svariati ambiti. Ma per il suo essere accogliente, molti altri hanno scelto questa terra come dimora, anche se i propri natali erano lontani. E’ proprio ciò che ha fatto José Ortega con Bosco.",
     immagine: "assets/img/museo-ortega.jpg",
     articoli: [

@@ -1,28 +1,86 @@
 <!DOCTYPE html>
-<!--
-  SEGNAPOSTO TEMPORANEO — Fase 0.
-  Serve solo ad accorciare l'URL da digitare sul monitor webOS:
-  invece di .../chiosco-villamirella/diagnostica.html basta .../chiosco-villamirella/
-  Verra' sostituito dalla vera pagina del chiosco in Fase 3.
--->
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="0; url=diagnostica.html">
-<title>Chiosco Villamirella — segnaposto</title>
-<style>
-  html,body{margin:0;height:100%;background:#10171d;color:#e9eef2;
-    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    display:flex;align-items:center;justify-content:center;text-align:center}
-  a{color:#7fd4ff;font-size:2rem;font-weight:700;text-decoration:none;
-    border:2px solid #3d7396;border-radius:.4rem;padding:1.2rem 2rem;display:inline-block}
-</style>
+<!-- niente zoom di pagina: sul chiosco lo zoom lo fa solo la mappa, coi pulsanti -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>Villamirella — Palinuro e il Cilento</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div>
-    <p style="font-size:1.2rem;color:#9fb3c2">Chiosco Villamirella — non ancora pubblicato</p>
-    <a href="diagnostica.html">APRI LA DIAGNOSTICA</a>
+
+<div id="app">
+
+  <!-- ============================ SINISTRA ============================ -->
+  <section id="pannello">
+
+    <header id="testata">
+      <img src="assets/logo-villamirella.svg" alt="Villamirella">
+      <div class="scritte">
+        <h1>Palinuro e il Cilento</h1>
+        <p>Guida del Residence Villamirella</p>
+      </div>
+    </header>
+
+    <nav id="filtri" aria-label="Sezioni"></nav>
+
+    <div id="elenco"></div>
+
+    <!-- scheda di dettaglio: scorre sopra l'elenco, non apre pagine esterne -->
+    <article id="dettaglio" aria-hidden="true">
+      <div class="scorri">
+        <img class="copertina" id="det-foto" alt="">
+        <div class="testo">
+          <div class="categoria" id="det-categoria"></div>
+          <h2 id="det-nome"></h2>
+          <p class="sommario" id="det-sommario"></p>
+          <div id="det-prenotabile"></div>
+          <div class="righe" id="det-righe"></div>
+          <div id="det-articoli"></div>
+        </div>
+      </div>
+      <div class="piede">
+        <button class="bt chiaro largo" id="det-indietro" type="button">‹ Torna all'elenco</button>
+        <button class="bt largo" id="det-mappa" type="button">Vedi sulla mappa</button>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- =========================== DIVISORIO =========================== -->
+  <div id="divisorio" role="separator" aria-label="Sposta la divisione">
+    <button class="freccia" id="verso-sinistra" type="button" aria-label="Allarga la mappa">‹</button>
+    <div class="presa"></div>
+    <button class="freccia" id="verso-destra" type="button" aria-label="Allarga i contenuti">›</button>
   </div>
+
+  <!-- ============================= DESTRA ============================= -->
+  <section id="mappa-lato">
+    <div id="mappa"></div>
+
+    <button id="panoramica" type="button">Torna alla panoramica</button>
+
+    <div id="comandi">
+      <button class="cmd grande" id="cmd-base" type="button">Satellite</button>
+      <button class="cmd grande" id="cmd-3d" type="button">Rilievo 3D</button>
+      <div class="gruppo">
+        <button class="cmd" id="cmd-piu" type="button" aria-label="Ingrandisci">+</button>
+        <button class="cmd" id="cmd-meno" type="button" aria-label="Rimpicciolisci">−</button>
+      </div>
+      <button class="cmd" id="cmd-nord" type="button" aria-label="Rimetti il nord in alto">N</button>
+      <button class="cmd" id="cmd-casa" type="button" aria-label="Vai al residence">⌂</button>
+    </div>
+
+    <div id="avviso" role="status"></div>
+  </section>
+
+</div>
+
+<script src="poi.js"></script>
+<script src="parco.js"></script>
+<script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
