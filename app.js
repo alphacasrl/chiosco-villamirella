@@ -1293,14 +1293,26 @@ tocca($('#reset'), ricomincia);
   function entraStandby() {
     ricomincia();
     standby.setAttribute('aria-hidden', 'false');
-    if (video) { try { video.currentTime = 0; var p = video.play(); if (p && p['catch']) p['catch'](function(){}); } catch (e) {} }
+    /* sotto il video non deve comporre nient'altro: la GPU del monitor
+       non regge video in loop e WebGL insieme (provato: si blocca) */
+    document.body.classList.add('in-standby');
+    if (video) {
+      try {
+        video.currentTime = 0;
+        var p = video.play();
+        if (p && p['catch']) p['catch'](function () {});
+      } catch (e) {}
+    }
   }
   function esciStandby() {
     if (standby.getAttribute('aria-hidden') === 'false') {
       standby.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('in-standby');
       if (video) { try { video.pause(); } catch (e) {} }
+      if (mappa) { try { mappa.resize(); } catch (e) {} }
     }
   }
+  window.__provaStandby = entraStandby;   /* per collaudo manuale dalla console */
   function azzera() {
     esciStandby();
     if (t) clearTimeout(t);

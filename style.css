@@ -599,3 +599,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   font-style: normal; font-family: Mulish, sans-serif; font-weight: 700;
   font-size: .54rem; letter-spacing: .05em; text-transform: uppercase; line-height: 1.1;
 }
+
+/* durante lo standby l'app sotto non viene composta: solo il video lavora */
+body.in-standby #app, body.in-standby #home,
+body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
