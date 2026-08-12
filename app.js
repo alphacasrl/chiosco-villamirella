@@ -111,7 +111,7 @@ var TESTI = {
     itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
     ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
     lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
-    meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com'
+    meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni'
   },
   en: {
     inizio: 'Home', tutteSezioni: '‹ All sections',
@@ -135,7 +135,7 @@ var TESTI = {
     itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
     ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
     lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
-    meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com'
+    meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days'
   }
 };
 var lingua = 'it';
@@ -1390,6 +1390,24 @@ function meteoPagina() {
       '<div><b>' + Math.round(cur.temperature_2m) + '\u00b0C \u00b7 ' + T2(vc.it, vc.en) + '</b>' +
       '<span>' + TXT('meteoOra') + ' \u00b7 ' + TXT('meteoVento') + ' ' + Math.round(cur.wind_speed_10m) + ' km/h</span></div>';
     corpo.appendChild(ora);
+    /* ora per ora: le prossime 24, in striscia scorrevole */
+    var hh = METEO.dati.hourly;
+    if (hh && hh.time && hh.time.length) {
+      corpo.appendChild(el('h3', null, TXT('meteoOre')));
+      var striscia = el('div', 'meteo-ore');
+      for (var k = 0; k < hh.time.length; k++) {
+        var vo = meteoVoce(hh.weather_code[k]);
+        var cella = el('div', 'meteo-cella');
+        var pp = hh.precipitation_probability ? hh.precipitation_probability[k] : null;
+        cella.innerHTML = '<b>' + hh.time[k].slice(11, 16) + '</b>' +
+          '<span class="cella-icona">' + icona(vo.icona) + '</span>' +
+          '<span class="cella-gradi">' + Math.round(hh.temperature_2m[k]) + '°</span>' +
+          (pp !== null && pp > 15 ? '<span class="cella-pioggia">' + pp + '%</span>' : '<span class="cella-pioggia"></span>');
+        striscia.appendChild(cella);
+      }
+      corpo.appendChild(striscia);
+    }
+    corpo.appendChild(el('h3', null, TXT('meteoGiorni')));
     for (var i = 0; i < d.time.length; i++) {
       var g = new Date(d.time[i] + 'T12:00:00');
       var nome = g.toLocaleDateString(lingua === 'it' ? 'it-IT' : 'en-GB', { weekday: 'long' });
@@ -1416,6 +1434,7 @@ function meteoAggiorna() {
   var u = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng +
     '&current=temperature_2m,weather_code,wind_speed_10m' +
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&hourly=temperature_2m,weather_code,precipitation_probability&forecast_hours=24' +
     '&timezone=Europe%2FRome&forecast_days=7';
   fetch(u).then(function (r) { return r.json(); }).then(function (d) {
     METEO.dati = d;
