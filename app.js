@@ -1012,7 +1012,8 @@ function aggiornaBussola() {
     assetta(app.classList.contains('solo-elenco') ? null : 'solo-elenco');
     setTimeout(aggiornaFrecce, 30);
   });
-  aggiornaFrecce();
+  /* al primo giro il set di icone non e' ancora assegnato: si rinvia */
+  setTimeout(aggiornaFrecce, 0);
 })();
 
 /* =====================================================================
@@ -1088,6 +1089,7 @@ var ICONE = {
   elenco:     '<path d="M8.5 6h11M8.5 12h11M8.5 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor" stroke="none"/>'
 };
 function icona(nome) {
+  if (typeof ICONE === 'undefined' || !ICONE) return '';
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
          (ICONE[nome] || ICONE.posti) + '</svg>';
