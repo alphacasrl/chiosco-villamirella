@@ -97,23 +97,23 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 #reset:active { background: var(--blu-scuro); }
 
-/* ============================= filtri ============================= */
-#filtri {
-  display: flex; gap: .45rem; padding: .6rem 1rem;
-  overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+/* ==================== barra della sezione aperta ================== */
+#barra-sezione {
+  display: flex; align-items: center; gap: .8rem; padding: .55rem 1rem;
   background: var(--bianco); border-bottom: 1px solid var(--bordo); flex: none;
 }
-#filtri::-webkit-scrollbar { display: none; }
-.chip {
-  flex: none; min-height: 3rem; padding: .5rem 1.1rem;
-  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
-  font-family: Mulish, sans-serif; font-size: .78rem; font-weight: 700;
-  color: var(--blu); background: var(--azzurro);
-  border: 2px solid var(--azzurro); border-radius: 2rem;
-  cursor: pointer;
+#sez-home {
+  flex: none; min-height: 3rem; padding: .4rem 1rem;
+  background: var(--azzurro); color: var(--blu); border: none; border-radius: .45rem;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .74rem; cursor: pointer;
 }
-.chip .pallino { width: .55rem; height: .55rem; border-radius: 50%; flex: none; }
-.chip[aria-pressed="true"] { background: var(--blu); border-color: var(--blu); color: var(--bianco); }
+#sez-home:active { background: var(--blu); color: var(--bianco); }
+#sez-nome {
+  display: inline-flex; align-items: center; gap: .45rem; min-width: 0;
+  font-family: Mulish, sans-serif; font-weight: 900; font-size: .95rem;
+  color: var(--titolo); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+#sez-nome .pallino { width: .55rem; height: .55rem; border-radius: 50%; flex: none; }
 
 /* ============================= elenco ============================= */
 #elenco { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: .3rem .8rem 2rem; }
@@ -344,10 +344,15 @@ img { -webkit-user-drag: none; user-drag: none; }
   font-size: .8rem; line-height: 1.55; color: var(--marrone);
 }
 #mattonelle {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: .6rem;
+}
+.gruppo-mattonelle {
+  grid-column: 1 / -1; text-align: left; margin-top: .5rem;
+  font-family: Mulish, sans-serif; font-weight: 700; font-size: .68rem;
+  text-transform: uppercase; letter-spacing: .12em; color: var(--marrone);
 }
 .mattonella {
-  min-height: 7.2rem; padding: .8rem .6rem .7rem;
+  min-height: 6.6rem; padding: .8rem .6rem .7rem;
   background: var(--bianco); border: 1px solid #e3d5b8; border-radius: .7rem;
   box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .55rem;

@@ -227,32 +227,18 @@ function badgePren() {
   return b;
 }
 
+/* la navigazione fra sezioni vive nella schermata iniziale: qui resta
+   solo la barra con il ritorno e il nome della sezione aperta */
 function disegnaFiltri() {
-  var n = $('#filtri');
+  var g = gruppoCorrente();
+  var n = $('#sez-nome');
   vuota(n);
-  for (var i = 0; i < GRUPPI.length; i++) {
-    (function (g) {
-      var b = el('button', 'chip');
-      b.type = 'button';
-      if (g.cat) {
-        var p = el('span', 'pallino');
-        p.style.background = colore(g.cat);
-        b.appendChild(p);
-      }
-      b.appendChild(el('span', null, g.nome));
-      b.setAttribute('aria-pressed', g.id === stato.gruppo ? 'true' : 'false');
-      tocca(b, function () {
-        if (stato.gruppo === g.id) return;
-        stato.gruppo = g.id;
-        chiudiDettaglio();
-        disegnaFiltri();
-        disegnaElenco();
-        aggiornaPoi();
-        panoramica();
-      });
-      n.appendChild(b);
-    })(GRUPPI[i]);
+  if (g.cat) {
+    var p = el('span', 'pallino');
+    p.style.background = colore(g.cat);
+    n.appendChild(p);
   }
+  n.appendChild(el('span', null, g.nome));
 }
 
 function gruppoCorrente() {
@@ -272,7 +258,6 @@ function disegnaElenco() {
   vuota(n);
   var g = gruppoCorrente();
   var voci = g.voci();
-  n.appendChild(el('div', 'sezione-titolo', g.nome));
   if (!voci.length) { n.appendChild(el('div', 'vuoto', 'Nessuna voce in questa sezione.')); return; }
   for (var i = 0; i < voci.length; i++) {
     (function (v) {
@@ -882,7 +867,13 @@ var ICONE = {
   regole:     '<rect x="5" y="3" width="14" height="18" rx="1.8"/><path d="M9 8h6M9 12h6M9 16h4"/>',
   wifi:       '<path d="M3 9.5C8 4.8 16 4.8 21 9.5"/><path d="M6.2 13c3.4-3.2 8.2-3.2 11.6 0"/><path d="M9.4 16.4c1.6-1.5 3.6-1.5 5.2 0"/><circle cx="12" cy="19.4" r="1.4"/>',
   faq:        '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1.1"/>',
-  telefono:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>'
+  telefono:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
+  grotta:     '<path d="M3 20h18"/><path d="M4 20V12a8 8 0 0 1 16 0v8"/><path d="M9.5 20v-4a2.5 2.5 0 0 1 5 0v4"/>',
+  natura:     '<path d="M12 21V9"/><path d="M12 9C7 9 4.5 5.5 4.5 3c4 0 7.5 1.5 7.5 6z"/><path d="M12 13c0-4.5 3.5-6 7.5-6 0 2.5-2.5 6-7.5 6z"/>',
+  tempio:     '<path d="M4 8l8-4.5L20 8"/><path d="M5 8h14"/><path d="M6.5 8v8M10 8v8M14 8v8M17.5 8v8"/><path d="M4 18.5h16M3 21h18"/>',
+  santuario:  '<path d="M12 3v4M10 5h4"/><path d="M7 21v-8.5L12 8l5 4.5V21"/><path d="M10.5 21v-4h3v4"/><path d="M4 21h16"/>',
+  stella:     '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/>',
+  libro:      '<path d="M12 6c-2-1.6-4.5-2-8-2v14c3.5 0 6 .4 8 2 2-1.6 4.5-2 8-2V4c-3.5 0-6 .4-8 2z"/><path d="M12 6v14"/>'
 };
 function icona(nome) {
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
@@ -942,6 +933,7 @@ function apriSezione(idGruppo) {
   var griglia = $('#mattonelle');
   var m = GUIDA.MATTONELLE || [];
   for (var i = 0; i < m.length; i++) {
+    if (m[i].gruppo) { griglia.appendChild(el('div', 'gruppo-mattonelle', m[i].gruppo)); continue; }
     (function (v) {
       var b = el('button', 'mattonella');
       b.type = 'button';
@@ -957,6 +949,7 @@ function apriSezione(idGruppo) {
     })(m[i]);
   }
   tocca($('#pagina-home'), function () { mostraHome(true); });
+  tocca($('#sez-home'), function () { chiudiDettaglio(); mostraHome(true); });
   tocca($('#pagina-esplora'), function () { apriSezione(stato.gruppo); });
 })();
 

@@ -23,20 +23,30 @@ window.GUIDA = {
     frase: "Siamo sempre al tuo fianco durante tutto il soggiorno: non esitare a contattarci per qualsiasi esigenza o consiglio."
   },
 
-  /* le mattonelle della schermata iniziale, nell'ordine in cui compaiono */
+  /* le mattonelle della schermata iniziale: e' QUESTA la navigazione
+     fra le sezioni (nell'esploratore non c'e' piu' un menu).
+     "gruppo" crea un'intestazione sopra il blocco di mattonelle. */
   MATTONELLE: [
-    { id: "posti",       nome: "Posti da visitare",    icona: "posti",      sezione: "cat:borghi" },
-    { id: "spiagge",     nome: "Spiagge",              icona: "spiagge",    sezione: "cat:spiagge" },
-    { id: "mare",        nome: "Il mare di Palinuro",  icona: "barca",      sezione: "mare" },
-    { id: "itinerari",   nome: "Itinerari",            icona: "sentiero",   sezione: "itinerari" },
-    { id: "ristoranti",  nome: "Ristoranti",           icona: "ristorante", pagina: "ristoranti" },
-    { id: "negozi",      nome: "Supermercati e negozi", icona: "negozio",   pagina: "negozi" },
-    { id: "muoversi",    nome: "Come muoversi",        icona: "bus",        pagina: "muoversi" },
-    { id: "checkin",     nome: "Check-in e check-out", icona: "chiave",     pagina: "checkin" },
-    { id: "regole",      nome: "Regole della casa",    icona: "regole",     pagina: "regole" },
-    { id: "wifi",        nome: "WiFi",                 icona: "wifi",       pagina: "wifi" },
-    { id: "faq",         nome: "Domande frequenti",    icona: "faq",        pagina: "faq" },
-    { id: "contatti",    nome: "Contatti",             icona: "telefono",   pagina: "contatti" }
+    { gruppo: "Esplora il territorio" },
+    { id: "mare",        nome: "Il mare di Palinuro",   icona: "barca",      sezione: "mare" },
+    { id: "spiagge",     nome: "Spiagge e cale",        icona: "spiagge",    sezione: "cat:spiagge" },
+    { id: "borghi",      nome: "Borghi e paesi",        icona: "posti",      sezione: "cat:borghi" },
+    { id: "grotte",      nome: "Grotte e mare",         icona: "grotta",     sezione: "cat:grotte" },
+    { id: "natura",      nome: "Natura e oasi",         icona: "natura",     sezione: "cat:natura" },
+    { id: "archeologia", nome: "Archeologia e musei",   icona: "tempio",     sezione: "cat:archeologia" },
+    { id: "santuari",    nome: "Santuari",              icona: "santuario",  sezione: "cat:santuari" },
+    { id: "itinerari",   nome: "Itinerari",             icona: "sentiero",   sezione: "itinerari" },
+    { id: "esperienze",  nome: "Esperienze",            icona: "stella",     sezione: "esperienze" },
+    { id: "guide",       nome: "Guide",                 icona: "libro",      sezione: "guide" },
+    { gruppo: "Il tuo soggiorno" },
+    { id: "checkin",     nome: "Check-in e check-out",  icona: "chiave",     pagina: "checkin" },
+    { id: "wifi",        nome: "WiFi",                  icona: "wifi",       pagina: "wifi" },
+    { id: "regole",      nome: "Regole della casa",     icona: "regole",     pagina: "regole" },
+    { id: "ristoranti",  nome: "Ristoranti",            icona: "ristorante", pagina: "ristoranti" },
+    { id: "negozi",      nome: "Supermercati e negozi", icona: "negozio",    pagina: "negozi" },
+    { id: "muoversi",    nome: "Come muoversi",         icona: "bus",        pagina: "muoversi" },
+    { id: "faq",         nome: "Domande frequenti",     icona: "faq",        pagina: "faq" },
+    { id: "contatti",    nome: "Contatti",              icona: "telefono",   pagina: "contatti" }
   ],
 
   PAGINE: {
