@@ -1290,9 +1290,23 @@ tocca($('#reset'), ricomincia);
 (function () {
   var t = null, ts = null;
   var standby = $('#standby'), video = $('#standby-video');
+  var battito = null;
   function entraStandby() {
     ricomincia();
     standby.setAttribute('aria-hidden', 'false');
+    /* la CTA non deve MAI restare statica: i pannelli LG attenuano le aree
+       immobili sovrapposte a video, e il compositor puo' retrocedere un
+       layer fermo. Ogni battito i pixel cambiano e il layer si ricompone. */
+    if (battito) clearInterval(battito);
+    battito = setInterval(function () {
+      var velo = $('#standby-velo');
+      if (!velo) return;
+      velo.classList.toggle('alterna');
+      /* ricomposizione forzata: stacca e riattacca il velo */
+      var p = velo.parentNode;
+      p.removeChild(velo);
+      p.appendChild(velo);
+    }, 5000);
     /* sotto il video non deve comporre nient'altro: la GPU del monitor
        non regge video in loop e WebGL insieme (provato: si blocca) */
     document.body.classList.add('in-standby');
@@ -1305,6 +1319,7 @@ tocca($('#reset'), ricomincia);
     }
   }
   function esciStandby() {
+    if (battito) { clearInterval(battito); battito = null; }
     if (standby.getAttribute('aria-hidden') === 'false') {
       standby.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('in-standby');

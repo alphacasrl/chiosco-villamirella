@@ -617,3 +617,19 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .meteo-riga.ora b { min-width: 3.2rem; }
 .meteo-riga.ora .umid { min-width: 6.5rem; text-align: right; font-size: .62rem; color: #7d9db5; }
 .meteo-riga.ora { cursor: default; }
+
+/* la CTA respira: deriva lenta + alternanza di evidenza fra le due lingue */
+#standby-velo { animation: velo-deriva 14s ease-in-out infinite; }
+@keyframes velo-deriva {
+  0%, 100% { padding-bottom: 3.2rem; }
+  50%      { padding-bottom: 4.4rem; }
+}
+#standby-velo .grande    { transition: opacity 1.2s ease; }
+#standby-velo .grande-en { transition: opacity 1.2s ease; opacity: .55; }
+#standby-velo.alterna .grande    { opacity: .55; }
+#standby-velo.alterna .grande-en { opacity: 1; }
+#standby-velo .invito { animation: invito-respiro 5s ease-in-out infinite; }
+@keyframes invito-respiro {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .6; }
+}
