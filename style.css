@@ -94,7 +94,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   flex: none; min-height: 3.2rem; padding: .4rem 1.1rem;
   display: inline-flex; align-items: center; gap: .5rem;
   background: var(--blu); color: var(--bianco);
-  border: none; border-radius: .45rem; cursor: pointer;
+  border: none; border-radius: 0; cursor: pointer;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
   box-shadow: var(--ombra);
 }
@@ -107,7 +107,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 #sez-home {
   flex: none; min-height: 3rem; padding: .4rem 1rem;
-  background: var(--azzurro); color: var(--blu); border: none; border-radius: .45rem;
+  background: var(--azzurro); color: var(--blu); border: none; border-radius: 0;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .74rem; cursor: pointer;
 }
 #sez-home:active { background: var(--blu); color: var(--bianco); }
@@ -232,7 +232,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 #divisorio .presa { width: .28rem; height: 3.2rem; background: var(--marrone); opacity: .45; border-radius: .2rem; }
 #divisorio .freccia {
   width: 1.9rem; min-height: 4.6rem; padding: .3rem 0;
-  background: var(--blu); color: var(--bianco); border: none; border-radius: .4rem;
+  background: var(--blu); color: var(--bianco); border: none; border-radius: 0;
   cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: .15rem;
 }
 #divisorio .freccia em {
@@ -258,7 +258,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 .cmd {
   min-width: 3.2rem; min-height: 3.2rem; padding: 0 .7rem;
   background: rgba(255,255,255,.95); color: var(--blu);
-  border: 1px solid var(--bordo); border-radius: .45rem;
+  border: 1px solid var(--bordo); border-radius: 0;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .82rem;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
   box-shadow: var(--ombra);
@@ -267,13 +267,13 @@ img { -webkit-user-drag: none; user-drag: none; }
 .cmd.acceso { background: var(--blu); color: var(--bianco); border-color: var(--blu); }
 .cmd.grande { min-width: 8.2rem; }
 #comandi .gruppo { display: flex; flex-direction: column; gap: 1px; }
-#comandi .gruppo .cmd:first-child { border-radius: .45rem .45rem 0 0; }
-#comandi .gruppo .cmd:last-child { border-radius: 0 0 .45rem .45rem; }
+#comandi .gruppo .cmd:first-child { border-radius: 0; }
+#comandi .gruppo .cmd:last-child { border-radius: 0; }
 
 #panoramica {
   position: absolute; left: .7rem; top: .7rem; z-index: 3;
   min-height: 3.2rem; padding: 0 1.1rem;
-  background: var(--blu); color: var(--bianco); border: none; border-radius: .45rem;
+  background: var(--blu); color: var(--bianco); border: none; border-radius: 0;
   font-family: Mulish, sans-serif; font-weight: 700; font-size: .8rem;
   box-shadow: var(--ombra); cursor: pointer;
   display: none;
@@ -362,7 +362,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 .mattonella {
   min-height: 6.4rem; padding: .6rem .4rem .55rem;
-  background: var(--bianco); border: 1px solid #e3d5b8; border-radius: .7rem;
+  background: var(--bianco); border: 1px solid #e3d5b8; border-radius: 0;
   box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem;
   cursor: pointer;
