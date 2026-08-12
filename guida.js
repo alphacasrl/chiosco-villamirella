@@ -66,7 +66,7 @@ window.GUIDA = {
       titolo: "Rete WiFi",
       titolo_en: "WiFi network",
       blocchi: [
-        { kv: [["Nome della rete", "primulapalinuri"], ["Password", "VMresidence"]], kv_en: [["Network name", "primulapalinuri"], ["Password", "VMresidence"]] },
+        { kv: [["Nome della rete", "VMresidence"], ["Password", "primulapalinuri"]], kv_en: [["Network name", "VMresidence"], ["Password", "primulapalinuri"]] },
         { img: "assets/wifi-qr.png", didascalia: "Inquadra il codice con la fotocamera del telefono per collegarti subito.", didascalia_en: "Scan the code with your phone camera to connect instantly." },
         { p: "La rete copre gli alloggi e le aree comuni del residence.", p_en: "The network covers the apartments and the common areas of the residence." }
       ]
