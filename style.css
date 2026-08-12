@@ -265,7 +265,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 .cmd:active { background: var(--blu); color: var(--bianco); }
 .cmd.acceso { background: var(--blu); color: var(--bianco); border-color: var(--blu); }
-.cmd.grande { min-width: 8.2rem; }
+.cmd.grande { min-width: 3.6rem; max-width: 3.6rem; padding: .3rem .2rem; }
 #comandi .gruppo { display: flex; flex-direction: column; gap: 1px; }
 #comandi .gruppo .cmd:first-child { border-radius: 0; }
 #comandi .gruppo .cmd:last-child { border-radius: 0; }
@@ -490,13 +490,14 @@ img { -webkit-user-drag: none; user-drag: none; }
 .titolo-icona svg { width: 100%; height: 100%; }
 
 /* commutatore di base con miniatura */
-#cmd-base { display: flex; flex-direction: column; gap: .2rem; padding: .35rem .6rem; min-height: 4.6rem; }
+#cmd-base { display: flex; flex-direction: column; gap: .2rem; min-height: 4.2rem; }
 #cmd-base img {
-  width: 3.4rem; height: 2.4rem; object-fit: cover;
+  width: 3rem; height: 2.1rem; object-fit: cover;
   border: 1px solid var(--bordo); display: block;
 }
-#cmd-base span { font-size: .62rem; }
-#cmd-3d { display: flex; align-items: center; gap: .45rem; }
+#cmd-base span { font-size: .5rem; }
+#cmd-3d { display: flex; flex-direction: column; align-items: center; gap: .15rem; min-height: 4.2rem; }
+#cmd-3d span { font-size: .55rem; font-weight: 700; }
 
 /* standby: riga inglese sotto quella italiana */
 #standby-velo .grande-en {
