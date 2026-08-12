@@ -224,14 +224,14 @@ img { -webkit-user-drag: none; user-drag: none; }
 
 /* ========================== divisorio ============================= */
 #divisorio {
-  flex: none; width: 2rem; background: var(--crema); cursor: col-resize;
+  flex: none; width: 3rem; background: var(--crema); cursor: col-resize;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem;
   touch-action: none;
   border-left: 1px solid #e3d5b8; border-right: 1px solid #e3d5b8;
 }
 #divisorio .presa { width: .28rem; height: 3.2rem; background: var(--marrone); opacity: .45; border-radius: .2rem; }
 #divisorio .freccia {
-  width: 1.9rem; min-height: 4.6rem; padding: .3rem 0;
+  width: 2.7rem; min-height: 5.6rem; padding: .35rem 0;
   background: var(--blu); color: var(--bianco); border: none; border-radius: 0;
   cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: .15rem;
 }
@@ -591,3 +591,11 @@ img { -webkit-user-drag: none; user-drag: none; }
   background: var(--blu); color: var(--bianco); padding: .06rem .35rem; margin-left: .3rem;
 }
 .meteo-cella .cella-umidita { font-size: .54rem; color: #7d9db5; min-height: .75rem; }
+
+#divisorio .freccia { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .28rem; }
+#divisorio .freccia .div-icona { display: inline-flex; width: 1.55rem; height: 1.55rem; }
+#divisorio .freccia .div-icona svg { width: 100%; height: 100%; }
+#divisorio .freccia em {
+  font-style: normal; font-family: Mulish, sans-serif; font-weight: 700;
+  font-size: .54rem; letter-spacing: .05em; text-transform: uppercase; line-height: 1.1;
+}

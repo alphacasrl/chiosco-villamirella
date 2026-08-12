@@ -93,8 +93,8 @@ var TESTI = {
     inizio: 'Inizio', tutteSezioni: '‹ Tutte le sezioni',
     tornaElenco: '‹ Torna all\'elenco', vediMappa: 'Vedi sulla mappa',
     panoramica: 'Torna alla panoramica',
-    mappaIntera: 'mappa<br>intera', elencoIntero: 'elenco<br>intero',
-    apriElenco: 'apri<br>elenco', apriMappa: 'apri<br>mappa',
+    mappaIntera: 'Mappa', elencoIntero: 'Elenco',
+    apriElenco: 'Apri', apriMappa: 'Apri',
     prenotabile: 'Prenotabile in reception',
     distanzaAria: 'Distanza in linea d\'aria', inAuto: 'In auto',
     dove: 'Dove', lidi: 'Lidi sulla spiaggia', luogo: 'Luogo', luoghi: 'Luoghi',
@@ -117,8 +117,8 @@ var TESTI = {
     inizio: 'Home', tutteSezioni: '‹ All sections',
     tornaElenco: '‹ Back to the list', vediMappa: 'Show on the map',
     panoramica: 'Back to overview',
-    mappaIntera: 'full<br>map', elencoIntero: 'full<br>list',
-    apriElenco: 'open<br>list', apriMappa: 'open<br>map',
+    mappaIntera: 'Map', elencoIntero: 'List',
+    apriElenco: 'Open', apriMappa: 'Open',
     prenotabile: 'Bookable at reception',
     distanzaAria: 'Straight-line distance', inAuto: 'By car',
     dove: 'Where', lidi: 'Beach clubs', luogo: 'Place', luoghi: 'Places',
@@ -972,22 +972,36 @@ function aggiornaBussola() {
   /* i due tastini centrali fanno TUTTO: aprire, chiudere, tornare.
      Le etichette dicono sempre cosa succedera' al prossimo tocco. */
   function aggiornaFrecce() {
+    /* ogni tasto mostra l'ICONA di cio' che otterrai toccandolo,
+       una parola sola sotto, e la freccia nel verso del movimento */
     var sm = app.classList.contains('solo-mappa');
     var se = app.classList.contains('solo-elenco');
     var sx = $('#verso-sinistra'), dx = $('#verso-destra');
     sx.style.display = se ? 'none' : '';
     dx.style.display = sm ? 'none' : '';
-    sx.querySelector('em').innerHTML = sm ? '' : TXT('mappaIntera');
-    dx.querySelector('em').innerHTML = se ? '' : TXT('elencoIntero');
-    sx.setAttribute('aria-label', sm ? 'Riapri l\'elenco' : 'Mappa a tutto schermo');
-    dx.setAttribute('aria-label', se ? 'Riapri la mappa' : 'Elenco a tutto schermo');
-    /* quando una meta' e' chiusa, l'unica freccia visibile punta al ritorno */
     sx.classList.toggle('ritorno', sm);
     dx.classList.toggle('ritorno', se);
-    sx.querySelector('svg path').setAttribute('d', sm ? 'M10 6l6 6-6 6' : 'M14 6l-6 6 6 6');
-    dx.querySelector('svg path').setAttribute('d', se ? 'M14 6l-6 6 6 6' : 'M10 6l6 6-6 6');
-    if (sm) sx.querySelector('em').innerHTML = TXT('apriElenco');
-    if (se) dx.querySelector('em').innerHTML = TXT('apriMappa');
+    function riempi(btn, freccia, ic, parola) {
+      btn.innerHTML =
+        '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="' + freccia +
+        '" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>' +
+        '<span class="div-icona">' + icona(ic) + '</span>' +
+        '<em>' + parola + '</em>';
+    }
+    if (sm) {
+      riempi(sx, 'M10 6l6 6-6 6', 'elenco', TXT('apriElenco'));
+      sx.setAttribute('aria-label', 'Riapri l\'elenco');
+    } else {
+      riempi(sx, 'M14 6l-6 6 6 6', 'mappa', TXT('mappaIntera'));
+      sx.setAttribute('aria-label', 'Mappa a tutto schermo');
+    }
+    if (se) {
+      riempi(dx, 'M14 6l-6 6 6 6', 'mappa', TXT('apriMappa'));
+      dx.setAttribute('aria-label', 'Riapri la mappa');
+    } else {
+      riempi(dx, 'M10 6l6 6-6 6', 'elenco', TXT('elencoIntero'));
+      dx.setAttribute('aria-label', 'Elenco a tutto schermo');
+    }
   }
   window.__aggiornaFrecce = aggiornaFrecce;
   tocca($('#verso-sinistra'), function () {
