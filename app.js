@@ -68,7 +68,7 @@ var CONFIG = {
   COLORI: {
     spiagge: '#1a87c9', borghi: '#c96a2b', grotte: '#7057c9',
     natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8',
-    ristoranti: '#d64550', negozi: '#5b7d8c'
+    ristoranti: '#d64550', negozi: '#5b7d8c', salute: '#c0392b'
   },
   COLORE_SCELTO: '#dd350f',
   COLORE_CASA: '#dd350f',
@@ -150,6 +150,7 @@ function perId(id) {
 function nomeCategoria(id) {
   if (id === 'ristoranti') return 'Ristorante';
   if (id === 'negozi') return 'Negozio';
+  if (id === 'salute') return 'Salute';
   for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) return CATEGORIE[i].nome;
   return id;
 }
@@ -204,7 +205,7 @@ var GRUPPI = [
   }
   /* gruppi dalla guida: ristoranti e negozi georiferiti */
   var G = window.GUIDA || {};
-  ['ristoranti', 'negozi'].forEach(function (pid) {
+  ['ristoranti', 'negozi', 'salute'].forEach(function (pid) {
     var pag = (G.PAGINE || {})[pid];
     if (!pag || !pag.mappa) return;
     var pseudo = [];
@@ -223,7 +224,8 @@ var GRUPPI = [
       });
     });
     pseudo.forEach(function (l) { LUOGHI.push(l); });
-    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid, icona: pid,
+    var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute' };
+    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid, icona: ICP[pid] || pid,
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
 })();
@@ -296,6 +298,11 @@ function disegnaElenco() {
   vuota(n);
   var g = gruppoCorrente();
   var voci = g.voci();
+  if (g.id === 'g:salute') {
+    var em = el('div', 'emergenza');
+    em.innerHTML = '<b>Emergenza sanitaria: 118</b><span>Numero unico di emergenza: 112</span>';
+    n.appendChild(em);
+  }
   if (!voci.length) { n.appendChild(el('div', 'vuoto', 'Nessuna voce in questa sezione.')); return; }
   for (var i = 0; i < voci.length; i++) {
     (function (v) {
@@ -926,7 +933,7 @@ var GUIDA = window.GUIDA || { MATTONELLE: [], PAGINE: {}, benvenuto: {} };
 /* icone disegnate a mano: linee semplici, niente emoji (font incerti su webOS) */
 var ICONE = {
   /* un solo tratto (1.8, punte tonde) per tutte: la coerenza e' il disegno */
-  mare:       '<path d="M12 3.5v6"/><path d="M4 9.5a8 8 0 0 1 16 0z"/><path d="M12 9.5V19"/><path d="M12 19c0 1.4 1 2 2.4 2"/><path d="M7.5 9.3C7.5 6 9 3.9 12 3.5c3 .4 4.5 2.5 4.5 5.8"/>',
+  mare:       '<circle cx="16.2" cy="7" r="2.6"/><path d="M16.2 2.6v1.2M20.6 7h-1.2M19.3 3.9l-.85.85M19.3 10.1l-.85-.85M13.1 7h-1.2M13.1 3.9l.85.85"/><path d="M3 14.5c2-1.7 4-1.7 6 0s4 1.7 6 0 4-1.7 6 0"/><path d="M3 19c2-1.7 4-1.7 6 0s4 1.7 6 0 4-1.7 6 0"/>',
   borghi:     '<path d="M3.5 20.5v-8l4-3 4 3v8"/><path d="M11.5 20.5v-11l4.5-3.5 4.5 3.5v11"/><path d="M3 20.5h18"/><path d="M7 20.5v-3.4h1.6v3.4M15 20.5v-3.6h2v3.6"/><path d="M14.2 12h1.6M14.2 9h1.6"/>',
   grotte:     '<path d="M3.5 20.5c0-7.5 3.6-13 8.5-13s8.5 5.5 8.5 13"/><path d="M8.8 20.5c0-3.6 1.3-6 3.2-6s3.2 2.4 3.2 6"/><path d="M2.5 20.5h19"/>',
   natura:     '<path d="M12 21v-8.5"/><path d="M12 12.5C7.5 12.5 5 9.5 4.5 5c4.5.5 7.5 3 7.5 7.5z"/><path d="M12 10.5c0-3.5 2.5-6 7.5-6.5-.5 4.5-3 7-7.5 7z"/><path d="M8.5 21h7"/>',
@@ -943,6 +950,7 @@ var ICONE = {
   muoversi:   '<rect x="5" y="3.8" width="14" height="12.4" rx="2.4"/><path d="M5 9.2h14"/><path d="M8 13.4h.01M16 13.4h.01"/><circle cx="8.6" cy="19.2" r="1.4"/><circle cx="15.4" cy="19.2" r="1.4"/>',
   faq:        '<circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
   contatti:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
+  salute:     '<circle cx="12" cy="12" r="8.6"/><path d="M12 8v8M8 12h8"/>',
   casa:       '<path d="M4 11.5L12 4.5l8 7"/><path d="M6.3 10v10h11.4V10"/><path d="M10 20v-5h4v5"/>',
   mappa:      '<path d="M9 4.5L4 6.3v13.2L9 17.7l6 1.8 5-1.8V4.5L15 6.3z"/><path d="M9 4.5v13.2M15 6.3v13.2"/>',
   elenco:     '<path d="M8.5 6h11M8.5 12h11M8.5 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor" stroke="none"/>'

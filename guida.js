@@ -44,6 +44,7 @@ window.GUIDA = {
     { id: "regole",      nome: "Regole della casa", icona: "regole",      pagina: "regole" },
     { id: "muoversi",    nome: "Come muoversi",     icona: "muoversi",    pagina: "muoversi" },
     { id: "faq",         nome: "Domande frequenti", icona: "faq",         pagina: "faq" },
+    { id: "salute",      nome: "Salute e farmacie", icona: "salute",      colore: "#c0392b", sezione: "g:salute" },
     { id: "contatti",    nome: "Contatti",          icona: "contatti",    pagina: "contatti" }
   ],
 
@@ -170,6 +171,38 @@ window.GUIDA = {
         { p: "Le camere vengono pulite quotidianamente dallo staff. Negli appartamenti la pulizia spetta a te, ma puoi richiedere il servizio giornaliero o una pulizia integrativa." },
         { t: "Servizi extra" },
         { p: "Colazione a buffet, pulizia integrativa, tour in barca tra grotte e calette, lidi convenzionati: chiedi in reception per aggiungere valore alla tua vacanza." }
+      ]
+    },
+
+    salute: {
+      titolo: "Salute ed emergenze",
+      mappa: true,
+      blocchi: [
+        { kv: [
+          ["Emergenza sanitaria", "118"],
+          ["Numero unico di emergenza", "112"]
+        ]},
+        { t: "A Palinuro" },
+        { card: { nome: "Guardia Medica Turistica", lat: 40.042762, lng: 15.308952,
+          dove: "Via Sant'Agata Nord — Distretto sanitario 71",
+          testo: "Assistenza medica di base per i non residenti, attiva in estate tutti i giorni dalle 8:00 alle 20:00. È nello stesso edificio della postazione 118." } },
+        { card: { nome: "Postazione SAUT 118 Palinuro", lat: 40.042762, lng: 15.308952,
+          dove: "Via Sant'Agata Nord — Distretto sanitario 71",
+          testo: "Postazione territoriale di primo soccorso con ambulanza. In caso di emergenza chiama sempre il 118: è il modo più rapido per attivarla." } },
+        { card: { nome: "Farmacia Speranza", lat: 40.035865, lng: 15.286794,
+          dove: "Corso Carlo Pisacane 64 — Palinuro centro",
+          testo: "La farmacia di Palinuro. Telefono 0974 931315." } },
+        { card: { nome: "Dispensario stagionale Farmacia Speranza", lat: 40.043285, lng: 15.300119,
+          dove: "Via Acqua del Lauro, località Piana — vicino al Todis",
+          testo: "Presidio estivo della Farmacia Speranza, a due passi dal residence." } },
+        { t: "Nei dintorni" },
+        { card: { nome: "Farmacia Pinnella", lat: 40.021176, lng: 15.381999,
+          dove: "Via Nuova 37/39 — Lentiscosa (Camerota)", testo: "" } },
+        { card: { nome: "Farmacia Giuliani", lat: 39.998588, lng: 15.370933,
+          dove: "Marina di Camerota", testo: "" } },
+        { card: { nome: "Farmacia Dott.ssa Di Maio", lat: 40.083850, lng: 15.265726,
+          dove: "SS447r — Pisciotta", testo: "" } },
+        { p: "In caso di dubbio su cosa fare, chiama il 118 oppure rivolgiti alla reception: siamo qui per aiutarti." }
       ]
     },
 
