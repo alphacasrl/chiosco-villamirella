@@ -20,7 +20,8 @@
      articoli    elenco degli approfondimenti collegati. Puo' essere vuoto: [].
      distanzaKm  numero di chilometri dal residence, es. 12. Vuoto = "".
      tempoAuto   tempo in auto, es. "20 min". Vuoto = "".
-     inEvidenza  true per farlo comparire nella sezione IN PRIMO PIANO.
+     inEvidenza  true per farlo comparire nella prima sezione della
+                 colonna di sinistra (vedi window.SEZIONI qui sotto).
 
    COME SI PRENDONO LE COORDINATE
    ------------------------------
