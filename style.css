@@ -24,8 +24,8 @@
   --azzurro: #ddeaf6;
   --azzurro-velo: #eef4fa;
   /* palette della guida cartacea (Canva) */
-  --crema: #f5eacf;
-  --crema-chiaro: #faf4e4;
+  --crema: #eef1f5;        /* velo neutro: divisori, stati premuti */
+  --crema-chiaro: #ffffff; /* i fondi ora sono bianchi */
   --marrone: #9f7757;
   --marrone-scuro: #4b2b17;
   --verde-ok: #1e8a4c;
@@ -132,9 +132,9 @@ img { -webkit-user-drag: none; user-drag: none; }
 .scheda {
   display: flex; gap: .8rem; align-items: stretch;
   padding: .55rem; min-height: 4.6rem; cursor: pointer;
-  background: var(--bianco); border: 1px solid #e3d5b8;
+  background: var(--bianco); border: 1px solid #dfe5eb;
   border-radius: 0; margin-bottom: .5rem;
-  box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
+  box-shadow: 0 2px 6px rgba(4, 11, 17, .07);
 }
 .scheda:active { background: var(--azzurro); }
 .scheda.evidenziata { background: var(--azzurro); border-color: var(--blu); box-shadow: inset .25rem 0 0 var(--blu); }
@@ -192,15 +192,15 @@ img { -webkit-user-drag: none; user-drag: none; }
 #dettaglio .riga {
   display: flex; justify-content: space-between; gap: 1rem;
   padding: .45rem .6rem; font-size: .72rem;
-  background: var(--bianco); border: 1px solid #eadfc6;
+  background: var(--bianco); border: 1px solid #dfe5eb;
   border-radius: .45rem; margin-bottom: .3rem;
 }
 #dettaglio .riga b { font-family: Mulish, sans-serif; color: var(--titolo); }
 #det-prenotabile .badge-pren { font-size: .62rem; padding: .35rem .8rem; margin-top: .5rem; }
 .articolo {
   margin-top: .8rem; padding: .7rem .8rem;
-  background: var(--bianco); border: 1px solid #eadfc6;
-  border-radius: .55rem; box-shadow: 0 1px 3px rgba(75,43,23,.07);
+  background: var(--bianco); border: 1px solid #dfe5eb;
+  border-radius: .55rem; box-shadow: 0 1px 3px rgba(4,11,17,.06);
 }
 .articolo h4 { font-family: Mulish, sans-serif; font-size: .82rem; font-weight: 700; color: var(--titolo); margin: 0 0 .25rem; }
 .articolo p { margin: 0; font-size: .7rem; line-height: 1.55; }
@@ -227,7 +227,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   flex: none; width: 3rem; background: var(--crema); cursor: col-resize;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem;
   touch-action: none;
-  border-left: 1px solid #e3d5b8; border-right: 1px solid #e3d5b8;
+  border-left: 1px solid #dfe5eb; border-right: 1px solid #dfe5eb;
 }
 #divisorio .presa { width: .28rem; height: 3.2rem; background: var(--marrone); opacity: .45; border-radius: .2rem; }
 #divisorio .freccia {
@@ -330,7 +330,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* ===================== SCHERMATA INIZIALE ========================= */
 #home {
   position: fixed; inset: 0; z-index: 20;
-  background: linear-gradient(180deg, var(--crema-chiaro), var(--crema));
+  background: var(--bianco);
   display: flex; align-items: stretch; justify-content: center;
   overflow: hidden;                      /* MAI scorrere: e' la vetrina */
 }
@@ -362,8 +362,8 @@ img { -webkit-user-drag: none; user-drag: none; }
 }
 .mattonella {
   min-height: 6.4rem; padding: .6rem .4rem .55rem;
-  background: var(--bianco); border: 1px solid #e3d5b8; border-radius: 0;
-  box-shadow: 0 2px 6px rgba(75, 43, 23, .08);
+  background: var(--bianco); border: 1px solid #dfe5eb; border-radius: 0;
+  box-shadow: 0 2px 6px rgba(4, 11, 17, .07);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem;
   cursor: pointer;
 }
@@ -414,12 +414,12 @@ img { -webkit-user-drag: none; user-drag: none; }
 #pagina-corpo .kv {
   display: flex; gap: 1rem; padding: .5rem .7rem; margin-bottom: .3rem;
   background: var(--bianco); border-radius: .45rem; font-size: .76rem;
-  border: 1px solid #eadfc6;
+  border: 1px solid #dfe5eb;
 }
 #pagina-corpo .kv b { font-family: Mulish, sans-serif; color: var(--marrone-scuro); flex: none; min-width: 9rem; }
 #pagina-corpo .card {
-  background: var(--bianco); border: 1px solid #eadfc6; border-radius: .55rem;
-  padding: .7rem .85rem; margin-bottom: .5rem; box-shadow: 0 1px 3px rgba(75,43,23,.07);
+  background: var(--bianco); border: 1px solid #dfe5eb; border-radius: .55rem;
+  padding: .7rem .85rem; margin-bottom: .5rem; box-shadow: 0 1px 3px rgba(4,11,17,.06);
 }
 #pagina-corpo .card b { font-family: Mulish, sans-serif; font-size: .85rem; color: var(--marrone-scuro); }
 #pagina-corpo .card .dove { font-size: .62rem; color: var(--marrone); text-transform: uppercase; letter-spacing: .04em; margin: .1rem 0 .25rem; }
@@ -427,7 +427,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 #pagina-corpo .figura { text-align: center; margin: .8rem 0; }
 #pagina-corpo .figura img {
   width: 11rem; height: 11rem; object-fit: contain;
-  background: var(--bianco); border: 1px solid #eadfc6; border-radius: .6rem; padding: .6rem;
+  background: var(--bianco); border: 1px solid #dfe5eb; border-radius: .6rem; padding: .6rem;
 }
 #pagina-corpo .figura p { font-size: .68rem; color: var(--marrone); margin-top: .35rem; }
 
@@ -475,7 +475,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* avvertenza sulle regole */
 .avviso-regole {
   display: flex; gap: .6rem; align-items: flex-start;
-  background: #fdf3e0; border: 1px solid #ecd9ac; border-left: .3rem solid #d09a1e;
+  background: #fdf3e0; border: 1px solid #dfe5eb; border-left: .3rem solid #d09a1e;
   color: #7a5a12; padding: .6rem .8rem; margin: .2rem 0 .8rem;
   font-size: .74rem; line-height: 1.5;
 }
@@ -507,7 +507,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   position: fixed; top: .8rem; right: .8rem; z-index: 26;
   display: flex; gap: .35rem;
   background: rgba(255,255,255,.92); padding: .3rem;
-  border: 1px solid #e3d5b8; box-shadow: var(--ombra);
+  border: 1px solid #dfe5eb; box-shadow: var(--ombra);
 }
 .bandiera {
   min-width: 3rem; min-height: 2.6rem; padding: .25rem .4rem;
@@ -548,7 +548,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 /* scheda previsioni */
 .meteo-adesso {
   display: flex; align-items: center; gap: 1rem;
-  background: var(--bianco); border: 1px solid #eadfc6;
+  background: var(--bianco); border: 1px solid #dfe5eb;
   padding: .8rem 1rem; margin-bottom: .7rem;
 }
 .meteo-adesso .grande-icona { display: inline-flex; width: 3rem; height: 3rem; color: var(--blu); }
@@ -557,7 +557,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 .meteo-adesso span { font-size: .68rem; color: var(--marrone); }
 .meteo-riga {
   display: flex; align-items: center; gap: .7rem;
-  background: var(--bianco); border: 1px solid #eadfc6;
+  background: var(--bianco); border: 1px solid #dfe5eb;
   padding: .55rem .8rem; margin-bottom: .3rem; font-size: .76rem;
 }
 .meteo-riga b { font-family: Mulish, sans-serif; color: var(--marrone-scuro); min-width: 6.5rem; }
@@ -575,7 +575,7 @@ img { -webkit-user-drag: none; user-drag: none; }
 .meteo-ore::-webkit-scrollbar { display: none; }
 .meteo-cella {
   flex: none; width: 4.2rem; padding: .45rem .2rem;
-  background: var(--bianco); border: 1px solid #eadfc6;
+  background: var(--bianco); border: 1px solid #dfe5eb;
   display: flex; flex-direction: column; align-items: center; gap: .2rem;
 }
 .meteo-cella b { font-family: Mulish, sans-serif; font-size: .62rem; color: var(--marrone-scuro); }
