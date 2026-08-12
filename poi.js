@@ -20,6 +20,8 @@
      articoli    elenco degli approfondimenti collegati. Puo' essere vuoto: [].
      distanzaKm  numero di chilometri dal residence, es. 12. Vuoto = "".
      tempoAuto   tempo in auto, es. "20 min". Vuoto = "".
+     durata      (solo itinerari/esperienze) es. "2 h 30", vuoto = riga nascosta
+     difficolta  (solo itinerari/esperienze) es. "facile", "media", "impegnativa"
      inEvidenza  true per farlo comparire nella prima sezione della
                  colonna di sinistra (vedi window.SEZIONI qui sotto).
 

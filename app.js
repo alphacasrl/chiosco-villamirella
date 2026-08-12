@@ -107,7 +107,8 @@ var TESTI = {
     online: 'Connessione tornata.',
     lenta: 'Connessione lenta: alcune parti della mappa potrebbero mancare.',
     itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
-    ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute'
+    ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
+    lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0'
   },
   en: {
     inizio: 'Home', tutteSezioni: '‹ All sections',
@@ -129,7 +130,8 @@ var TESTI = {
     online: 'Connection restored.',
     lenta: 'Slow connection: parts of the map may be missing.',
     itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
-    ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health'
+    ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
+    lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty'
   }
 };
 var lingua = 'it';
@@ -442,6 +444,23 @@ function apriDettaglio(v) {
     if (d.dove) riga(TXT('dove'), T2(d.dove, d.dove_en));
     if (d.lidi) riga(TXT('lidi'), d.lidi);
   } else if (v.tipo === 'esperienza') {
+    /* scheda in stile app da trekking: lunghezza dal tracciato reale,
+       durata e difficolta' se compilate a mano in poi.js */
+    var perc = PERCORSI[d.id];
+    if (perc && perc.linee) {
+      var kmTot = 0;
+      for (var li = 0; li < perc.linee.length; li++) {
+        var ln = perc.linee[li];
+        for (var pi = 1; pi < ln.length; pi++) {
+          kmTot += distanzaAria({ lat: ln[pi-1][1], lng: ln[pi-1][0] },
+                                { lat: ln[pi][1],   lng: ln[pi][0] });
+        }
+      }
+      if (kmTot > 0.3) riga(TXT('lunghezza'), kmTot.toFixed(1) + ' km' +
+        (perc.indicativo ? ' \u2014 ' + TXT('percorsoInd').toLowerCase() : ''));
+    }
+    if (d.durata) riga(TXT('durata'), d.durata);
+    if (d.difficolta) riga(TXT('difficolta'), d.difficolta);
     var rif = d.luoghi || [], nomi = [];
     for (var i = 0; i < rif.length; i++) { var l = perId(rif[i]); if (l) nomi.push(l.nome); }
     if (nomi.length) riga(nomi.length > 1 ? TXT('luoghi') : TXT('luogo'), nomi.join(', '));
@@ -812,7 +831,7 @@ function applicaTerreno() {
   var b3 = $('#cmd-3d');
   /* dice DOVE SI VA: montagnette per passare al 3D, quadrato piatto per il 2D */
   b3.innerHTML = stato.terreno
-    ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4.5" width="16" height="15" rx="1.5"/><path d="M4 19.5L20 4.5"/></svg><span>2D</span>'
+    ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 7.5h11l-2.4 9h-13z"/><path d="M5.8 12h11.6M10.4 7.5l-1.7 9M14.9 7.5l-1.7 9"/></svg><span>2D</span>'
     : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18.5l5.5-9 3.6 6 3-4.5 5.9 7.5z"/><circle cx="16.6" cy="6.4" r="1.8"/></svg><span>3D</span>';
   b3.className = 'cmd grande' + (stato.terreno ? ' acceso' : '');
 }
@@ -1025,6 +1044,14 @@ var ICONE = {
   faq:        '<circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
   contatti:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
   salute:     '<circle cx="12" cy="12" r="8.6"/><path d="M12 8v8M8 12h8"/>',
+  riciclo:    '<path d="M12 4l2.8 4.8h-5.6z"/><path d="M6.5 9.5L4 14l3.4 5h3.2"/><path d="M17.5 9.5L20 14l-3.4 5h-3.2"/><path d="M8.5 19l-1.4-2.2M15.5 19l1.4-2.2M12 6.5V4.6"/>',
+  luce:       '<path d="M9.5 18h5"/><path d="M10 21h4"/><path d="M8 11a4 4 0 1 1 8 0c0 2-1.4 2.8-1.8 4.3h-4.4C9.4 13.8 8 13 8 11z"/><path d="M12 2.5v1.6M5 5l1.2 1.2M19 5l-1.2 1.2"/>',
+  frigo:      '<rect x="7" y="3" width="10" height="18" rx="1.4"/><path d="M7 10h10"/><path d="M9.5 6v2M9.5 13v3"/>',
+  pulizia:    '<path d="M14 3l-2.5 8"/><path d="M8 11h8l1.5 9h-11z"/><path d="M9.5 14.5v3M12 14.5v3M14.5 14.5v3"/>',
+  aria:       '<path d="M4 8h10a2.5 2.5 0 1 0-2.5-2.5"/><path d="M4 12h14a2.5 2.5 0 1 1-2.5 2.5"/><path d="M4 16h7a2.2 2.2 0 1 1-2.2 2.2"/>',
+  piscina:    '<path d="M9 16V5.5a1.8 1.8 0 0 1 3.6 0M15 16V5.5"/><path d="M9 8.5h6M9 12.5h6"/><path d="M3 18.5c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/>',
+  ospiti:     '<circle cx="9" cy="8" r="3"/><path d="M4 20v-1.5A4.5 4.5 0 0 1 8.5 14h1A4.5 4.5 0 0 1 14 18.5V20"/><circle cx="17" cy="9.2" r="2.4"/><path d="M15.8 13.5c2.8 0 4.7 1.7 4.7 4.3V20"/>',
+  animali:    '<circle cx="7" cy="9" r="1.6"/><circle cx="11" cy="6.5" r="1.6"/><circle cx="15.5" cy="7.5" r="1.6"/><circle cx="18.4" cy="11" r="1.5"/><path d="M8.5 15.5c0-2 1.8-3.8 4-3.8s4 1.8 4 3.8c0 1.7-1.2 3-2.8 3-1 0-1.2-.4-2.2-.4s-1.2.4-2.2.4c-1.6 0-2.8-1.3-2.8-3z"/>',
   auto:       '<path d="M5 16.5V12l1.8-5h10.4L19 12v4.5"/><path d="M5 12h14"/><circle cx="7.8" cy="16" r="1.4"/><circle cx="16.2" cy="16" r="1.4"/><path d="M4.5 19h15"/>',
   treno:      '<rect x="6" y="3.5" width="12" height="13" rx="2.6"/><path d="M6 9.5h12"/><circle cx="9.3" cy="13.3" r="1.1"/><circle cx="14.7" cy="13.3" r="1.1"/><path d="M8.5 17l-2 3.5M15.5 17l2 3.5M7.5 20.5h9"/>',
   bici:       '<circle cx="6" cy="16.5" r="3.4"/><circle cx="18" cy="16.5" r="3.4"/><path d="M6 16.5L9.5 9h5.8"/><path d="M12 16.5L9.5 9"/><path d="M15.3 9l2.7 7.5"/><path d="M13.8 6.5h3"/>',
@@ -1076,6 +1103,11 @@ function mostraPagina(id) {
       var kvl = (lingua === 'en' && b.kv_en) ? b.kv_en : b.kv;
       for (var j = 0; j < kvl.length; j++) {
         var r = el('div', 'kv');
+        if (kvl[j][2]) {
+          var ki = el('span', 'kv-icona');
+          ki.innerHTML = icona(kvl[j][2]);
+          r.appendChild(ki);
+        }
         r.appendChild(el('b', null, kvl[j][0]));
         r.appendChild(el('span', null, kvl[j][1]));
         corpo.appendChild(r);
@@ -1147,6 +1179,19 @@ tocca($('#pagina-home'), function () { mostraHome(true); });
 tocca($('#sez-home'), function () { chiudiDettaglio(); mostraHome(true); });
 
 /* ---- cambio lingua: ridisegna tutto cio' che e' a schermo ---- */
+function bandiera(cod) {
+  if (cod === 'en') {
+    return '<svg viewBox="0 0 24 16" width="28" height="19" aria-hidden="true">' +
+      '<rect width="24" height="16" fill="#1a3a7c"/>' +
+      '<path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="3.2"/>' +
+      '<path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.6"/>' +
+      '<path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="5"/>' +
+      '<path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.8"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 16" width="28" height="19" aria-hidden="true">' +
+    '<rect width="8" height="16" fill="#008c45"/><rect x="8" width="8" height="16" fill="#fff"/>' +
+    '<rect x="16" width="8" height="16" fill="#cd212a"/></svg>';
+}
 function scriviFissi() {
   $('#reset span').textContent = TXT('inizio');
   $('#sez-home').textContent = TXT('tutteSezioni');
@@ -1156,11 +1201,17 @@ function scriviFissi() {
   $('#panoramica').textContent = TXT('panoramica');
   $('#testata h1').textContent = TXT('titolo');
   $('#testata .scritte p').textContent = TXT('guida');
-  var bs = document.querySelectorAll('.lingua');
-  for (var i = 0; i < bs.length; i++) bs[i].textContent = lingua === 'it' ? 'EN' : 'IT';
+  var bit = $('#lingua-it'), ben = $('#lingua-en');
+  if (bit) {
+    bit.className = 'bandiera' + (lingua === 'it' ? ' attiva' : '');
+    ben.className = 'bandiera' + (lingua === 'en' ? ' attiva' : '');
+    bit.setAttribute('aria-pressed', lingua === 'it' ? 'true' : 'false');
+    ben.setAttribute('aria-pressed', lingua === 'en' ? 'true' : 'false');
+  }
 }
-function cambiaLingua() {
-  lingua = (lingua === 'it') ? 'en' : 'it';
+function impostaLingua(nuova) {
+  if (nuova === lingua) return;
+  lingua = nuova;
   scriviFissi();
   disegnaHome();
   disegnaFiltri();
@@ -1171,8 +1222,10 @@ function cambiaLingua() {
   if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) mostraPagina(pg.__pid);
 }
 (function () {
-  var bs = document.querySelectorAll('.lingua');
-  for (var i = 0; i < bs.length; i++) tocca(bs[i], cambiaLingua);
+  var bit = $('#lingua-it'), ben = $('#lingua-en');
+  if (bit) { bit.innerHTML = bandiera('it'); ben.innerHTML = bandiera('en'); }
+  tocca(bit, function () { impostaLingua('it'); });
+  tocca(ben, function () { impostaLingua('en'); });
   scriviFissi();
 })();
 

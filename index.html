@@ -7,9 +7,15 @@
 <meta name="format-detection" content="telephone=no">
 <title>Villamirella — Palinuro e il Cilento</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=202608121458">
+<link rel="stylesheet" href="style.css?v=202608121505">
 </head>
 <body>
+
+<!-- lingua: STESSA posizione su ogni schermata, l'attiva e' evidenziata -->
+<div id="cambio-lingua" role="group" aria-label="Lingua / Language">
+  <button id="lingua-it" class="bandiera attiva" type="button" aria-label="Italiano" aria-pressed="true"></button>
+  <button id="lingua-en" class="bandiera" type="button" aria-label="English" aria-pressed="false"></button>
+</div>
 
 <!-- ================== ATTESA: video con invito al tocco ================== -->
 <div id="standby" aria-hidden="true">
@@ -31,7 +37,6 @@
 
 <!-- ============ SCHERMATA INIZIALE (stile guida cartacea) ============ -->
 <div id="home" aria-hidden="false">
-  <button class="lingua" id="lingua-home" type="button" aria-label="Switch language">EN</button>
   <div id="home-interno">
     <div id="home-testa">
       <img id="home-logo" src="assets/logo-villamirella.svg" alt="Villamirella">
@@ -48,7 +53,6 @@
   <header id="pagina-testata">
     <button class="bt chiaro" id="pagina-home" type="button">‹ Tutte le sezioni</button>
     <h2 id="pagina-titolo"></h2>
-    <button class="lingua" type="button" aria-label="Switch language">EN</button>
 
   </header>
   <div id="pagina-corpo"></div>
@@ -65,7 +69,6 @@
         <h1>Palinuro e il Cilento</h1>
         <p>Guida del Residence Villamirella</p>
       </div>
-      <button class="lingua" type="button" aria-label="Switch language">EN</button>
       <button id="reset" type="button" aria-label="Ricomincia dall'inizio">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z" fill="currentColor"/>
@@ -150,11 +153,11 @@
 
 </div>
 
-<script src="guida.js?v=202608121458"></script>
-<script src="poi.js?v=202608121458"></script>
-<script src="parco.js?v=202608121458"></script>
-<script src="percorsi.js?v=202608121458"></script>
+<script src="guida.js?v=202608121505"></script>
+<script src="poi.js?v=202608121505"></script>
+<script src="parco.js?v=202608121505"></script>
+<script src="percorsi.js?v=202608121505"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
-<script src="app.js?v=202608121458"></script>
+<script src="app.js?v=202608121505"></script>
 </body>
 </html>

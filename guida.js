@@ -76,36 +76,36 @@ window.GUIDA = {
       titolo: "Regole della casa",
       titolo_en: "House rules",
       blocchi: [
-        { avviso: "Queste regole sono un promemoria indicativo: fa sempre fede il regolamento completo della struttura, disponibile in reception.",
-          avviso_en: "These rules are an indicative reminder: the full house regulations available at reception always prevail." },
         { t: "In appartamento", t_en: "In the apartment", icona: "casa" },
         { kv: [
-          ["Raccolta differenziata", "l'isola ecologica è all'interno del residence, in fondo al parcheggio"],
-          ["Chiavi", "prima di uscire assicurati che non restino inserite nella serratura, all'interno"],
-          ["Luci", "spegni le luci interne e della terrazza durante il giorno o quando esci"],
-          ["Frigorifero", "chiudi bene la porta e tieni la temperatura impostata su 2"],
-          ["Pulizia", "il riassetto quotidiano spetta a te; puoi richiedere pulizie integrative a pagamento"],
-          ["Aria condizionata", "non tenere le finestre aperte quando è accesa; spegnila quando esci"]
+          ["Raccolta differenziata", "l'isola ecologica è all'interno del residence, in fondo al parcheggio"], "riciclo",
+          ["Chiavi", "prima di uscire assicurati che non restino inserite nella serratura, all'interno"], "checkin",
+          ["Luci", "spegni le luci interne e della terrazza durante il giorno o quando esci"], "luce",
+          ["Frigorifero", "chiudi bene la porta e tieni la temperatura impostata su 2"], "frigo",
+          ["Pulizia", "il riassetto quotidiano spetta a te; puoi richiedere pulizie integrative a pagamento"], "pulizia",
+          ["Aria condizionata", "non tenere le finestre aperte quando è accesa; spegnila quando esci"], "aria"
         ], kv_en: [
-          ["Recycling", "the waste collection point is inside the residence, at the far end of the car park"],
-          ["Keys", "before going out, make sure they are not left in the lock on the inside"],
-          ["Lights", "switch off indoor and terrace lights during the day or when you go out"],
-          ["Fridge", "close the door properly and keep the temperature set to 2"],
-          ["Cleaning", "daily tidying is up to you; extra cleaning is available on request, for a fee"],
-          ["Air conditioning", "do not keep windows open while it is on; switch it off when you leave"]
+          ["Recycling", "the waste collection point is inside the residence, at the far end of the car park"], "riciclo",
+          ["Keys", "before going out, make sure they are not left in the lock on the inside"], "checkin",
+          ["Lights", "switch off indoor and terrace lights during the day or when you go out"], "luce",
+          ["Fridge", "close the door properly and keep the temperature set to 2"], "frigo",
+          ["Cleaning", "daily tidying is up to you; extra cleaning is available on request, for a fee"], "pulizia",
+          ["Air conditioning", "do not keep windows open while it is on; switch it off when you leave"], "aria"
         ]},
         { t: "Nella struttura", t_en: "Around the residence", icona: "regole" },
         { kv: [
-          ["Piscina", "aperta dalle 9:00 alle 20:00; sorveglia i bambini; non sono ammessi tuffi"],
-          ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto"],
-          ["Ospiti esterni", "ricevili nel giardino davanti alla reception, avvisando la direzione; non possono usare la piscina né accedere all'alloggio"],
-          ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina"]
+          ["Piscina", "aperta dalle 9:00 alle 20:00; sorveglia i bambini; non sono ammessi tuffi"], "piscina",
+          ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto"], "auto",
+          ["Ospiti esterni", "ricevili nel giardino davanti alla reception, avvisando la direzione; non possono usare la piscina né accedere all'alloggio"], "ospiti",
+          ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina"], "animali"
         ], kv_en: [
-          ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed"],
-          ["Parking", "park in the internal car park using one space only"],
-          ["Visitors", "welcome them in the garden in front of reception, informing the management; they may not use the pool or enter the apartment"],
-          ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area"]
-        ]}
+          ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed"], "piscina",
+          ["Parking", "park in the internal car park using one space only"], "auto",
+          ["Visitors", "welcome them in the garden in front of reception, informing the management; they may not use the pool or enter the apartment"], "ospiti",
+          ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area"], "animali"
+        ]},
+        { avviso: "Queste regole sono un promemoria indicativo: fa sempre fede il regolamento completo della struttura.",
+          avviso_en: "These rules are an indicative reminder: the full house regulations always prevail." }
       ]
     },
 
