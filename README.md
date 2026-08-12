@@ -14,6 +14,8 @@ Pagina statica: nessuna installazione, nessun account, nessuna chiave.
 | `index.html` | la pagina |
 | `poi.js` | **i contenuti**: luoghi, esperienze, coordinate. È il file da modificare |
 | `parco.js` | il confine del Parco Nazionale (poligono) |
+| `percorsi.js` | i tracciati di itinerari ed esperienze (da OpenStreetMap) |
+| `assets/glifi/` | i caratteri delle scritte sulla mappa, in locale |
 | `app.js` | il funzionamento |
 | `style.css` | l'aspetto |
 | `assets/img/` | le foto, tutte in locale |
@@ -29,6 +31,10 @@ Pagina statica: nessuna installazione, nessun account, nessuna chiave.
 
 Il repository è `alphacasrl/chiosco-villamirella`. Ogni modifica caricata sul
 ramo `main` va in linea da sola dopo un minuto circa.
+
+Prima di caricare, aggiorna il numero di versione in fondo a `index.html`
+(le righe con `?v=...`): e' quello che costringe il browser del monitor a
+scaricare i file nuovi invece di riusare quelli vecchi.
 
 ```bash
 git add -A && git commit -m "aggiorno i contenuti" && git push
@@ -57,8 +63,8 @@ indirizzo. Per aggiornare, ritrascina la cartella.
 Il browser webOS non ha una modalità chiosco: **la barra dell'indirizzo resta
 visibile** e non si può togliere. Tutto il resto del blocco è dentro la pagina:
 niente selezione del testo, niente menu contestuale, niente zoom della pagina
-col doppio tocco, nessun collegamento che porti fuori. Dopo 90 secondi senza
-tocchi la pagina torna da sola alla schermata iniziale.
+col doppio tocco, nessun collegamento che porti fuori. Dopo 2 minuti senza tocchi la pagina ricomincia da capo da sola; il pulsante
+RICOMINCIA in alto fa la stessa cosa in ogni momento.
 
 ---
 
@@ -125,7 +131,9 @@ I numeri qui sotto sono misurati sul monitor vero, non stimati. La GPU è una
 ARM Mali-G31 e il collo di bottiglia è il **numero di pixel da disegnare**, non
 la quantità di pin: aggiungere luoghi non peggiora nulla.
 
-Interventi in ordine di efficacia, tutti in `CONFIG` in cima ad `app.js`:
+I luoghi sulla mappa sono livelli WebGL nativi (non marcatori HTML): seguono
+zoom, rotazione e rilievo senza costo aggiuntivo, quindi il loro numero non
+incide. Interventi in ordine di efficacia, tutti in `CONFIG` in cima ad `app.js`:
 
 1. **`PIXEL_RATIO: 1`** — è già così. Con `1.25` la mappa è più nitida ma
    scende da 60 a 28 fotogrammi. Non impostarlo mai da codice a mappa già
