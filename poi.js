@@ -53,6 +53,16 @@ window.CATEGORIE = [
   { id: "santuari",    nome: "Santuari" },
 ];
 
+/* L'ORDINE DELLE SEZIONI nella colonna di sinistra.
+   Per spostarne una basta spostare la riga; per nasconderla, cancellarla.
+   "mare" raccoglie le voci con inEvidenza: true. */
+window.SEZIONI = [
+  { id: "mare",       nome: "Il mare di Palinuro" },
+  { id: "itinerari",  nome: "Itinerari" },
+  { id: "esperienze", nome: "Esperienze" },
+  { id: "guide",      nome: "Guide" }
+];
+
 /* Il residence: e' il punto da cui si calcolano le distanze.
    ANCHE QUESTE COORDINATE VANNO INSERITE A MANO. */
 window.RESIDENCE = {
@@ -183,7 +193,7 @@ window.LUOGHI = [
       }
     ],
     distanzaKm: "",   tempoAuto: "",
-    inEvidenza: true
+    inEvidenza: false
   },
   {
     id: "spiaggia-pozzallo",
@@ -200,7 +210,7 @@ window.LUOGHI = [
       }
     ],
     distanzaKm: "",   tempoAuto: "",
-    inEvidenza: true
+    inEvidenza: false
   },
   {
     id: "porto-infreschi",
@@ -222,7 +232,7 @@ window.LUOGHI = [
       }
     ],
     distanzaKm: "",   tempoAuto: "",
-    inEvidenza: true
+    inEvidenza: false
   },
 
   /* ---------- BORGHI E PAESI ---------- */
@@ -851,127 +861,6 @@ window.LUOGHI = [
    reception" sulla scheda. Mettilo solo dove e' vero. */
 window.ESPERIENZE = [
 
-  /* ---------- ESPERIENZE ---------- */
-  {
-    id: "gita-grotte",
-    nome: "Giro in barca alle Grotte di Capo Palinuro",
-    tipo: "esperienza",
-    sommario: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto.",
-    immagine: "assets/img/gita-grotte.jpg",
-    luoghi: ["grotte-capo-palinuro"],
-    prenotabileInReception: true,
-    inEvidenza: true,
-    articoli: [
-      {
-        titolo: "Tour in barca: le grotte di Palinuro",
-        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
-        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
-      }
-    ]
-  },
-  {
-    id: "immersioni",
-    nome: "Immersioni alle grotte di Palinuro",
-    tipo: "esperienza",
-    sommario: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione.",
-    immagine: "assets/img/immersioni.jpg",
-    luoghi: ["grotte-capo-palinuro"],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "Immersioni a Palinuro",
-        url: "https://www.villamirella.it/cilento/immersioni-alle-grotte-di-palinuro",
-        estratto: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione."
-      }
-    ]
-  },
-  {
-    id: "lamparata",
-    nome: "La lamparata a Marina di Camerota",
-    tipo: "esperienza",
-    sommario: "Il punto di partenza è fissato dal porto di Marina di Camerota, intorno alle 21, a pochi minuti di auto dagli appartamenti di Villamirella.",
-    immagine: "assets/img/lamparata.jpg",
-    luoghi: ["marina-di-camerota"],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "La lamparata a Marina di Camerota",
-        url: "https://www.villamirella.it/cilento/lamparata-marina-di-camerota",
-        estratto: "Il punto di partenza è fissato dal porto di Marina di Camerota, intorno alle 21, a pochi minuti di auto dagli appartamenti di Villamirella."
-      }
-    ]
-  },
-  {
-    id: "climbing",
-    nome: "Arrampicata alla falesia della Molpa",
-    tipo: "esperienza",
-    sommario: "Il climbing a Palinuro è un'attività molto popolare per gli amanti dell'arrampicata e delle avventure all'aria aperta .",
-    immagine: "assets/img/climbing.jpg",
-    luoghi: ["collina-molpa"],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "Climbing in Palinuro: le falesie della costa di Palinuro",
-        url: "https://www.villamirella.it/cilento/climbing-palinuro-arrampicata",
-        estratto: "Il climbing a Palinuro è un'attività molto popolare per gli amanti dell'arrampicata e delle avventure all'aria aperta ."
-      }
-    ]
-  },
-  {
-    id: "volo-trentinara",
-    nome: "Cilento in Volo a Trentinara",
-    tipo: "esperienza",
-    sommario: "Situato in una posizione eccezionale tra le montagne e il mare, troviamo il borgo di Trentinara, accanto al Monte Cantenna su un costone roccioso.",
-    immagine: "assets/img/volo-trentinara.jpg",
-    luoghi: [],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "Cilento col Volo dell'Angelo a Trentinara",
-        url: "https://www.villamirella.it/cilento/cilento-volo-trentinara",
-        estratto: "Situato in una posizione eccezionale tra le montagne e il mare, troviamo il borgo di Trentinara, accanto al Monte Cantenna su un costone roccioso."
-      }
-    ]
-  },
-  {
-    id: "piano-croce",
-    nome: "Parco avventura Piano della Croce",
-    tipo: "esperienza",
-    sommario: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania.",
-    immagine: "assets/img/piano-croce.jpg",
-    luoghi: [],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "Il parco avventura della Piano della Croce",
-        url: "https://www.villamirella.it/cilento/parco-avventura-piano-croce",
-        estratto: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania."
-      }
-    ]
-  },
-  {
-    id: "cantine",
-    nome: "Le cantine del Cilento",
-    tipo: "esperienza",
-    sommario: "Il Cilento, un'affascinante regione situata nel cuore della Campania, è rinomato non solo per le sue bellezze naturali e i siti archeologici di valore inestimabile, ma anche per la produzione di vini straordinari.",
-    immagine: "assets/img/cantine.webp",
-    luoghi: [],
-    prenotabileInReception: false,
-    inEvidenza: false,
-    articoli: [
-      {
-        titolo: "I migliori vini del Cilento da assaggiare",
-        url: "https://www.villamirella.it/cilento/i-migliori-vini-del-cilento-campania",
-        estratto: "Il Cilento, un'affascinante regione situata nel cuore della Campania, è rinomato non solo per le sue bellezze naturali e i siti archeologici di valore inestimabile, ma anche per la produzione di vini straordinari."
-      }
-    ]
-  },
-
   /* ---------- ITINERARI ---------- */
   {
     id: "sentiero-fortini",
@@ -1072,6 +961,93 @@ window.ESPERIENZE = [
         titolo: "Vacanze in bici: Via Silente",
         url: "https://www.villamirella.it/cilento/la-via-silente",
         estratto: "La Via Silente prende il nome dal silenzio, re assoluto del Cilento. Così difficile da descrivere, nel silenzio paesaggi, colori, profumi e tempo si mescolano. Si rimane incantati nell'ascoltare il silenzio mentre il sole gioca a nascondino tra le nuvole cambiando la luce, in ogni momento."
+      }
+    ]
+  },
+
+  /* ---------- ESPERIENZE ---------- */
+  {
+    id: "gita-grotte",
+    nome: "Giro in barca alle Grotte di Capo Palinuro",
+    tipo: "esperienza",
+    sommario: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto.",
+    immagine: "assets/img/gita-grotte.jpg",
+    luoghi: ["grotte-capo-palinuro"],
+    prenotabileInReception: true,
+    inEvidenza: true,
+    articoli: [
+      {
+        titolo: "Tour in barca: le grotte di Palinuro",
+        url: "https://www.villamirella.it/cilento/gita-in-barca-alle-grotte-di-palinuro",
+        estratto: "L'escursione in barca lungo il promontorio di Capo Palinuro è adatta a tutti, grandi e piccoli, e non presenta nessun particolare rischio. Durante la gita in barca ti lascerai incantare dal panorama unico di questi luoghi e conquistare dai racconti delle guide del posto."
+      }
+    ]
+  },
+  {
+    id: "immersioni",
+    nome: "Immersioni alle grotte di Palinuro",
+    tipo: "esperienza",
+    sommario: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione.",
+    immagine: "assets/img/immersioni.jpg",
+    luoghi: ["grotte-capo-palinuro"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: [
+      {
+        titolo: "Immersioni a Palinuro",
+        url: "https://www.villamirella.it/cilento/immersioni-alle-grotte-di-palinuro",
+        estratto: "Per questo, una delle attività da fare quando sei in vacanza a Palinuro è il diving con le sue immersioni . E se non si ha esperienza, nessun problema basta seguire i consigli degli istruttori esperti che popolano la zona con diverse scuole sub e centri di immersione."
+      }
+    ]
+  },
+  {
+    id: "lamparata",
+    nome: "La lamparata a Marina di Camerota",
+    tipo: "esperienza",
+    sommario: "Il punto di partenza è fissato dal porto di Marina di Camerota, intorno alle 21, a pochi minuti di auto dagli appartamenti di Villamirella.",
+    immagine: "assets/img/lamparata.jpg",
+    luoghi: ["marina-di-camerota"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: [
+      {
+        titolo: "La lamparata a Marina di Camerota",
+        url: "https://www.villamirella.it/cilento/lamparata-marina-di-camerota",
+        estratto: "Il punto di partenza è fissato dal porto di Marina di Camerota, intorno alle 21, a pochi minuti di auto dagli appartamenti di Villamirella."
+      }
+    ]
+  },
+  {
+    id: "piano-croce",
+    nome: "Parco avventura Piano della Croce",
+    tipo: "esperienza",
+    sommario: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania.",
+    immagine: "assets/img/piano-croce.jpg",
+    luoghi: [],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: [
+      {
+        titolo: "Il parco avventura della Piano della Croce",
+        url: "https://www.villamirella.it/cilento/parco-avventura-piano-croce",
+        estratto: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania."
+      }
+    ]
+  },
+  {
+    id: "cantine",
+    nome: "Le cantine del Cilento",
+    tipo: "esperienza",
+    sommario: "Il Cilento, un'affascinante regione situata nel cuore della Campania, è rinomato non solo per le sue bellezze naturali e i siti archeologici di valore inestimabile, ma anche per la produzione di vini straordinari.",
+    immagine: "assets/img/cantine.webp",
+    luoghi: [],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: [
+      {
+        titolo: "I migliori vini del Cilento da assaggiare",
+        url: "https://www.villamirella.it/cilento/i-migliori-vini-del-cilento-campania",
+        estratto: "Il Cilento, un'affascinante regione situata nel cuore della Campania, è rinomato non solo per le sue bellezze naturali e i siti archeologici di valore inestimabile, ma anche per la produzione di vini straordinari."
       }
     ]
   },
