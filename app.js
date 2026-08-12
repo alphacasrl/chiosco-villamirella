@@ -83,6 +83,61 @@ var CONFIG = {
 };
 
 /* =====================================================================
+   LINGUE — tutte le scritte dell'interfaccia nelle due lingue.
+   I contenuti hanno il gemello inglese nei campi *_en di guida.js.
+   ===================================================================== */
+var TESTI = {
+  it: {
+    inizio: 'Inizio', tutteSezioni: '‹ Tutte le sezioni',
+    tornaElenco: '‹ Torna all\'elenco', vediMappa: 'Vedi sulla mappa',
+    panoramica: 'Torna alla panoramica',
+    mappaIntera: 'mappa<br>intera', elencoIntero: 'elenco<br>intero',
+    apriElenco: 'apri<br>elenco', apriMappa: 'apri<br>mappa',
+    prenotabile: 'Prenotabile in reception',
+    distanzaAria: 'Distanza in linea d\'aria', inAuto: 'In auto',
+    dove: 'Dove', lidi: 'Lidi sulla spiaggia', luogo: 'Luogo', luoghi: 'Luoghi',
+    guida: 'Guida del Residence Villamirella',
+    titolo: 'Palinuro e il Cilento',
+    invito: 'Tocca un riquadro per cominciare',
+    vuoto: 'Nessuna voce in questa sezione.',
+    senzaTesto: 'Per questo luogo il sito non riporta una descrizione.',
+    percorsoInd: 'Percorso indicativo',
+    emergenza: 'Emergenza sanitaria: 118', emergenza2: 'Numero unico di emergenza: 112',
+    offline: 'Sei senza connessione: la mappa non si aggiorna, i testi restano leggibili.',
+    online: 'Connessione tornata.',
+    lenta: 'Connessione lenta: alcune parti della mappa potrebbero mancare.',
+    itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
+    ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute'
+  },
+  en: {
+    inizio: 'Home', tutteSezioni: '‹ All sections',
+    tornaElenco: '‹ Back to the list', vediMappa: 'Show on the map',
+    panoramica: 'Back to overview',
+    mappaIntera: 'full<br>map', elencoIntero: 'full<br>list',
+    apriElenco: 'open<br>list', apriMappa: 'open<br>map',
+    prenotabile: 'Bookable at reception',
+    distanzaAria: 'Straight-line distance', inAuto: 'By car',
+    dove: 'Where', lidi: 'Beach clubs', luogo: 'Place', luoghi: 'Places',
+    guida: 'Residence Villamirella guest guide',
+    titolo: 'Palinuro and Cilento',
+    invito: 'Tap a tile to start',
+    vuoto: 'Nothing in this section.',
+    senzaTesto: 'The website has no description for this place.',
+    percorsoInd: 'Approximate route',
+    emergenza: 'Medical emergency: 118', emergenza2: 'EU emergency number: 112',
+    offline: 'No connection: the map will not update, all texts remain readable.',
+    online: 'Connection restored.',
+    lenta: 'Slow connection: parts of the map may be missing.',
+    itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
+    ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health'
+  }
+};
+var lingua = 'it';
+function TXT(k) { return (TESTI[lingua] && TESTI[lingua][k]) || TESTI.it[k] || k; }
+/* campo bilingue di guida.js: T(blocco.p, blocco.p_en) */
+function T2(it, en) { return (lingua === 'en' && en) ? en : it; }
+
+/* =====================================================================
    Utilita'
    ===================================================================== */
 function $(s) { return document.querySelector(s); }
@@ -147,11 +202,15 @@ function perId(id) {
   for (var i = 0; i < LUOGHI.length; i++) if (LUOGHI[i].id === id) return LUOGHI[i];
   return null;
 }
+var CAT_EN = { spiagge: 'Beaches & coves', borghi: 'Villages & towns', grotte: 'Caves & sea',
+               natura: 'Nature & oases', archeologia: 'Archaeology & museums', santuari: 'Sanctuaries' };
 function nomeCategoria(id) {
-  if (id === 'ristoranti') return 'Ristorante';
-  if (id === 'negozi') return 'Negozio';
-  if (id === 'salute') return 'Salute';
-  for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) return CATEGORIE[i].nome;
+  if (id === 'ristoranti') return TXT('ristorante');
+  if (id === 'negozi') return TXT('negozio');
+  if (id === 'salute') return TXT('salute');
+  for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) {
+    return (lingua === 'en' && CAT_EN[id]) ? CAT_EN[id] : CATEGORIE[i].nome;
+  }
   return id;
 }
 function nomeSezione(id, rip) {
@@ -189,9 +248,9 @@ function spiaggeEMare() {
   return r.concat(prima);
 }
 var GRUPPI = [
-  { id: 'mare',       nome: 'Spiagge e mare', cat: 'spiagge', icona: 'mare', voci: spiaggeEMare },
-  { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'),   cat: null, icona: 'itinerari', voci: function () { return espDiTipo('itinerario'); } },
-  { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), cat: null, icona: 'esperienze', voci: function () { return espDiTipo('esperienza'); } }
+  { id: 'mare',       nome: 'Spiagge e mare', nome_en: 'Beaches & sea', cat: 'spiagge', icona: 'mare', voci: spiaggeEMare },
+  { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'), nome_en: 'Itineraries', cat: null, icona: 'itinerari', voci: function () { return espDiTipo('itinerario'); } },
+  { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), nome_en: 'Experiences', cat: null, icona: 'esperienze', voci: function () { return espDiTipo('esperienza'); } }
 ];
 (function () {
   for (var i = 0; i < CATEGORIE.length; i++) {
@@ -199,7 +258,10 @@ var GRUPPI = [
       if (c.id === 'spiagge') return;   /* fuse in "Spiagge e mare" */
       var IC = { borghi: 'borghi', grotte: 'grotte', natura: 'natura',
                  archeologia: 'archeologia', santuari: 'santuari' };
-      GRUPPI.push({ id: 'cat:' + c.id, nome: c.nome, cat: c.id, icona: IC[c.id] || 'borghi',
+      var EN = { borghi: 'Villages & towns', grotte: 'Caves', natura: 'Nature & oases',
+                 archeologia: 'Archaeology & museums', santuari: 'Sanctuaries' };
+      GRUPPI.push({ id: 'cat:' + c.id, nome: c.nome, nome_en: EN[c.id] || c.nome,
+                    cat: c.id, icona: IC[c.id] || 'borghi',
                     voci: function () { return luoghiDiCategoria(c.id); } });
     })(CATEGORIE[i]);
   }
@@ -218,14 +280,16 @@ var GRUPPI = [
         lng: (b.card.lng !== undefined ? b.card.lng : null),
         verified: b.card.lat !== undefined,
         sommario: b.card.testo || '',
+        sommario_en: b.card.testo_en || '',
         dove: b.card.dove || '',
+        dove_en: b.card.dove_en || '',
         immagine: b.card.foto || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
       });
     });
     pseudo.forEach(function (l) { LUOGHI.push(l); });
     var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute' };
-    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, cat: pid, icona: ICP[pid] || pid,
+    GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, nome_en: pag.titolo_en || pag.titolo, cat: pid, icona: ICP[pid] || pid,
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
 })();
@@ -264,7 +328,7 @@ function badgePren() {
   var b = el('span', 'badge-pren');
   b.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">' +
     '<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-    '<span>Prenotabile in reception</span>';
+    '<span>' + TXT('prenotabile') + '</span>';
   return b;
 }
 
@@ -278,7 +342,7 @@ function disegnaFiltri() {
   c.innerHTML = icona(g.icona || 'borghi');
   if (g.cat) c.style.color = colore(g.cat);
   n.appendChild(c);
-  n.appendChild(el('span', null, g.nome));
+  n.appendChild(el('span', null, T2(g.nome, g.nome_en)));
 }
 
 function gruppoCorrente() {
@@ -288,9 +352,9 @@ function gruppoCorrente() {
 
 function sottotitolo(v) {
   if (v.tipo === 'luogo') return nomeCategoria(v.dato.categoria);
-  if (v.dato.tipo === 'itinerario') return 'Itinerario';
-  if (v.dato.tipo === 'guida') return 'Guida';
-  return 'Esperienza';
+  if (v.dato.tipo === 'itinerario') return TXT('itinerario');
+  if (v.dato.tipo === 'guida') return TXT('guidaTipo');
+  return TXT('esperienza');
 }
 
 function disegnaElenco() {
@@ -300,10 +364,10 @@ function disegnaElenco() {
   var voci = g.voci();
   if (g.id === 'g:salute') {
     var em = el('div', 'emergenza');
-    em.innerHTML = '<b>Emergenza sanitaria: 118</b><span>Numero unico di emergenza: 112</span>';
+    em.innerHTML = '<b>' + TXT('emergenza') + '</b><span>' + TXT('emergenza2') + '</span>';
     n.appendChild(em);
   }
-  if (!voci.length) { n.appendChild(el('div', 'vuoto', 'Nessuna voce in questa sezione.')); return; }
+  if (!voci.length) { n.appendChild(el('div', 'vuoto', TXT('vuoto'))); return; }
   for (var i = 0; i < voci.length; i++) {
     (function (v) {
       var d = v.dato;
@@ -351,7 +415,7 @@ function apriDettaglio(v) {
 
   $('#det-categoria').textContent = sottotitolo(v);
   $('#det-nome').textContent = d.nome;
-  $('#det-sommario').textContent = d.sommario || '';
+  $('#det-sommario').textContent = T2(d.sommario, d.sommario_en) || '';
   $('#det-sommario').style.display = d.sommario ? 'block' : 'none';
 
   var pren = $('#det-prenotabile');
@@ -372,15 +436,15 @@ function apriDettaglio(v) {
       riga('Distanza dal residence', d.distanzaKm + ' km');
     } else {
       var km = distanzaAria(RESIDENCE, d);
-      if (km !== null) riga('Distanza in linea d’aria', km.toFixed(1) + ' km');
+      if (km !== null) riga(TXT('distanzaAria'), km.toFixed(1) + ' km');
     }
-    if (d.tempoAuto) riga('In auto', d.tempoAuto);
-    if (d.dove) riga('Dove', d.dove);
-    if (d.lidi) riga('Lidi sulla spiaggia', d.lidi);
+    if (d.tempoAuto) riga(TXT('inAuto'), d.tempoAuto);
+    if (d.dove) riga(TXT('dove'), T2(d.dove, d.dove_en));
+    if (d.lidi) riga(TXT('lidi'), d.lidi);
   } else if (v.tipo === 'esperienza') {
     var rif = d.luoghi || [], nomi = [];
     for (var i = 0; i < rif.length; i++) { var l = perId(rif[i]); if (l) nomi.push(l.nome); }
-    if (nomi.length) riga(nomi.length > 1 ? 'Luoghi' : 'Luogo', nomi.join(', '));
+    if (nomi.length) riga(nomi.length > 1 ? TXT('luoghi') : TXT('luogo'), nomi.join(', '));
   }
 
   var arts = $('#det-articoli');
@@ -395,7 +459,7 @@ function apriDettaglio(v) {
     arts.appendChild(box);
   }
   if (!d.sommario && !arts.childNodes.length) {
-    arts.appendChild(el('p', 'avviso-vuoto', 'Per questo luogo il sito non riporta una descrizione.'));
+    arts.appendChild(el('p', 'avviso-vuoto', TXT('senzaTesto')));
   }
   /* se il tracciato e' una congiungente e non un rilievo GPS, va detto */
   var pct = PERCORSI[d.id];
@@ -580,7 +644,7 @@ function avvia() {
 
   mappa.on('error', function () {
     erroriTile++;
-    if (erroriTile === 8) mostraAvviso('Connessione lenta: alcune parti della mappa potrebbero mancare.', 6000);
+    if (erroriTile === 8) mostraAvviso(TXT('lenta'), 6000);
   });
   mappa.on('moveend', function () { erroriTile = 0; });
 }
@@ -746,7 +810,10 @@ function applicaTerreno() {
     }
   } catch (e) {}
   var b3 = $('#cmd-3d');
-  b3.textContent = 'Vista 3D';
+  /* dice DOVE SI VA: montagnette per passare al 3D, quadrato piatto per il 2D */
+  b3.innerHTML = stato.terreno
+    ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4.5" width="16" height="15" rx="1.5"/><path d="M4 19.5L20 4.5"/></svg><span>2D</span>'
+    : '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18.5l5.5-9 3.6 6 3-4.5 5.9 7.5z"/><circle cx="16.6" cy="6.4" r="1.8"/></svg><span>3D</span>';
   b3.className = 'cmd grande' + (stato.terreno ? ' acceso' : '');
 }
 
@@ -756,10 +823,17 @@ function applicaVista() {
   }
 }
 
+function etichettaBase() {
+  /* il pulsante mostra la MINIATURA di dove si va, non una parola */
+  var altra = stato.base === 'sat' ? 'osm' : 'sat';
+  var n = $('#cmd-base');
+  n.innerHTML = '<img src="assets/thumb-' + altra + '.jpg" alt="">' +
+                '<span>' + (altra === 'osm' ? (lingua === 'it' ? 'Mappa' : 'Map') : (lingua === 'it' ? 'Satellite' : 'Satellite')) + '</span>';
+}
 function cambiaBase() {
   stato.base = (stato.base === 'sat') ? 'osm' : 'sat';
   var b = CONFIG.BASI[stato.base];
-  $('#cmd-base').textContent = CONFIG.BASI[stato.base === 'sat' ? 'osm' : 'sat'].etichetta;
+  etichettaBase();
   if (!mappa || !stato.mappaPronta) return;
   try {
     ['base', 'basso'].forEach(function (id) {
@@ -880,8 +954,8 @@ function aggiornaBussola() {
     var sx = $('#verso-sinistra'), dx = $('#verso-destra');
     sx.style.display = se ? 'none' : '';
     dx.style.display = sm ? 'none' : '';
-    sx.querySelector('em').innerHTML = sm ? '' : 'mappa<br>intera';
-    dx.querySelector('em').innerHTML = se ? '' : 'elenco<br>intero';
+    sx.querySelector('em').innerHTML = sm ? '' : TXT('mappaIntera');
+    dx.querySelector('em').innerHTML = se ? '' : TXT('elencoIntero');
     sx.setAttribute('aria-label', sm ? 'Riapri l\'elenco' : 'Mappa a tutto schermo');
     dx.setAttribute('aria-label', se ? 'Riapri la mappa' : 'Elenco a tutto schermo');
     /* quando una meta' e' chiusa, l'unica freccia visibile punta al ritorno */
@@ -889,8 +963,8 @@ function aggiornaBussola() {
     dx.classList.toggle('ritorno', se);
     sx.querySelector('svg path').setAttribute('d', sm ? 'M10 6l6 6-6 6' : 'M14 6l-6 6 6 6');
     dx.querySelector('svg path').setAttribute('d', se ? 'M14 6l-6 6 6 6' : 'M10 6l6 6-6 6');
-    if (sm) sx.querySelector('em').innerHTML = 'apri<br>elenco';
-    if (se) dx.querySelector('em').innerHTML = 'apri<br>mappa';
+    if (sm) sx.querySelector('em').innerHTML = TXT('apriElenco');
+    if (se) dx.querySelector('em').innerHTML = TXT('apriMappa');
   }
   window.__aggiornaFrecce = aggiornaFrecce;
   tocca($('#verso-sinistra'), function () {
@@ -951,6 +1025,11 @@ var ICONE = {
   faq:        '<circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.4A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
   contatti:   '<path d="M6 3.5h4l1.4 4.5-2.2 1.6a12 12 0 0 0 5.2 5.2l1.6-2.2 4.5 1.4v4a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 5.7 2 2 0 0 1 6 3.5z"/>',
   salute:     '<circle cx="12" cy="12" r="8.6"/><path d="M12 8v8M8 12h8"/>',
+  auto:       '<path d="M5 16.5V12l1.8-5h10.4L19 12v4.5"/><path d="M5 12h14"/><circle cx="7.8" cy="16" r="1.4"/><circle cx="16.2" cy="16" r="1.4"/><path d="M4.5 19h15"/>',
+  treno:      '<rect x="6" y="3.5" width="12" height="13" rx="2.6"/><path d="M6 9.5h12"/><circle cx="9.3" cy="13.3" r="1.1"/><circle cx="14.7" cy="13.3" r="1.1"/><path d="M8.5 17l-2 3.5M15.5 17l2 3.5M7.5 20.5h9"/>',
+  bici:       '<circle cx="6" cy="16.5" r="3.4"/><circle cx="18" cy="16.5" r="3.4"/><path d="M6 16.5L9.5 9h5.8"/><path d="M12 16.5L9.5 9"/><path d="M15.3 9l2.7 7.5"/><path d="M13.8 6.5h3"/>',
+  taxi:       '<path d="M5 16.5V12l1.8-4.5h10.4L19 12v4.5"/><path d="M5 12h14"/><circle cx="7.8" cy="16" r="1.4"/><circle cx="16.2" cy="16" r="1.4"/><path d="M10 7.5V5.2h4v2.3"/>',
+  uscita:     '<path d="M9 4.5H5.5v15H9"/><path d="M13 8l4 4-4 4"/><path d="M17 12H8.5"/>',
   casa:       '<path d="M4 11.5L12 4.5l8 7"/><path d="M6.3 10v10h11.4V10"/><path d="M10 20v-5h4v5"/>',
   mappa:      '<path d="M9 4.5L4 6.3v13.2L9 17.7l6 1.8 5-1.8V4.5L15 6.3z"/><path d="M9 4.5v13.2M15 6.3v13.2"/>',
   elenco:     '<path d="M8.5 6h11M8.5 12h11M8.5 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor" stroke="none"/>'
@@ -970,18 +1049,35 @@ function mostraPagina(id) {
   if (!id) { n.setAttribute('aria-hidden', 'true'); return; }
   var p = GUIDA.PAGINE[id];
   if (!p) return;
-  $('#pagina-titolo').textContent = p.titolo;
+  n.__pid = id;
+  $('#pagina-titolo').textContent = T2(p.titolo, p.titolo_en);
   var corpo = $('#pagina-corpo');
   vuota(corpo);
   for (var i = 0; i < p.blocchi.length; i++) {
     var b = p.blocchi[i];
-    if (b.t) corpo.appendChild(el('h3', null, b.t));
-    else if (b.p) corpo.appendChild(el('p', null, b.p));
+    if (b.avviso) {
+      var av = el('div', 'avviso-regole');
+      av.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v8M12 17h.01"/><circle cx="12" cy="12" r="9.4"/></svg>';
+      av.appendChild(el('span', null, T2(b.avviso, b.avviso_en)));
+      corpo.appendChild(av);
+    }
+    else if (b.t) {
+      var h3 = el('h3');
+      if (b.icona) {
+        var ic = el('span', 'titolo-icona');
+        ic.innerHTML = icona(b.icona);
+        h3.appendChild(ic);
+      }
+      h3.appendChild(el('span', null, T2(b.t, b.t_en)));
+      corpo.appendChild(h3);
+    }
+    else if (b.p) corpo.appendChild(el('p', null, T2(b.p, b.p_en)));
     else if (b.kv) {
-      for (var j = 0; j < b.kv.length; j++) {
+      var kvl = (lingua === 'en' && b.kv_en) ? b.kv_en : b.kv;
+      for (var j = 0; j < kvl.length; j++) {
         var r = el('div', 'kv');
-        r.appendChild(el('b', null, b.kv[j][0]));
-        r.appendChild(el('span', null, b.kv[j][1]));
+        r.appendChild(el('b', null, kvl[j][0]));
+        r.appendChild(el('span', null, kvl[j][1]));
         corpo.appendChild(r);
       }
     } else if (b.img) {
@@ -989,13 +1085,13 @@ function mostraPagina(id) {
       var fim = el('img');
       fim.src = b.img; fim.alt = '';
       fig.appendChild(fim);
-      if (b.didascalia) fig.appendChild(el('p', null, b.didascalia));
+      if (b.didascalia) fig.appendChild(el('p', null, T2(b.didascalia, b.didascalia_en)));
       corpo.appendChild(fig);
     } else if (b.card) {
       var c = el('div', 'card');
       c.appendChild(el('b', null, b.card.nome));
       if (b.card.dove) c.appendChild(el('div', 'dove', b.card.dove));
-      if (b.card.testo) c.appendChild(el('p', null, b.card.testo));
+      if (b.card.testo) c.appendChild(el('p', null, T2(b.card.testo, b.card.testo_en)));
       corpo.appendChild(c);
     }
   }
@@ -1013,16 +1109,18 @@ function apriSezione(idGruppo) {
   mostraHome(false);
   mostraPagina(null);
 }
-(function () {
+function disegnaHome() {
   var ben = GUIDA.benvenuto || {};
-  $('#home-titolo').textContent = ben.titolo || 'Benvenuto!';
-  $('#home-sotto').textContent = ben.sotto || '';
+  $('#home-titolo').textContent = T2(ben.titolo, ben.titolo_en) || 'Benvenuto!';
+  $('#home-sotto').textContent = T2(ben.sotto, ben.sotto_en) || '';
+  $('#home-invito').textContent = TXT('invito');
   var griglia = $('#mattonelle');
+  vuota(griglia);
   var m = GUIDA.MATTONELLE || [];
   var fascia = null;
   for (var i = 0; i < m.length; i++) {
     if (m[i].gruppo) {
-      griglia.appendChild(el('div', 'gruppo-mattonelle', m[i].gruppo));
+      griglia.appendChild(el('div', 'gruppo-mattonelle', T2(m[i].gruppo, m[i].gruppo_en)));
       fascia = el('div', 'fascia');
       griglia.appendChild(fascia);
       continue;
@@ -1034,7 +1132,7 @@ function apriSezione(idGruppo) {
       c.innerHTML = icona(v.icona);
       if (v.colore) { c.style.color = v.colore; c.style.background = v.colore + '22'; }
       b.appendChild(c);
-      b.appendChild(el('b', null, v.nome));
+      b.appendChild(el('b', null, T2(v.nome, v.nome_en)));
       tocca(b, function () {
         if (v.pagina) mostraPagina(v.pagina);
         else if (v.sezione) apriSezione(v.sezione);
@@ -1043,12 +1141,44 @@ function apriSezione(idGruppo) {
       (fascia || griglia).appendChild(b);
     })(m[i]);
   }
-  tocca($('#pagina-home'), function () { mostraHome(true); });
-  tocca($('#sez-home'), function () { chiudiDettaglio(); mostraHome(true); });
+}
+disegnaHome();
+tocca($('#pagina-home'), function () { mostraHome(true); });
+tocca($('#sez-home'), function () { chiudiDettaglio(); mostraHome(true); });
+
+/* ---- cambio lingua: ridisegna tutto cio' che e' a schermo ---- */
+function scriviFissi() {
+  $('#reset span').textContent = TXT('inizio');
+  $('#sez-home').textContent = TXT('tutteSezioni');
+  $('#pagina-home').textContent = TXT('tutteSezioni');
+  $('#det-indietro').textContent = TXT('tornaElenco');
+  $('#det-mappa').textContent = TXT('vediMappa');
+  $('#panoramica').textContent = TXT('panoramica');
+  $('#testata h1').textContent = TXT('titolo');
+  $('#testata .scritte p').textContent = TXT('guida');
+  var bs = document.querySelectorAll('.lingua');
+  for (var i = 0; i < bs.length; i++) bs[i].textContent = lingua === 'it' ? 'EN' : 'IT';
+}
+function cambiaLingua() {
+  lingua = (lingua === 'it') ? 'en' : 'it';
+  scriviFissi();
+  disegnaHome();
+  disegnaFiltri();
+  disegnaElenco();
+  if (window.__aggiornaFrecce) window.__aggiornaFrecce();
+  if (stato.aperta) apriDettaglio(stato.aperta);
+  var pg = $('#pagina');
+  if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) mostraPagina(pg.__pid);
+}
+(function () {
+  var bs = document.querySelectorAll('.lingua');
+  for (var i = 0; i < bs.length; i++) tocca(bs[i], cambiaLingua);
+  scriviFissi();
 })();
 
 /* ------------------------ RICOMINCIA ------------------------------ */
 function ricomincia() {
+  if (lingua !== 'it') { lingua = 'it'; scriviFissi(); disegnaHome(); }
   /* cambiaBase() commuta: chiamarla solo se non siamo gia' sulla base iniziale */
   if (stato.base !== CONFIG.BASE_INIZIALE) cambiaBase();
   stato.gruppo = CONFIG.GRUPPO_INIZIALE;
@@ -1121,10 +1251,10 @@ document.addEventListener('selectstart', function (e) {
    Rete e ridimensionamento
    ===================================================================== */
 window.addEventListener('offline', function () {
-  mostraAvviso('Sei senza connessione: la mappa non si aggiorna, i testi restano leggibili.', 0);
+  mostraAvviso(TXT('offline'), 0);
 });
 window.addEventListener('online', function () {
-  mostraAvviso('Connessione tornata.', 3000);
+  mostraAvviso(TXT('online'), 3000);
   if (mappa) mappa.resize();
 });
 
@@ -1145,13 +1275,13 @@ window.addEventListener('online', function () {
 /* =====================================================================
    Partenza
    ===================================================================== */
-$('#cmd-base').textContent = CONFIG.BASI[CONFIG.BASE_INIZIALE === 'sat' ? 'osm' : 'sat'].etichetta;
+etichettaBase();
 applicaVista();
 disegnaFiltri();
 disegnaElenco();
 avvia();
 if (!navigator.onLine) {
-  mostraAvviso('Sei senza connessione: la mappa non si aggiorna, i testi restano leggibili.', 0);
+  mostraAvviso(TXT('offline'), 0);
 }
 
 })();
