@@ -1342,6 +1342,51 @@ window.ESPERIENZE = [
 
   /* ---------- ITINERARI ---------- */
   {
+    id: "sentiero-primula",
+    nome: "Sentiero della Primula",
+    tipo: "itinerario",
+    sommario: "Se ami il trekking e vuoi scoprire uno dei luoghi più belli del Cilento, il Sentiero della Primula è tra i più bei sentieri di Palinuro. Situato a Capo Palinuro, permette di esplorare l'intera zona, dalla foce del fiume Mingardo fino a Cala Ficocella e al centro del paese.",
+    immagine: "",
+    luoghi: ["spiaggia-ficocella"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: []
+  },
+  {
+    id: "trekking-faro",
+    nome: "Trekking del Faro di Capo Palinuro",
+    tipo: "itinerario",
+    sommario: "",
+    immagine: "",
+    luoghi: ["grotta-azzurra"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: []
+  },
+  {
+    id: "sentiero-tragara",
+    nome: "Sentiero della Tragara",
+    tipo: "itinerario",
+    sommario: "",
+    immagine: "",
+    luoghi: ["san-severino"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: []
+  },
+  {
+    id: "percorso-capelli-venere",
+    nome: "Anello dell'Oasi Capelli di Venere",
+    tipo: "itinerario",
+    sommario: "",
+    immagine: "",
+    luoghi: ["capelli-di-venere"],
+    prenotabileInReception: false,
+    inEvidenza: false,
+    articoli: []
+  },
+
+  {
     id: "sentiero-fortini",
     nome: "Sentiero dei Fortini",
     tipo: "itinerario",

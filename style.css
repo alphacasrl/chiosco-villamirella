@@ -727,3 +727,7 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .stat-riga b { flex: none; width: 16rem; font-family: Mulish, sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stat-barra { height: .8rem; background: var(--blu); min-width: 2px; }
 .stat-riga span { flex: none; min-width: 2.2rem; text-align: right; font-weight: 700; }
+
+.qr-percorso { text-align: center; margin: 1rem 0 .4rem; }
+.qr-percorso img { width: 8rem; height: 8rem; background: var(--bianco); border: 1px solid #dfe5eb; padding: .4rem; }
+.qr-percorso p { font-size: .64rem; color: var(--marrone); margin-top: .3rem; }

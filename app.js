@@ -115,6 +115,7 @@ var TESTI = {
     lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
     orariInd: 'Orari indicativi: fa fede l\'orario pubblicato dalla linea.', vediOrario: 'Vedi l\'orario ufficiale',
     dislivello: 'Dislivello', quotaEtich: 'Quota', anello: 'Anello', traversata: 'Traversata', profilo: 'Profilo altimetrico',
+    approfondisci: 'Per approfondire questo percorso inquadra il codice col telefono',
     meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni', meteoOggi: 'oggi', meteoUmidita: 'umidità', meteoIndietro: '‹ Tutte le previsioni'
   },
   en: {
@@ -142,6 +143,7 @@ var TESTI = {
     lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
     orariInd: 'Times are indicative: the operator\'s published timetable prevails.', vediOrario: 'See the official timetable',
     dislivello: 'Elevation gain', quotaEtich: 'Altitude', anello: 'Loop', traversata: 'One-way', profilo: 'Elevation profile',
+    approfondisci: 'To find out more about this route, scan the code with your phone',
     meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days', meteoOggi: 'today', meteoUmidita: 'humidity', meteoIndietro: '‹ All forecasts'
   }
 };
@@ -547,6 +549,15 @@ function apriDettaglio(v) {
       '<polyline points="' + pts + '" fill="none" stroke="#235784" stroke-width="2.5"/>' +
       '</svg><div class="profilo-etich"><span>' + mn + ' m</span><span>' + mx + ' m</span></div>';
     arts.appendChild(box);
+  }
+  /* QR di approfondimento verso la pagina d'origine del percorso */
+  if (v.tipo === 'esperienza' && PERCORSI[d.id] && PERCORSI[d.id].qr) {
+    var fq = el('div', 'figura qr-percorso');
+    var iq = el('img');
+    iq.src = PERCORSI[d.id].qr; iq.alt = '';
+    fq.appendChild(iq);
+    fq.appendChild(el('p', null, TXT('approfondisci')));
+    arts.appendChild(fq);
   }
   /* orari delle linee bus: dopo lo svuotamento, mai prima */
   if (d.orari || d.foglioOrari) {
