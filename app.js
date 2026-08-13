@@ -112,6 +112,7 @@ var TESTI = {
     itinerario: 'Itinerario', esperienza: 'Esperienza', guidaTipo: 'Guida',
     ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
     lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
+    orariInd: 'Orari indicativi: fa fede l\'orario pubblicato dalla linea.', vediOrario: 'Vedi l\'orario ufficiale',
     meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni', meteoOggi: 'oggi', meteoUmidita: 'umidità', meteoIndietro: '‹ Tutte le previsioni'
   },
   en: {
@@ -136,6 +137,7 @@ var TESTI = {
     itinerario: 'Itinerary', esperienza: 'Experience', guidaTipo: 'Guide',
     ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
     lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
+    orariInd: 'Times are indicative: the operator\'s published timetable prevails.', vediOrario: 'See the official timetable',
     meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days', meteoOggi: 'today', meteoUmidita: 'humidity', meteoIndietro: '‹ All forecasts'
   }
 };
@@ -301,6 +303,7 @@ var GRUPPI = [
         immagine: b.card.foto || '',
         orari: b.card.orari || null,
         icona: b.card.icona || '',
+        foglioOrari: b.card.foglioOrari || '',
         fermate: b.card.fermate || null,
         nome_en: b.card.nome_en || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
@@ -381,6 +384,9 @@ function disegnaElenco() {
   vuota(n);
   var g = gruppoCorrente();
   var voci = g.voci();
+  if (g.id === 'g:muoversi') {
+    n.appendChild(el('div', 'avviso-regole', TXT('orariInd')));
+  }
   if (g.id === 'g:salute') {
     var em = el('div', 'emergenza');
     em.innerHTML = '<b>' + TXT('emergenza') + '</b><span>' + TXT('emergenza2') + '</span>';
@@ -491,6 +497,17 @@ function apriDettaglio(v) {
   var arts = $('#det-articoli');
   vuota(arts);
   /* orari delle linee bus: dopo lo svuotamento, mai prima */
+  if (d.orari || d.foglioOrari) {
+    arts.appendChild(el('p', 'avviso-orari', TXT('orariInd')));
+  }
+  if (d.foglioOrari) {
+    var bo = el('button', 'bt largo apri-orario', TXT('vediOrario'));
+    bo.type = 'button';
+    (function (src) {
+      tocca(bo, function () { apriDocumento(src); });
+    })(d.foglioOrari);
+    arts.appendChild(bo);
+  }
   if (d.orari) {
     for (var oi = 0; oi < d.orari.length; oi++) {
       var oz = d.orari[oi];
@@ -1424,6 +1441,7 @@ function ricomincia() {
     mappa.easeTo({ bearing: 0, duration: 400 });
     panoramica();
   }
+  chiudiDocumento();
   mostraHome(true);   /* si riparte dalla schermata di benvenuto */
 }
 tocca($('#reset'), ricomincia);
@@ -1584,6 +1602,20 @@ window.addEventListener('online', function () {
   ro.observe(document.documentElement);
   ro.observe($('#mappa-lato'));
 })();
+
+/* =====================================================================
+   VISORE DOCUMENTI — l'orario ufficiale a schermo intero, X per chiudere
+   ===================================================================== */
+function apriDocumento(src) {
+  $('#documento-img').src = src;
+  $('#documento').setAttribute('aria-hidden', 'false');
+  $('#documento-scorri').scrollTop = 0;
+}
+function chiudiDocumento() {
+  $('#documento').setAttribute('aria-hidden', 'true');
+  $('#documento-img').removeAttribute('src');
+}
+tocca($('#documento-chiudi'), chiudiDocumento);
 
 /* =====================================================================
    METEO — Open-Meteo (nessuna chiave, attribuzione obbligatoria).

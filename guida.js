@@ -129,7 +129,7 @@ window.GUIDA = {
           dove: "Piazza Vittorio Veneto, Sapri — Intercity e Frecce", dove_en: "Piazza Vittorio Veneto, Sapri — Intercity and high-speed trains",
           testo: "", testo_en: "" } },
         { t: "Linee autobus Infante — estate 2026", t_en: "Infante bus lines — summer 2026", icona: "muoversi" },
-        { card: { nome: "Bus urbano di Palinuro", icona: "muoversi",
+        { card: { nome: "Bus urbano di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/urbano-palinuro.png",
           fermate: [
             { nome: "Piazza Virgilio", lat: 40.034602, lng: 15.287262 },
             { nome: "Porto di Palinuro", lat: 40.031163, lng: 15.277197 }
@@ -158,7 +158,7 @@ window.GUIDA = {
               ["Rotatoria ex Club Med", "10:00  10:45  11:45  12:45  13:30  16:15  17:15  18:15  19:15"]
             ]}
           ] } },
-        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro", icona: "muoversi",
+        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/linea-mare.png",
           fermate: [
             { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738 },
             { nome: "Lidi delle Saline", lat: 40.062627, lng: 15.278547 }
@@ -192,7 +192,7 @@ window.GUIDA = {
               ["Stazione FS Pisciotta-Palinuro", "09:20  10:30  11:30  12:40  16:00  17:20  17:50  18:20"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro", icona: "muoversi",
+        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro", icona: "muoversi", foglioOrari: "assets/orari/stazione-pisciotta.png",
           fermate: [
             { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
             { nome: "Palinuro Saline", lat: 40.062627, lng: 15.278547 },
@@ -223,7 +223,7 @@ window.GUIDA = {
               ["M. di Camerota Lungomare", "08:40  09:30  10:40  11:40  12:50  14:05  15:20  16:40  18:00  18:30"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Centola", icona: "muoversi",
+        { card: { nome: "Linea da e per Stazione FS Centola", icona: "muoversi", foglioOrari: "assets/orari/stazione-centola.png",
           fermate: [
             { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
             { nome: "Stazione FS Centola", lat: 40.091144, lng: 15.345259 }
