@@ -82,14 +82,14 @@ window.GUIDA = {
           ["Chiavi", "prima di uscire assicurati che non restino inserite nella serratura, all'interno", "checkin"],
           ["Luci", "spegni le luci interne e della terrazza durante il giorno o quando esci", "luce"],
           ["Frigorifero", "chiudi bene la porta e tieni la temperatura impostata su 2", "frigo"],
-          ["Pulizia", "il riassetto quotidiano spetta a te; puoi richiedere pulizie integrative a pagamento", "pulizia"],
+          ["Pulizia", "in formula residence il riassetto quotidiano spetta a te; puoi richiedere pulizie integrative a pagamento", "pulizia"],
           ["Aria condizionata", "non tenere le finestre aperte quando è accesa; spegnila quando esci", "aria"]
         ], kv_en: [
           ["Recycling", "the waste collection point is inside the residence, at the far end of the car park", "riciclo"],
           ["Keys", "before going out, make sure they are not left in the lock on the inside", "checkin"],
           ["Lights", "switch off indoor and terrace lights during the day or when you go out", "luce"],
           ["Fridge", "close the door properly and keep the temperature set to 2", "frigo"],
-          ["Cleaning", "daily tidying is up to you; extra cleaning is available on request, for a fee", "pulizia"],
+          ["Cleaning", "with the residence formula, daily tidying is up to you; extra cleaning is available on request, for a fee", "pulizia"],
           ["Air conditioning", "do not keep windows open while it is on; switch it off when you leave", "aria"]
         ]},
         { t: "Nella struttura", t_en: "Around the residence", icona: "regole" },
