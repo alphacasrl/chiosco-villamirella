@@ -397,10 +397,10 @@ window.LUOGHI = [
   },
   {
     id: "chiesa-foria",
-    nome: "Chiesa di Foria di Centola",
+    nome: "Chiesa di Santa Maria delle Grazie",
     categoria: "santuari",
     lat: null,   lng: null,   verified: false,
-    notaCoordinate: "DA INSERIRE A MANO: nome e posizione da confermare (non trovati su fonti verificabili)",
+    notaCoordinate: "DA INSERIRE A MANO: a Foria di Centola (nome dalla Diocesi di Vallo della Lucania), non mappata su OpenStreetMap",
     sommario: "",
     immagine: "",
     articoli: [],
