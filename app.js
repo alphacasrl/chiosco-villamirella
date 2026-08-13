@@ -155,20 +155,119 @@ var lingua = 'it';
    segreto: TRE TOCCHI RAPIDI nell'angolo in basso a DESTRA.
    ===================================================================== */
 var STATS_CHIAVE = 'vm-statistiche';
+var STAT_SESSIONI_MAX = 250;   /* visite conservate per intero (le piu' recenti) */
+var STAT_GIORNI_MAX = 400;     /* i riepiloghi giornalieri restano oltre un anno */
+var STAT_PAUSA_MS = 90000;     /* fermo piu' a lungo: e' un'altra persona */
+var STAT_DWELL_MAX = 180;      /* tetto ai secondi attribuiti a una schermata */
+var STAT_PASSI_MAX = 14;       /* passi registrati per esteso in una visita */
+
+function statOggi(ms) { return new Date(ms || Date.now()).toISOString().slice(0, 10); }
+function statVuoto() {
+  return { v: 2, da: statOggi(), totale: 0, sezioni: {}, voci: {}, giorni: {}, sessioni: [] };
+}
 function statLeggi() {
-  try {
-    var d = JSON.parse(localStorage.getItem(STATS_CHIAVE));
-    if (d && d.sezioni) return d;
-  } catch (e) {}
-  return { da: new Date().toISOString().slice(0, 10), totale: 0, sezioni: {}, voci: {} };
+  var d = null;
+  try { d = JSON.parse(localStorage.getItem(STATS_CHIAVE)); } catch (e) {}
+  if (!d || !d.sezioni) return statVuoto();
+  /* i dati raccolti con la prima versione restano: si aggiungono i campi nuovi */
+  if (!d.giorni) d.giorni = {};
+  if (!d.sessioni) d.sessioni = [];
+  d.v = 2;
+  return d;
+}
+function statScrivi(d) {
+  try { localStorage.setItem(STATS_CHIAVE, JSON.stringify(d)); } catch (e) {
+    /* memoria piena: si sacrificano le visite piu' vecchie, mai i riepiloghi */
+    try {
+      d.sessioni = d.sessioni.slice(-40);
+      localStorage.setItem(STATS_CHIAVE, JSON.stringify(d));
+    } catch (e2) { /* storage negato: si vive lo stesso */ }
+  }
 }
 function statConta(tipo, nome) {
-  try {
-    var d = statLeggi();
-    d.totale++;
-    d[tipo][nome] = (d[tipo][nome] || 0) + 1;
-    localStorage.setItem(STATS_CHIAVE, JSON.stringify(d));
-  } catch (e) { /* quota piena o storage negato: si vive lo stesso */ }
+  var d = statLeggi();
+  d.totale++;
+  d[tipo][nome] = (d[tipo][nome] || 0) + 1;
+  statScrivi(d);
+}
+
+/* ---------------------------------------------------------------------
+   LA VISITA — comincia al primo tocco, finisce quando lo schermo torna in
+   attesa o dopo una pausa lunga. La durata e' l'intervallo tra il primo e
+   l'ULTIMO tocco: il tempo in cui nessuno tocca piu' non si conta, altrimenti
+   basterebbe allontanarsi per gonfiare le medie.
+   --------------------------------------------------------------------- */
+var visita = null;
+function statTocco() {
+  var ora = Date.now();
+  if (visita && ora - visita.ultimo > STAT_PAUSA_MS) statChiudiVisita();
+  if (!visita) visita = { avvio: ora, ultimo: ora, dal: ora, dove: 'home',
+                          passi: [], n: 1, lingua: lingua, servizio: false };
+  else visita.ultimo = ora;
+}
+function statPasso(codice) {
+  statTocco();
+  var ora = Date.now();
+  if (visita.passi.length < STAT_PASSI_MAX) {
+    visita.passi.push([visita.dove, Math.min(STAT_DWELL_MAX, Math.round((ora - visita.dal) / 1000))]);
+  }
+  visita.n++;
+  visita.dove = codice;
+  visita.dal = ora;
+  visita.ultimo = ora;
+}
+function statChiudiVisita() {
+  var v = visita;
+  visita = null;
+  if (!v) return;
+  /* il pannello di reception non e' una visita di un ospite */
+  if (v.servizio) return;
+  if (v.passi.length < STAT_PASSI_MAX) {
+    v.passi.push([v.dove, Math.min(STAT_DWELL_MAX, Math.round((v.ultimo - v.dal) / 1000))]);
+  }
+  var durata = Math.round((v.ultimo - v.avvio) / 1000);
+  /* sfioramenti di passaggio: non sono un uso del chiosco */
+  if (v.n <= 1 && durata < 3) return;
+  var d = statLeggi();
+  var g = statOggi(v.avvio);
+  var r = d.giorni[g] || { s: 0, sec: 0, passi: 0, oltre: 0, ore: {}, lin: {} };
+  var oraDelGiorno = new Date(v.avvio).getHours();
+  r.s++;
+  r.sec += durata;
+  r.passi += v.n;
+  if (v.n > 1) r.oltre++;
+  r.ore[oraDelGiorno] = (r.ore[oraDelGiorno] || 0) + 1;
+  r.lin[v.lingua] = (r.lin[v.lingua] || 0) + 1;
+  d.giorni[g] = r;
+  d.sessioni.push({ t: v.avvio, d: durata, n: v.n, p: v.passi, l: v.lingua });
+  if (d.sessioni.length > STAT_SESSIONI_MAX) d.sessioni = d.sessioni.slice(-STAT_SESSIONI_MAX);
+  var chiavi = Object.keys(d.giorni).sort();
+  while (chiavi.length > STAT_GIORNI_MAX) { delete d.giorni[chiavi.shift()]; }
+  statScrivi(d);
+}
+/* se il browser viene chiuso o lo schermo spento, la visita in corso si salva */
+window.addEventListener('pagehide', statChiudiVisita);
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'hidden') statChiudiVisita();
+});
+
+/* i codici interni diventano i nomi che si leggono sul chiosco */
+function statEtichetta(c) {
+  if (!c) return '?';
+  if (c.indexOf('sez:') === 0) c = c.slice(4);
+  if (c === 'home') return 'Schermata iniziale';
+  if (c === 'meteo') return 'Previsioni del tempo';
+  if (c.indexOf('scheda:') === 0) return c.slice(7);
+  if (c.indexOf('doc:') === 0) return 'Orario ufficiale';
+  var G = window.GUIDA || {};
+  if (c.indexOf('pagina:') === 0) {
+    var p = (G.PAGINE || {})[c.slice(7)];
+    return p ? p.titolo : c.slice(7);
+  }
+  if (typeof GRUPPI !== 'undefined' && GRUPPI) {
+    for (var i = 0; i < GRUPPI.length; i++) if (GRUPPI[i].id === c) return GRUPPI[i].nome;
+  }
+  return c;
 }
 function TXT(k) { return (TESTI[lingua] && TESTI[lingua][k]) || TESTI.it[k] || k; }
 /* campo bilingue di guida.js: T(blocco.p, blocco.p_en) */
@@ -468,6 +567,7 @@ function disegnaElenco() {
 function apriDettaglio(v) {
   var d = v.dato;
   statConta('voci', d.nome);
+  statPasso('scheda:' + d.nome);
   stato.aperta = v;
 
   var foto = $('#det-foto');
@@ -1326,6 +1426,7 @@ function mostraPagina(id) {
   if (!p) return;
   n.__pid = id;
   statConta('sezioni', 'pagina:' + id);
+  statPasso('pagina:' + id);
   $('#pagina-titolo').textContent = T2(p.titolo, p.titolo_en);
   var corpo = $('#pagina-corpo');
   vuota(corpo);
@@ -1382,6 +1483,7 @@ function mostraPagina(id) {
 }
 function apriSezione(idGruppo) {
   statConta('sezioni', idGruppo);
+  statPasso('sez:' + idGruppo);
   stato.gruppo = idGruppo;
   chiudiDettaglio();
   disegnaFiltri();
@@ -1586,6 +1688,7 @@ tocca($('#reset'), ricomincia);
   }
   var battito = null;
   function entraStandby() {
+    statChiudiVisita();
     ricomincia();
     standby.setAttribute('aria-hidden', 'false');
     /* la CTA non deve MAI restare statica: i pannelli LG attenuano le aree
@@ -1634,6 +1737,7 @@ tocca($('#reset'), ricomincia);
     });
   })();
   function azzera() {
+    statTocco();
     esciStandby();
     if (t) clearTimeout(t);
     if (ts) clearTimeout(ts);
@@ -1692,39 +1796,247 @@ window.addEventListener('online', function () {
 /* =====================================================================
    PANNELLO STATISTICHE (solo per la reception)
    ===================================================================== */
+function statDurata(sec) {
+  if (sec < 60) return sec + ' s';
+  var m = Math.floor(sec / 60);
+  if (m < 60) return m + ' min ' + (sec % 60) + ' s';
+  return Math.floor(m / 60) + ' h ' + (m % 60) + ' min';
+}
+function statLunedi(giorno) {
+  var dt = new Date(giorno + 'T12:00:00');
+  var g = (dt.getDay() + 6) % 7;            /* lunedi' = 0 */
+  dt.setDate(dt.getDate() - g);
+  return dt.toISOString().slice(0, 10);
+}
+function statGiornoBreve(iso) {
+  var N = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
+  var dt = new Date(iso + 'T12:00:00');
+  return N[dt.getDay()] + ' ' + iso.slice(8, 10) + '/' + iso.slice(5, 7);
+}
+
 function mostraStatistiche() {
+  if (visita) visita.servizio = true;   /* questa non e' la visita di un ospite */
   var d = statLeggi();
   var n = $('#statistiche'), corpo = $('#statistiche-corpo');
   vuota(corpo);
-  corpo.appendChild(el('p', 'stat-riassunto',
-    d.totale + ' aperture registrate dal ' + d.da + ' (solo su questo schermo)'));
-  function blocco(titolo, dati) {
-    corpo.appendChild(el('h3', null, titolo));
+
+  function titolo(t, sotto) {
+    corpo.appendChild(el('h3', null, t));
+    if (sotto) corpo.appendChild(el('p', 'stat-nota', sotto));
+  }
+  function classifica(dati, quante, formato) {
     var voci = Object.keys(dati).map(function (k) { return [k, dati[k]]; });
     voci.sort(function (a, b) { return b[1] - a[1]; });
-    if (!voci.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
-    var max = voci.length ? voci[0][1] : 1;
-    voci.slice(0, 20).forEach(function (v) {
+    if (!voci.length) { corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente')); return; }
+    var max = voci[0][1];
+    voci.slice(0, quante).forEach(function (v) {
       var r = el('div', 'stat-riga');
       var barra = el('div', 'stat-barra');
       barra.style.width = Math.max(4, Math.round(v[1] / max * 100)) + '%';
-      r.appendChild(el('b', null, v[0]));
+      r.appendChild(el('b', null, statEtichetta(v[0])));
       r.appendChild(barra);
-      r.appendChild(el('span', null, v[1]));
+      r.appendChild(el('span', null, formato ? formato(v[1]) : v[1]));
       corpo.appendChild(r);
     });
   }
-  blocco('Sezioni e pagine', d.sezioni);
-  blocco('Schede aperte', d.voci);
+
+  /* ---------------- quadro d'insieme ---------------- */
+  var giorni = Object.keys(d.giorni).sort();
+  var tot = { s: 0, sec: 0, passi: 0, oltre: 0 };
+  giorni.forEach(function (g) {
+    var r = d.giorni[g];
+    tot.s += r.s; tot.sec += r.sec; tot.passi += r.passi; tot.oltre += r.oltre;
+  });
+  var oggi = statOggi();
+  var settimana = statLunedi(oggi);
+  var qGiorno = d.giorni[oggi] || { s: 0, sec: 0 };
+  var qSett = { s: 0, sec: 0 };
+  giorni.forEach(function (g) {
+    if (statLunedi(g) === settimana) { qSett.s += d.giorni[g].s; qSett.sec += d.giorni[g].sec; }
+  });
+
+  corpo.appendChild(el('p', 'stat-riassunto',
+    tot.s + ' visite dal ' + d.da + ' \u00b7 solo su questo schermo'));
+  var q = el('div', 'stat-quadro');
+  function cifra(valore, etich) {
+    var b = el('div', 'stat-cifra');
+    b.appendChild(el('b', null, valore));
+    b.appendChild(el('span', null, etich));
+    q.appendChild(b);
+  }
+  cifra(qGiorno.s, 'visite oggi');
+  cifra(qSett.s, 'questa settimana');
+  cifra(tot.s ? statDurata(Math.round(tot.sec / tot.s)) : '\u2014', 'durata media');
+  cifra(tot.s ? Math.round(tot.oltre / tot.s * 100) + '%' : '—', 'oltre la home');
+  cifra(tot.s ? (tot.passi / tot.s).toFixed(1) : '\u2014', 'schermate a visita');
+  corpo.appendChild(q);
+  if (tot.s && tot.oltre / tot.s < 0.5) {
+    corpo.appendChild(el('p', 'stat-nota',
+      'Meno di una visita su due va oltre la schermata iniziale: molti toccano e se ne vanno.'));
+  }
+
+  /* ---------------- giorno per giorno ---------------- */
+  titolo('Ultimi 14 giorni', 'barra = visite; a destra il tempo d\u2019uso totale');
+  var ultimi = giorni.slice(-14);
+  if (!ultimi.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
+  var maxG = 1;
+  ultimi.forEach(function (g) { if (d.giorni[g].s > maxG) maxG = d.giorni[g].s; });
+  ultimi.forEach(function (g) {
+    var r = el('div', 'stat-riga');
+    var barra = el('div', 'stat-barra');
+    barra.style.width = Math.max(4, Math.round(d.giorni[g].s / maxG * 100)) + '%';
+    r.appendChild(el('b', null, statGiornoBreve(g)));
+    r.appendChild(barra);
+    r.appendChild(el('span', null, d.giorni[g].s + ' \u00b7 ' + statDurata(d.giorni[g].sec)));
+    corpo.appendChild(r);
+  });
+
+  /* ---------------- settimane ---------------- */
+  titolo('Settimane', 'dal lunedi\u2019; media = durata di una visita');
+  var sett = {};
+  giorni.forEach(function (g) {
+    var k = statLunedi(g);
+    var r = sett[k] || (sett[k] = { s: 0, sec: 0 });
+    r.s += d.giorni[g].s; r.sec += d.giorni[g].sec;
+  });
+  var chiaviS = Object.keys(sett).sort().slice(-8);
+  if (!chiaviS.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
+  var maxS = 1;
+  chiaviS.forEach(function (k) { if (sett[k].s > maxS) maxS = sett[k].s; });
+  chiaviS.forEach(function (k) {
+    var r = el('div', 'stat-riga');
+    var barra = el('div', 'stat-barra');
+    barra.style.width = Math.max(4, Math.round(sett[k].s / maxS * 100)) + '%';
+    r.appendChild(el('b', null, 'dal ' + k.slice(8, 10) + '/' + k.slice(5, 7)));
+    r.appendChild(barra);
+    r.appendChild(el('span', null, sett[k].s + ' \u00b7 media ' +
+      (sett[k].s ? statDurata(Math.round(sett[k].sec / sett[k].s)) : '\u2014')));
+    corpo.appendChild(r);
+  });
+
+  /* ---------------- ore della giornata ---------------- */
+  titolo('A che ora lo usano', 'somma di tutti i giorni');
+  var ore = {};
+  giorni.forEach(function (g) {
+    var o = d.giorni[g].ore || {};
+    Object.keys(o).forEach(function (h) { ore[h] = (ore[h] || 0) + o[h]; });
+  });
+  var chiaviO = Object.keys(ore).sort(function (a, b) { return a - b; });
+  if (!chiaviO.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
+  var maxO = 1;
+  chiaviO.forEach(function (h) { if (ore[h] > maxO) maxO = ore[h]; });
+  chiaviO.forEach(function (h) {
+    var r = el('div', 'stat-riga');
+    var barra = el('div', 'stat-barra');
+    barra.style.width = Math.max(4, Math.round(ore[h] / maxO * 100)) + '%';
+    r.appendChild(el('b', null, (h.length < 2 ? '0' + h : h) + ':00'));
+    r.appendChild(barra);
+    r.appendChild(el('span', null, ore[h]));
+    corpo.appendChild(r);
+  });
+
+  /* ---------------- come si muovono ---------------- */
+  var primi = {}, ultimiP = {}, dwell = {}, dwellN = {}, percorsi = {}, lingue = {};
+  d.sessioni.forEach(function (v) {
+    var p = v.p || [];
+    lingue[v.l === 'en' ? 'inglese' : 'italiano'] = (lingue[v.l === 'en' ? 'inglese' : 'italiano'] || 0) + 1;
+    if (p.length > 1) primi[p[1][0]] = (primi[p[1][0]] || 0) + 1;
+    if (p.length) ultimiP[p[p.length - 1][0]] = (ultimiP[p[p.length - 1][0]] || 0) + 1;
+    /* l'ULTIMA schermata di ogni visita e' esclusa dalle medie di permanenza:
+       il tempo su una schermata si misura solo vedendo quando la si lascia, e
+       dell'ultima non lo sappiamo (l'ospite se ne va senza toccare piu' nulla).
+       Contarla come zero falserebbe verso il basso proprio le schede su cui la
+       gente si ferma di piu'. Per "Dove si fermano" invece va benissimo. */
+    p.slice(0, -1).forEach(function (passo) {
+      dwell[passo[0]] = (dwell[passo[0]] || 0) + passo[1];
+      dwellN[passo[0]] = (dwellN[passo[0]] || 0) + 1;
+    });
+    if (p.length > 1) {
+      var catena = p.slice(1, 4).map(function (x) { return statEtichetta(x[0]); }).join(' \u2192 ');
+      if (catena) percorsi[catena] = (percorsi[catena] || 0) + 1;
+    }
+  });
+
+  titolo('Da dove partono', 'il primo riquadro toccato dopo la schermata iniziale');
+  classifica(primi, 10);
+
+  titolo('Dove si fermano', 'l\u2019ultima schermata prima di andarsene');
+  classifica(ultimiP, 10);
+
+  titolo('Percorsi ricorrenti', 'le prime tre schermate di ogni visita');
+  var pc = Object.keys(percorsi).map(function (k) { return [k, percorsi[k]]; });
+  pc.sort(function (a, b) { return b[1] - a[1]; });
+  if (!pc.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
+  pc.slice(0, 8).forEach(function (v) {
+    var r = el('div', 'stat-percorso');
+    r.appendChild(el('b', null, v[0]));
+    r.appendChild(el('span', null, v[1] + '\u00d7'));
+    corpo.appendChild(r);
+  });
+
+  titolo('Schermate che trattengono di piu\u2019', 'tempo medio di permanenza, da 3 visite in su');
+  var med = {};
+  Object.keys(dwell).forEach(function (k) {
+    if (dwellN[k] >= 3) med[k] = Math.round(dwell[k] / dwellN[k]);
+  });
+  classifica(med, 12, statDurata);
+
+  titolo('Lingua scelta', null);
+  classifica(lingue, 4);
+
+  /* ---------------- conteggi storici ---------------- */
+  titolo('Sezioni e pagine', 'aperture totali, comprese quelle registrate prima del registro');
+  classifica(d.sezioni, 20);
+  titolo('Schede aperte', null);
+  classifica(d.voci, 20);
+
   n.setAttribute('aria-hidden', 'false');
+}
+
+/* esportazione: un foglio per Excel con una riga per visita */
+function statEsporta() {
+  var d = statLeggi();
+  var righe = ['data;ora;durata_secondi;schermate;lingua;percorso'];
+  d.sessioni.forEach(function (v) {
+    var dt = new Date(v.t);
+    righe.push([
+      statOggi(v.t),
+      ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2),
+      v.d, v.n, v.l,
+      '"' + (v.p || []).map(function (x) { return statEtichetta(x[0]) + ' (' + x[1] + 's)'; }).join(' > ') + '"'
+    ].join(';'));
+  });
+  righe.push('');
+  righe.push('data;visite;secondi_totali;schermate;visite_oltre_la_home');
+  Object.keys(d.giorni).sort().forEach(function (g) {
+    var r = d.giorni[g];
+    righe.push([g, r.s, r.sec, r.passi, r.oltre].join(';'));
+  });
+  var testo = righe.join('\r\n');
+  try {
+    var url = URL.createObjectURL(new Blob(['\ufeff' + testo], { type: 'text/csv' }));
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'uso-chiosco-' + statOggi() + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  } catch (e) { /* niente scaricamento su questo browser: resta il testo grezzo */ }
+  /* rete di sicurezza: se il monitor non sa scaricare, il testo resta selezionabile */
+  var box = $('#statistiche-grezzo');
+  if (box) { box.value = testo; box.hidden = false; box.select(); }
 }
 tocca($('#statistiche-chiudi'), function () {
   $('#statistiche').setAttribute('aria-hidden', 'true');
 });
 tocca($('#statistiche-azzera'), function () {
   try { localStorage.removeItem(STATS_CHIAVE); } catch (e) {}
+  var box = $('#statistiche-grezzo');
+  if (box) { box.hidden = true; box.value = ''; }
   mostraStatistiche();
 });
+tocca($('#statistiche-esporta'), statEsporta);
 
 /* =====================================================================
    VISORE DOCUMENTI — l'orario ufficiale a schermo intero, X per chiudere

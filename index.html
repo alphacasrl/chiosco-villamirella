@@ -7,7 +7,7 @@
 <meta name="format-detection" content="telephone=no">
 <title>Villamirella — Palinuro e il Cilento</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=202608131759">
+<link rel="stylesheet" href="style.css?v=202608132319">
 </head>
 <body>
 
@@ -19,11 +19,14 @@
 <div id="statistiche" aria-hidden="true">
   <div id="statistiche-scheda">
     <div id="statistiche-testa">
-      <b>Cosa toccano gli ospiti</b>
+      <b>Come viene usato il chiosco</b>
+      <button class="bt chiaro" id="statistiche-esporta" type="button">Scarica CSV</button>
       <button class="bt chiaro" id="statistiche-azzera" type="button">Azzera</button>
       <button id="statistiche-chiudi" type="button" aria-label="Chiudi">&#10005;</button>
     </div>
     <div id="statistiche-corpo"></div>
+    <textarea id="statistiche-grezzo" readonly hidden
+              aria-label="Dati grezzi da copiare"></textarea>
   </div>
 </div>
 
@@ -186,11 +189,11 @@
 
 </div>
 
-<script src="guida.js?v=202608131759"></script>
-<script src="poi.js?v=202608131759"></script>
-<script src="parco.js?v=202608131759"></script>
-<script src="percorsi.js?v=202608131759"></script>
+<script src="guida.js?v=202608132319"></script>
+<script src="poi.js?v=202608132319"></script>
+<script src="parco.js?v=202608132319"></script>
+<script src="percorsi.js?v=202608132319"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
-<script src="app.js?v=202608131759"></script>
+<script src="app.js?v=202608132319"></script>
 </body>
 </html>

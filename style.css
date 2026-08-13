@@ -731,3 +731,23 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .qr-percorso { text-align: center; margin: 1rem 0 .4rem; }
 .qr-percorso img { width: 8rem; height: 8rem; background: var(--bianco); border: 1px solid #dfe5eb; padding: .4rem; }
 .qr-percorso p { font-size: .64rem; color: var(--marrone); margin-top: .3rem; }
+
+/* --- registro d'uso: quadro d'insieme e riepiloghi --- */
+.stat-quadro { display: flex; gap: .5rem; margin: .6rem 0 .2rem; flex-wrap: wrap; }
+.stat-cifra {
+  flex: 1 1 7rem; background: var(--crema); border: 1px solid #dfe5eb;
+  padding: .5rem .6rem; text-align: center;
+}
+.stat-cifra b { display: block; font-family: Mulish, sans-serif; font-size: 1.25rem; color: var(--blu); }
+.stat-cifra span { display: block; font-size: .6rem; color: var(--marrone); margin-top: .1rem; }
+.stat-nota { font-size: .62rem; color: var(--marrone); margin: -.25rem 0 .4rem; }
+.stat-percorso {
+  display: flex; align-items: baseline; gap: .6rem; font-size: .68rem;
+  padding: .22rem 0; border-bottom: 1px dotted #dfe5eb;
+}
+.stat-percorso b { flex: 1; font-family: Mulish, sans-serif; font-weight: 600; }
+.stat-percorso span { flex: none; font-weight: 700; color: var(--blu); }
+#statistiche-grezzo {
+  flex: none; height: 7rem; margin: 0 1.2rem 1rem; font-size: .6rem;
+  font-family: monospace; border: 1px solid #dfe5eb; padding: .4rem; resize: none;
+}
