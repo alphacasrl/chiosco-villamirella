@@ -72,8 +72,10 @@ var G = window.GUIDA || {};
   var p = (G.PAGINE || {})[pid];
   if (!p) return;
   (p.blocchi || []).forEach(function (b) {
+    /* le foto di ristoranti e negozi sono sospese: la voce compare senza
+       immagine ma con il nome di file gia' pronto, per rimetterle una a una */
     if (b.card) voci.push({ nome: b.card.nome, tipo: pid, img: b.card.foto,
-                            atteso: b.card.foto || '' });
+                            atteso: b.card.foto || b.card.fotoSospesa || '' });
   });
 });
 var griglia = document.getElementById('griglia');
