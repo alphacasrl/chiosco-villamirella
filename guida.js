@@ -214,11 +214,9 @@ window.GUIDA = {
       mappa: true,
       blocchi: [
         { kv: [
-          ["Emergenza sanitaria", "118"],
           ["Numero unico di emergenza", "112"]
         ], kv_en: [
-          ["Medical emergency", "118"],
-          ["European emergency number", "112"]
+          ["Single European emergency number", "112"]
         ]},
         { t: "Guardia medica", t_en: "Out-of-hours doctor", icona: "salute" },
         { card: { nome: "Guardia Medica Turistica — Marina di Camerota", lat: 40.000415, lng: 15.374597,
@@ -238,7 +236,7 @@ window.GUIDA = {
           dove: "Marina di Camerota", testo: "" } },
         { card: { nome: "Farmacia Dott.ssa Di Maio", lat: 40.083850, lng: 15.265726,
           dove: "SS447r — Pisciotta", testo: "" } },
-        { p: "In caso di dubbio su cosa fare, chiama il 118 oppure rivolgiti alla reception: siamo qui per aiutarti.", p_en: "If in doubt about what to do, call 118 or come to reception: we are here to help." }
+        { p: "In caso di dubbio su cosa fare, chiama il 112 oppure rivolgiti alla reception: siamo qui per aiutarti.", p_en: "If in doubt about what to do, call 112 or come to reception: we are here to help." }
       ]
     },
 

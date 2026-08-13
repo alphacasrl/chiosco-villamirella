@@ -104,7 +104,7 @@ var TESTI = {
     vuoto: 'Nessuna voce in questa sezione.',
     senzaTesto: 'Per questo luogo il sito non riporta una descrizione.',
     percorsoInd: 'Percorso indicativo',
-    emergenza: 'Emergenza sanitaria: 118', emergenza2: 'Numero unico di emergenza: 112',
+    emergenza: 'Emergenze: 112', emergenza2: 'Numero unico europeo di emergenza',
     offline: 'Sei senza connessione: la mappa non si aggiorna, i testi restano leggibili.',
     online: 'Connessione tornata.',
     lenta: 'Connessione lenta: alcune parti della mappa potrebbero mancare.',
@@ -128,7 +128,7 @@ var TESTI = {
     vuoto: 'Nothing in this section.',
     senzaTesto: 'The website has no description for this place.',
     percorsoInd: 'Approximate route',
-    emergenza: 'Medical emergency: 118', emergenza2: 'EU emergency number: 112',
+    emergenza: 'Emergency: 112', emergenza2: 'Single European emergency number',
     offline: 'No connection: the map will not update, all texts remain readable.',
     online: 'Connection restored.',
     lenta: 'Slow connection: parts of the map may be missing.',
@@ -1300,12 +1300,7 @@ tocca($('#reset'), ricomincia);
     if (battito) clearInterval(battito);
     battito = setInterval(function () {
       var velo = $('#standby-velo');
-      if (!velo) return;
-      velo.classList.toggle('alterna');
-      /* ricomposizione forzata: stacca e riattacca il velo */
-      var p = velo.parentNode;
-      p.removeChild(velo);
-      p.appendChild(velo);
+      if (velo) velo.classList.toggle('alterna');
     }, 5000);
     /* sotto il video non deve comporre nient'altro: la GPU del monitor
        non regge video in loop e WebGL insieme (provato: si blocca) */
