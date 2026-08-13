@@ -285,6 +285,43 @@ window.LUOGHI = [
     inEvidenza: false
   },
 
+  {
+    id: "palinuro-sub",
+    nome: "Palinuro Sub Diving Center",
+    categoria: "diving",
+    lat: 40.029954,   lng: 15.280733,   verified: true,
+    notaCoordinate: "Via Porto, Palinuro (geocodifica a livello di via: il diving e' al porto)",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "continente-blu",
+    nome: "Diving Continente Blu",
+    categoria: "diving",
+    lat: 39.999233,   lng: 15.375412,   verified: true,
+    notaCoordinate: "Via delle Barche non e' mappata: posizione approssimata al porto di Marina di Camerota",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "parco-avventura-piano-croce",
+    nome: "Parco Avventura Piano della Croce",
+    categoria: "natura",
+    lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO: e' a Rofrano alle pendici del Monte Centaurino, ma ne' OpenStreetMap ne' il sito ufficiale espongono il punto esatto — meglio nessun pin che uno sbagliato",
+    sommario: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+
   /* ---------- BORGHI E PAESI ---------- */
   {
     id: "palinuro",
@@ -1320,7 +1357,7 @@ window.ESPERIENZE = [
     tipo: "esperienza",
     sommario: "Diverse sono i centri immersione del Cilento in cui è possibile praticare il diving. Per la bellezze delle coste, il mare cristallino e i fondali spettacolari solo Palinuro è il luogo ideale per le immersioni subacquee .",
     immagine: "assets/img/immersioni.jpg",
-    luoghi: ["grotta-azzurra"],
+    luoghi: ["palinuro-sub", "continente-blu"],
     prenotabileInReception: false,
     inEvidenza: false,
     articoli: [

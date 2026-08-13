@@ -28,6 +28,7 @@ window.GUIDA = {
      "gruppo" crea un'intestazione sopra il blocco di mattonelle. */
   MATTONELLE: [
     { gruppo: "Esplora il territorio", gruppo_en: "Explore the area" },
+    { id: "mappa",       nome: "Mappa", nome_en: "Map",              icona: "mappa",       colore: "#235784", sezione: "tutti", schermo: "mappa" },
     { id: "mare",        nome: "Spiagge e mare", nome_en: "Beaches & sea",    icona: "mare",        colore: "#1a87c9", sezione: "mare" },
     { id: "esperienze",  nome: "Esperienze", nome_en: "Experiences",        icona: "esperienze",  colore: "#d09a1e", sezione: "esperienze" },
     { id: "itinerari",   nome: "Itinerari", nome_en: "Itineraries",         icona: "itinerari",   colore: "#1f8074", sezione: "itinerari" },

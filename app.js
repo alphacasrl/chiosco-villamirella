@@ -214,6 +214,7 @@ function nomeCategoria(id) {
   if (id === 'ristoranti') return TXT('ristorante');
   if (id === 'negozi') return TXT('negozio');
   if (id === 'salute') return TXT('salute');
+  if (id === 'diving') return 'Diving';
   for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) {
     return (lingua === 'en' && CAT_EN[id]) ? CAT_EN[id] : CATEGORIE[i].nome;
   }
@@ -253,7 +254,13 @@ function spiaggeEMare() {
   });
   return r.concat(prima);
 }
+function tuttiILuoghi() {
+  var r = [];
+  for (var i = 0; i < LUOGHI.length; i++) if (LUOGHI[i].verified) r.push(voceLuogo(LUOGHI[i]));
+  return r;
+}
 var GRUPPI = [
+  { id: 'tutti',      nome: 'Mappa', nome_en: 'Map', cat: null, icona: 'mappa', voci: tuttiILuoghi },
   { id: 'mare',       nome: 'Spiagge e mare', nome_en: 'Beaches & sea', cat: 'spiagge', icona: 'mare', voci: spiaggeEMare },
   { id: 'itinerari',  nome: nomeSezione('itinerari', 'Itinerari'), nome_en: 'Itineraries', cat: null, icona: 'itinerari', voci: function () { return espDiTipo('itinerario'); } },
   { id: 'esperienze', nome: nomeSezione('esperienze', 'Esperienze'), nome_en: 'Experiences', cat: null, icona: 'esperienze', voci: function () { return espDiTipo('esperienza'); } }
@@ -511,10 +518,69 @@ function chiudiDettaglio() {
 /* =====================================================================
    MAPPA — luoghi come livelli nativi WebGL, non marcatori HTML
    ===================================================================== */
+/* itinerario vince su esperienza che vince sulla categoria */
+var RUOLO = null;
+function ruoloDi(id) {
+  if (!RUOLO) {
+    RUOLO = {};
+    for (var i = 0; i < ESPERIENZE.length; i++) {
+      var e = ESPERIENZE[i];
+      if (e.tipo === 'guida') continue;
+      var r = e.tipo === 'itinerario' ? 'itinerari' : 'esperienze';
+      (e.luoghi || []).forEach(function (x) {
+        if (RUOLO[x] !== 'itinerari') RUOLO[x] = (RUOLO[x] === undefined || r === 'itinerari') ? r : RUOLO[x];
+      });
+    }
+  }
+  return RUOLO[id] || null;
+}
+function iconaPin(l) {
+  return ruoloDi(l.id) || l.categoria;
+}
 function featureLuogo(l) {
   return { type: 'Feature',
-    properties: { id: l.id, nome: l.nome, colore: colore(l.categoria) },
+    properties: { id: l.id, nome: l.nome, colore: colore(l.categoria),
+                  icona: 'pin-' + iconaPin(l) },
     geometry: { type: 'Point', coordinates: [l.lng, l.lat] } };
+}
+/* le immagini dei pin: il set di icone, in bianco su tondo colorato */
+function creaIconeMappa() {
+  var TAV = {
+    spiagge: ['mare', '#1a87c9'], borghi: ['borghi', '#c96a2b'], grotte: ['grotte', '#7057c9'],
+    natura: ['natura', '#2f9e60'], archeologia: ['archeologia', '#b5892f'],
+    santuari: ['santuari', '#9550a8'], ristoranti: ['ristoranti', '#d64550'],
+    negozi: ['negozi', '#5b7d8c'], salute: ['salute', '#c0392b'],
+    diving: ['esperienze', '#0e7fb5'],
+    itinerari: ['itinerari', '#1f8074'], esperienze: ['esperienze', '#d09a1e']
+  };
+  Object.keys(TAV).forEach(function (k) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46">' +
+      '<circle cx="23" cy="23" r="20.5" fill="' + TAV[k][1] + '" stroke="#ffffff" stroke-width="3"/>' +
+      '<g transform="translate(11,11)" fill="none" stroke="#ffffff" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round">' + (ICONE[TAV[k][0]] || '') + '</g></svg>';
+    var im = new Image();
+    im.onload = function () {
+      try { if (!mappa.hasImage('pin-' + k)) mappa.addImage('pin-' + k, im); } catch (e) {}
+    };
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+  /* il residence: targhetta bianca col logo Villamirella */
+  var logo = new Image();
+  logo.onload = function () {
+    var c = document.createElement('canvas');
+    var lw = 150, lh = 46;
+    c.width = lw; c.height = lh;
+    var g2 = c.getContext('2d');
+    g2.fillStyle = '#ffffff';
+    g2.fillRect(0, 0, lw, lh);
+    g2.strokeStyle = '#dd350f'; g2.lineWidth = 4;
+    g2.strokeRect(2, 2, lw - 4, lh - 4);
+    var rap = Math.min((lw - 18) / logo.width, (lh - 12) / logo.height);
+    var w2 = logo.width * rap, h2 = logo.height * rap;
+    g2.drawImage(logo, (lw - w2) / 2, (lh - h2) / 2, w2, h2);
+    try { if (!mappa.hasImage('casa-targa')) mappa.addImage('casa-targa', g2.getImageData(0, 0, lw, lh)); } catch (e) {}
+  };
+  logo.src = 'assets/logo-villamirella.svg';
 }
 
 function stileMappa() {
@@ -556,31 +622,38 @@ function stileMappa() {
                  'circle-color': CONFIG.COLORE_SCELTO, 'circle-opacity': .35,
                  'circle-stroke-color': CONFIG.COLORE_SCELTO, 'circle-stroke-width': 2.5 } },
 
-      /* i luoghi: cerchio colorato per categoria + nome */
-      { id: 'poi-cerchi', type: 'circle', source: 'poi',
-        paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 6.5, 14, 9],
-                 'circle-color': ['get', 'colore'],
-                 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } },
+      /* i luoghi: icona della categoria su tondo colorato + nome */
+      { id: 'poi-icone', type: 'symbol', source: 'poi',
+        layout: {
+          'icon-image': ['get', 'icona'],
+          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.55, 14, 0.8],
+          'icon-allow-overlap': true
+        } },
       { id: 'poi-nomi', type: 'symbol', source: 'poi',
         layout: {
           'text-field': ['get', 'nome'],
           'text-font': CONFIG.FONT_MAPPA,
           'text-size': 13,
           'text-anchor': 'top',
-          'text-offset': [0, 0.9],
+          'text-offset': [0, 1.15],
           'text-max-width': 9,
           'text-optional': true
         },
         paint: { 'text-color': '#0c2233',
                  'text-halo-color': '#ffffff', 'text-halo-width': 1.6 } },
 
-      /* il residence, sempre visibile */
+      /* il residence, sempre visibile: punto + targhetta col logo */
       { id: 'casa-cerchio', type: 'circle', source: 'casa',
-        paint: { 'circle-radius': 8, 'circle-color': '#ffffff',
+        paint: { 'circle-radius': 7, 'circle-color': '#ffffff',
                  'circle-stroke-color': CONFIG.COLORE_CASA, 'circle-stroke-width': 3.5 } },
       { id: 'casa-nome', type: 'symbol', source: 'casa',
-        layout: { 'text-field': 'Siamo qui', 'text-font': CONFIG.FONT_MAPPA,
-                  'text-size': 13, 'text-anchor': 'top', 'text-offset': [0, 0.9] },
+        layout: { 'icon-image': 'casa-targa',
+                  'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.55, 14, 0.75],
+                  'icon-anchor': 'bottom', 'icon-offset': [0, -14],
+                  'icon-allow-overlap': true,
+                  'text-field': 'Siamo qui', 'text-font': CONFIG.FONT_MAPPA,
+                  'text-size': 12, 'text-anchor': 'top', 'text-offset': [0, 0.8],
+                  'text-optional': true },
         paint: { 'text-color': CONFIG.COLORE_CASA,
                  'text-halo-color': '#ffffff', 'text-halo-width': 1.8 } }
     ]
@@ -641,6 +714,7 @@ function avvia() {
 
   mappa.on('load', function () {
     stato.mappaPronta = true;
+    creaIconeMappa();
     mappa.resize();          /* se il layout non era assestato alla creazione */
     applicaTerreno();
     aggiornaCasa();
@@ -654,7 +728,7 @@ function avvia() {
     var r = 16;
     var box = [[ev.point.x - r, ev.point.y - r], [ev.point.x + r, ev.point.y + r]];
     var trovati = [];
-    try { trovati = mappa.queryRenderedFeatures(box, { layers: ['poi-cerchi', 'poi-nomi'] }); } catch (e) {}
+    try { trovati = mappa.queryRenderedFeatures(box, { layers: ['poi-icone', 'poi-nomi'] }); } catch (e) {}
     if (trovati.length) {
       var l = perId(trovati[0].properties.id);
       if (l) { apriDettaglio(voceLuogo(l)); return; }
@@ -1029,6 +1103,14 @@ tocca($('#cmd-3d'), function () {
 tocca($('#cmd-piu'),  function () { if (mappa) mappa.zoomIn({ duration: 400 }); });
 tocca($('#cmd-meno'), function () { if (mappa) mappa.zoomOut({ duration: 400 }); });
 tocca($('#cmd-casa'), vaiAlResidence);
+tocca($('#cmd-pin'), function () {
+  stato.pinVisibili = stato.pinVisibili === false ? true : false;
+  var v = stato.pinVisibili ? 'visible' : 'none';
+  ['poi-icone', 'poi-nomi', 'scelto-anello'].forEach(function (id) {
+    try { if (mappa.getLayer(id)) mappa.setLayoutProperty(id, 'visibility', v); } catch (e) {}
+  });
+  this.className = 'cmd' + (stato.pinVisibili ? '' : ' acceso');
+});
 tocca($('#panoramica'), function () { chiudiDettaglio(); panoramica(); });
 tocca($('#det-indietro'), function () { chiudiDettaglio(); });
 tocca($('#det-mappa'), function () {
@@ -1195,7 +1277,13 @@ function disegnaHome() {
       b.appendChild(el('b', null, T2(v.nome, v.nome_en)));
       tocca(b, function () {
         if (v.pagina) mostraPagina(v.pagina);
-        else if (v.sezione) apriSezione(v.sezione);
+        else if (v.sezione) {
+          apriSezione(v.sezione);
+          if (v.schermo === 'mappa' && window.__assetta) {
+            window.__assetta('solo-mappa');
+            if (window.__aggiornaFrecce) setTimeout(window.__aggiornaFrecce, 60);
+          }
+        }
       });
       /* niente doppioni di stile: il colore arriva dai gruppi */
       (fascia || griglia).appendChild(b);
@@ -1268,6 +1356,11 @@ function ricomincia() {
   if (stato.base !== CONFIG.BASE_INIZIALE) cambiaBase();
   stato.gruppo = CONFIG.GRUPPO_INIZIALE;
   stato.terreno = CONFIG.AVVIO_3D;
+  stato.pinVisibili = true;
+  ['poi-icone', 'poi-nomi', 'scelto-anello'].forEach(function (id) {
+    try { if (mappa && mappa.getLayer(id)) mappa.setLayoutProperty(id, 'visibility', 'visible'); } catch (e) {}
+  });
+  var bp = $('#cmd-pin'); if (bp) bp.className = 'cmd';
   stato.inclinata = false;
   chiudiDettaglio();
   disegnaFiltri();
@@ -1298,7 +1391,8 @@ tocca($('#reset'), ricomincia);
     /* in vetrina solo il territorio: niente negozi, farmacie o guide */
     for (i = 0; i < LUOGHI.length; i++) {
       if (LUOGHI[i].immagine &&
-          LUOGHI[i].categoria !== 'negozi' && LUOGHI[i].categoria !== 'salute') {
+          LUOGHI[i].categoria !== 'negozi' && LUOGHI[i].categoria !== 'salute' &&
+          LUOGHI[i].categoria !== 'ristoranti' && LUOGHI[i].categoria !== 'diving') {
         slide.lista.push({ img: LUOGHI[i].immagine,
           testo: LUOGHI[i].nome, tipo: LUOGHI[i].categoria });
       }
@@ -1326,6 +1420,13 @@ tocca($('#reset'), ricomincia);
     var dietro = $('#sb-' + slide.fronte);
     /* si carica dietro, si dissolve quando la foto e' pronta */
     dietro.onload = function () {
+      /* sgranate a tutto schermo: sotto i 600x380 si passa oltre */
+      if (dietro.naturalWidth < 600 || dietro.naturalHeight < 380) {
+        slide.scarti = (slide.scarti || 0) + 1;
+        if (slide.scarti < 12) slideMostra();
+        return;
+      }
+      slide.scarti = 0;
       dietro.classList.add('viva');
       davanti.classList.remove('viva');
       var did = $('#sb-didascalia');
