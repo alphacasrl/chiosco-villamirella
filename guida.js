@@ -361,6 +361,7 @@ window.GUIDA = {
       blocchi: [
         { card: { nome: "IP — Palinuro", icona: "benzina", pin: "benzina", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
         { card: { nome: "Tabacchi alla rotatoria di Palinuro (presso IP)", icona: "tabacchi", pin: "tabacchi", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
+        { card: { nome: "Edicola alla rotatoria di Palinuro", icona: "edicola", pin: "edicola", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
         { card: { nome: "IP — Palinuro", icona: "benzina", pin: "benzina", lat: 40.044234, lng: 15.287993, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~850 m in linea d'aria", testo_en: "~850 m as the crow flies" } },
         { card: { nome: "Banca della Campania", icona: "banca", pin: "banca", lat: 40.038811, lng: 15.28923, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~1.1 km in linea d'aria", testo_en: "~1.1 km as the crow flies" } },
         { card: { nome: "Ufficio postale — Palinuro", icona: "posta", pin: "posta", lat: 40.038275, lng: 15.287669, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~1.3 km in linea d'aria", testo_en: "~1.3 km as the crow flies" } },
