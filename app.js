@@ -1290,6 +1290,55 @@ tocca($('#reset'), ricomincia);
 (function () {
   var t = null, ts = null;
   var standby = $('#standby'), video = $('#standby-video');
+  /* ---- slideshow dei contenuti: foto dei luoghi, dissolvenza incrociata ---- */
+  var slide = { lista: [], indice: 0, timer: null, fronte: 'a' };
+  function slideLista() {
+    if (slide.lista.length) return slide.lista;
+    var i;
+    for (i = 0; i < LUOGHI.length; i++) {
+      if (LUOGHI[i].immagine) {
+        slide.lista.push({ img: LUOGHI[i].immagine,
+          testo: LUOGHI[i].nome, tipo: LUOGHI[i].categoria });
+      }
+    }
+    for (i = 0; i < ESPERIENZE.length; i++) {
+      if (ESPERIENZE[i].immagine) {
+        slide.lista.push({ img: ESPERIENZE[i].immagine,
+          testo: ESPERIENZE[i].nome, tipo: null });
+      }
+    }
+    /* mescolata una volta sola: ogni accensione un giro diverso */
+    for (i = slide.lista.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = slide.lista[i]; slide.lista[i] = slide.lista[j]; slide.lista[j] = t;
+    }
+    return slide.lista;
+  }
+  function slideMostra() {
+    var lista = slideLista();
+    if (!lista.length) return;
+    var v = lista[slide.indice % lista.length];
+    slide.indice++;
+    var davanti = $('#sb-' + slide.fronte);
+    slide.fronte = slide.fronte === 'a' ? 'b' : 'a';
+    var dietro = $('#sb-' + slide.fronte);
+    /* si carica dietro, si dissolve quando la foto e' pronta */
+    dietro.onload = function () {
+      dietro.classList.add('viva');
+      davanti.classList.remove('viva');
+      var did = $('#sb-didascalia');
+      did.textContent = v.testo + (v.tipo ? ' \u00b7 ' + nomeCategoria(v.tipo) : '');
+    };
+    dietro.src = v.img;
+  }
+  function avviaSlide() {
+    fermaSlide();
+    slideMostra();
+    slide.timer = setInterval(slideMostra, 7000);
+  }
+  function fermaSlide() {
+    if (slide.timer) { clearInterval(slide.timer); slide.timer = null; }
+  }
   var battito = null;
   function entraStandby() {
     ricomincia();
@@ -1305,20 +1354,14 @@ tocca($('#reset'), ricomincia);
     /* sotto il video non deve comporre nient'altro: la GPU del monitor
        non regge video in loop e WebGL insieme (provato: si blocca) */
     document.body.classList.add('in-standby');
-    if (video) {
-      try {
-        video.currentTime = 0;
-        var p = video.play();
-        if (p && p['catch']) p['catch'](function () {});
-      } catch (e) {}
-    }
+    avviaSlide();
   }
   function esciStandby() {
     if (battito) { clearInterval(battito); battito = null; }
     if (standby.getAttribute('aria-hidden') === 'false') {
       standby.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('in-standby');
-      if (video) { try { video.pause(); } catch (e) {} }
+      fermaSlide();
       if (mappa) { try { mappa.resize(); } catch (e) {} }
     }
   }
