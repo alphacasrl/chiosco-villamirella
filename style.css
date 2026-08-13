@@ -675,3 +675,6 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 }
 .orari-riga b { font-family: Mulish, sans-serif; flex: none; min-width: 11rem; color: var(--marrone-scuro); }
 .orari-riga span { letter-spacing: .04em; color: var(--testo); word-spacing: .3rem; }
+
+.scheda .foto.segnaposto svg { width: 2rem; height: 2rem; }
+.scheda .foto.segnaposto { color: var(--blu); }

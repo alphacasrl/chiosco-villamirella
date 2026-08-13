@@ -114,22 +114,26 @@ window.GUIDA = {
       mappa: true,
       blocchi: [
         { t: "Stazioni ferroviarie", t_en: "Railway stations", icona: "treno" },
-        { card: { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738,
+        { card: { nome: "Stazione FS Pisciotta-Palinuro", icona: "treno", lat: 40.091413, lng: 15.243738,
           dove: "La stazione di riferimento del residence", dove_en: "The residence's reference station",
           testo: "Da qui si raggiungono Napoli, Salerno e la costa. Collegata a Palinuro dalla linea bus Infante tutti i giorni in estate; su richiesta organizziamo un taxi.",
           testo_en: "Trains to Naples, Salerno and the coast. Linked to Palinuro by the Infante bus line every day in summer; we can arrange a taxi on request." } },
-        { card: { nome: "Stazione FS Centola", lat: 40.091144, lng: 15.345259,
+        { card: { nome: "Stazione FS Centola", icona: "treno", lat: 40.091144, lng: 15.345259,
           dove: "San Severino di Centola", dove_en: "San Severino di Centola",
           testo: "Collegata a Palinuro e Marina di Camerota dal bus Infante il sabato e la domenica in estate.",
           testo_en: "Linked to Palinuro and Marina di Camerota by the Infante bus on summer weekends." } },
-        { card: { nome: "Stazione FS Vallo della Lucania-Castelnuovo", lat: 40.229471, lng: 15.158137,
+        { card: { nome: "Stazione FS Vallo della Lucania-Castelnuovo", icona: "treno", lat: 40.229471, lng: 15.158137,
           dove: "Per Intercity e collegamenti principali", dove_en: "For Intercity and main connections",
           testo: "", testo_en: "" } },
-        { card: { nome: "Stazione FS Sapri", lat: 40.077700, lng: 15.628100,
+        { card: { nome: "Stazione FS Sapri", icona: "treno", lat: 40.077700, lng: 15.628100,
           dove: "Piazza Vittorio Veneto, Sapri — Intercity e Frecce", dove_en: "Piazza Vittorio Veneto, Sapri — Intercity and high-speed trains",
           testo: "", testo_en: "" } },
         { t: "Linee autobus Infante — estate 2026", t_en: "Infante bus lines — summer 2026", icona: "muoversi" },
-        { card: { nome: "Bus urbano di Palinuro",
+        { card: { nome: "Bus urbano di Palinuro", icona: "muoversi",
+          fermate: [
+            { nome: "Piazza Virgilio", lat: 40.034602, lng: 15.287262 },
+            { nome: "Porto di Palinuro", lat: 40.031163, lng: 15.277197 }
+          ],
           dove: "Tutti i giorni dall'1 al 31 agosto 2026", dove_en: "Every day, 1–31 August 2026",
           testo: "Anello del paese: Rotatoria ex Club Med, Poste, Ficocella, Piazza Virgilio, Belvedere, Babylon, parcheggio porto, Porto e ritorno. Biglietti su infantebus.it (fino al 30% di sconto rispetto a bordo) — assistenza WhatsApp 388 3095051.",
           testo_en: "Village loop: Ex Club Med roundabout, Post office, Ficocella, Piazza Virgilio, Belvedere, Babylon, harbour car park, Port and back. Tickets on infantebus.it (up to 30% cheaper than on board) — WhatsApp assistance 388 3095051.",
@@ -154,7 +158,11 @@ window.GUIDA = {
               ["Rotatoria ex Club Med", "10:00  10:45  11:45  12:45  13:30  16:15  17:15  18:15  19:15"]
             ]}
           ] } },
-        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro",
+        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro", icona: "muoversi",
+          fermate: [
+            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738 },
+            { nome: "Lidi delle Saline", lat: 40.062627, lng: 15.278547 }
+          ],
           dove: "Sabato e domenica dal 27 giugno al 30 agosto 2026", dove_en: "Saturdays and Sundays, 27 June – 30 August 2026",
           testo: "Collega la stazione ai lidi di Palinuro passando per Caprioli. Biglietti su infantebus.it — WhatsApp 388 3095051.",
           testo_en: "Links the station to Palinuro's beach clubs via Caprioli. Tickets on infantebus.it — WhatsApp 388 3095051.",
@@ -184,7 +192,12 @@ window.GUIDA = {
               ["Stazione FS Pisciotta-Palinuro", "09:20  10:30  11:30  12:40  16:00  17:20  17:50  18:20"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro",
+        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro", icona: "muoversi",
+          fermate: [
+            { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
+            { nome: "Palinuro Saline", lat: 40.062627, lng: 15.278547 },
+            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738 }
+          ],
           dove: "Tutti i giorni dall'8 giugno al 13 settembre 2026", dove_en: "Every day, 8 June – 13 September 2026",
           testo: "Marina di Camerota - Palinuro - Stazione FS. Fermate principali; il dettaglio completo su infantebus.it.",
           testo_en: "Marina di Camerota - Palinuro - Railway station. Main stops; full details on infantebus.it.",
@@ -210,7 +223,11 @@ window.GUIDA = {
               ["M. di Camerota Lungomare", "08:40  09:30  10:40  11:40  12:50  14:05  15:20  16:40  18:00  18:30"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Centola",
+        { card: { nome: "Linea da e per Stazione FS Centola", icona: "muoversi",
+          fermate: [
+            { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
+            { nome: "Stazione FS Centola", lat: 40.091144, lng: 15.345259 }
+          ],
           dove: "Solo sabato e domenica dal 13 giugno al 13 settembre 2026", dove_en: "Saturdays and Sundays only, 13 June – 13 September 2026",
           testo: "Marina di Camerota - Palinuro - Stazione FS Centola.",
           testo_en: "Marina di Camerota - Palinuro - Centola railway station.",
@@ -233,11 +250,11 @@ window.GUIDA = {
             ]}
           ] } },
         { t: "Altri modi", t_en: "Other ways", icona: "auto" },
-        { card: { nome: "In auto", nome_en: "By car",
+        { card: { nome: "In auto", icona: "auto", nome_en: "By car",
           dove: "Parcheggio gratuito al residence", dove_en: "Free parking at the residence",
           testo: "Il modo più comodo per esplorare il Cilento: spiagge, borghi e natura in libertà.",
           testo_en: "The most convenient way to explore Cilento: beaches, villages and nature at your own pace." } },
-        { card: { nome: "Taxi e transfer", nome_en: "Taxi & transfers",
+        { card: { nome: "Taxi e transfer", icona: "taxi", nome_en: "Taxi & transfers",
           dove: "Su richiesta in reception", dove_en: "On request at reception",
           testo: "Organizziamo taxi e transfer privati per stazioni, aeroporti e spostamenti locali: meglio prenotare in anticipo.",
           testo_en: "We arrange taxis and private transfers to stations, airports and local trips: better to book in advance." } },

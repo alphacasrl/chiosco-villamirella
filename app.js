@@ -300,6 +300,8 @@ var GRUPPI = [
         dove_en: b.card.dove_en || '',
         immagine: b.card.foto || '',
         orari: b.card.orari || null,
+        icona: b.card.icona || '',
+        fermate: b.card.fermate || null,
         nome_en: b.card.nome_en || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
       });
@@ -395,8 +397,13 @@ function disegnaElenco() {
         img.src = d.immagine; img.alt = ''; img.loading = 'lazy';
         c.appendChild(img);
       } else {
-        /* segnaposto con l'iniziale: onesto e meno triste del vuoto */
-        var sp = el('div', 'foto segnaposto', d.nome.charAt(0));
+        /* segnaposto: icona della voce quando c'e', altrimenti l'iniziale */
+        var sp = el('div', 'foto segnaposto');
+        if (d.icona || v.tipo === 'luogo') {
+          sp.innerHTML = icona(d.icona || iconaPin(d));
+        } else {
+          sp.textContent = d.nome.charAt(0);
+        }
         if (v.tipo === 'luogo') sp.style.color = colore(d.categoria);
         c.appendChild(sp);
       }
@@ -481,23 +488,21 @@ function apriDettaglio(v) {
     if (nomi.length) riga(nomi.length > 1 ? TXT('luoghi') : TXT('luogo'), nomi.join(', '));
   }
 
-  /* orari delle linee bus: sezioni con righe fermata -> tempi */
-  var boxOrari = $('#det-articoli');
+  var arts = $('#det-articoli');
+  vuota(arts);
+  /* orari delle linee bus: dopo lo svuotamento, mai prima */
   if (d.orari) {
     for (var oi = 0; oi < d.orari.length; oi++) {
       var oz = d.orari[oi];
-      var h4 = el('h4', 'orari-titolo', T2(oz.t, oz.t_en));
-      boxOrari.appendChild(h4);
+      arts.appendChild(el('h4', 'orari-titolo', T2(oz.t, oz.t_en)));
       for (var ri = 0; ri < oz.righe.length; ri++) {
         var rr = el('div', 'orari-riga');
         rr.appendChild(el('b', null, oz.righe[ri][0]));
         rr.appendChild(el('span', null, oz.righe[ri][1]));
-        boxOrari.appendChild(rr);
+        arts.appendChild(rr);
       }
     }
   }
-  var arts = $('#det-articoli');
-  vuota(arts);
   var lista = d.articoli || [];
   for (var k = 0; k < lista.length; k++) {
     var a = lista[k];
@@ -521,12 +526,25 @@ function apriDettaglio(v) {
   $('#dettaglio').setAttribute('aria-hidden', 'false');
   $('#dettaglio .scorri').scrollTop = 0;
 
+  var fer = (v.tipo === 'luogo' && d.fermate) ? d.fermate : null;
+  setSorgente('fermate', { type: 'FeatureCollection', features: (fer || []).map(function (f) {
+    return { type: 'Feature', properties: { nome: f.nome },
+             geometry: { type: 'Point', coordinates: [f.lng, f.lat] } };
+  }) });
   evidenzia(v);
   disegnaPercorso(v);
-  volaSu(v);
+  if (fer && fer.length) {
+    var pts = fer.map(function (f) { return [f.lng, f.lat]; });
+    if (d.verified) pts.push([d.lng, d.lat]);
+    inquadra(pts);
+    mostraPanoramica(true);
+  } else {
+    volaSu(v);
+  }
 }
 
 function chiudiDettaglio() {
+  setSorgente('fermate', { type: 'FeatureCollection', features: [] });
   stato.aperta = null;
   $('#dettaglio').classList.remove('aperto');
   $('#dettaglio').setAttribute('aria-hidden', 'true');
@@ -616,7 +634,8 @@ function stileMappa() {
       poi:      { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       scelto:   { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
       casa:     { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      percorso: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } }
+      percorso: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+      fermate:  { type: 'geojson', data: { type: 'FeatureCollection', features: [] } }
     },
     layers: [
       { id: 'sfondo', type: 'background', paint: { 'background-color': '#0f2733' } },
@@ -641,6 +660,16 @@ function stileMappa() {
         paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 11, 14, 15],
                  'circle-color': CONFIG.COLORE_SCELTO, 'circle-opacity': .35,
                  'circle-stroke-color': CONFIG.COLORE_SCELTO, 'circle-stroke-width': 2.5 } },
+
+      /* fermate della linea aperta: puntini con nome */
+      { id: 'fermate-punti', type: 'circle', source: 'fermate',
+        paint: { 'circle-radius': 5.5, 'circle-color': '#5b6ec9',
+                 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } },
+      { id: 'fermate-nomi', type: 'symbol', source: 'fermate',
+        layout: { 'text-field': ['get', 'nome'], 'text-font': CONFIG.FONT_MAPPA,
+                  'text-size': 11.5, 'text-anchor': 'top', 'text-offset': [0, 0.7],
+                  'text-optional': true },
+        paint: { 'text-color': '#2c3775', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 } },
 
       /* i luoghi: icona della categoria su tondo colorato + nome */
       { id: 'poi-icone', type: 'symbol', source: 'poi',
@@ -1355,7 +1384,6 @@ function impostaLingua(nuova) {
   if (window.__aggiornaFrecce) window.__aggiornaFrecce();
   if (stato.aperta) apriDettaglio(stato.aperta);
   meteoWidget();
-  if (window.__aggScorcia) window.__aggScorcia();
   var pg = $('#pagina');
   if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) {
     if (pg.__pid === '__meteo__') meteoPagina();
@@ -1717,10 +1745,7 @@ tocca($('#meteo-widget'), meteoPagina);
 (function () {
   var n = $('#mappa-scorcia');
   if (!n) return;
-  n.innerHTML = '<span class="meteo-icona">' + icona('mappa') + '</span><span class="scorcia-testo"></span>';
-  function agg() { n.querySelector('.scorcia-testo').textContent = lingua === 'en' ? 'Map' : 'Mappa'; }
-  agg();
-  window.__aggScorcia = agg;
+  n.innerHTML = '<span class="meteo-icona">' + icona('mappa') + '</span>';
   tocca(n, function () {
     apriSezione('tutti');
     if (window.__assetta) {
