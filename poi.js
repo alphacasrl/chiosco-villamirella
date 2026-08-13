@@ -61,7 +61,7 @@ window.CATEGORIE = [
   { id: "grotte",      nome: "Grotte e mare" },
   { id: "natura",      nome: "Natura e oasi" },
   { id: "archeologia", nome: "Archeologia e musei" },
-  { id: "santuari",    nome: "Santuari" },
+  { id: "santuari",    nome: "Santuari e chiese" },
 ];
 
 /* L'ORDINE DELLE SEZIONI nella colonna di sinistra.
@@ -316,6 +316,67 @@ window.LUOGHI = [
     lat: null,   lng: null,   verified: false,
     notaCoordinate: "DA INSERIRE A MANO: e' a Rofrano alle pendici del Monte Centaurino, ma ne' OpenStreetMap ne' il sito ufficiale espongono il punto esatto — meglio nessun pin che uno sbagliato",
     sommario: "Vieni a scoprire il Parco Avventura Piano della Croce, situato nel meraviglioso Cilento, in Campania.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+
+  {
+    id: "chiesa-porto-palinuro",
+    nome: "Chiesa di Sant'Antonio del Porto",
+    categoria: "santuari",
+    lat: 40.029422,   lng: 15.277076,   verified: true,
+    notaCoordinate: "OpenStreetMap [place_of_worship], Via Porto, Palinuro",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "chiesa-pisciotta",
+    nome: "Chiesa dei Santissimi Pietro e Paolo",
+    categoria: "santuari",
+    lat: 40.106997,   lng: 15.233714,   verified: true,
+    notaCoordinate: "OpenStreetMap [place_of_worship], Piazza Pagano, Marina di Pisciotta",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "chiesa-camerota",
+    nome: "Chiesa di Sant'Alfonso",
+    categoria: "santuari",
+    lat: 39.999978,   lng: 15.372552,   verified: true,
+    notaCoordinate: "OpenStreetMap [place_of_worship], Piazza San Domenico, Marina di Camerota",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "chiesa-palinuro",
+    nome: "Chiesa di Palinuro (centro)",
+    categoria: "santuari",
+    lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO: la parrocchiale del centro di Palinuro non e' mappata su OpenStreetMap",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "chiesa-centola",
+    nome: "Chiesa di Centola",
+    categoria: "santuari",
+    lat: null,   lng: null,   verified: false,
+    notaCoordinate: "DA INSERIRE A MANO: non mappata su OpenStreetMap",
+    sommario: "",
     immagine: "",
     articoli: [],
     distanzaKm: "",   tempoAuto: "",

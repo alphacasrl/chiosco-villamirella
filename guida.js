@@ -28,14 +28,13 @@ window.GUIDA = {
      "gruppo" crea un'intestazione sopra il blocco di mattonelle. */
   MATTONELLE: [
     { gruppo: "Esplora il territorio", gruppo_en: "Explore the area" },
-    { id: "mappa",       nome: "Mappa", nome_en: "Map",              icona: "mappa",       colore: "#235784", sezione: "tutti", schermo: "mappa" },
     { id: "mare",        nome: "Spiagge e mare", nome_en: "Beaches & sea",    icona: "mare",        colore: "#1a87c9", sezione: "mare" },
     { id: "esperienze",  nome: "Esperienze", nome_en: "Experiences",        icona: "esperienze",  colore: "#d09a1e", sezione: "esperienze" },
     { id: "itinerari",   nome: "Itinerari", nome_en: "Itineraries",         icona: "itinerari",   colore: "#1f8074", sezione: "itinerari" },
     { id: "borghi",      nome: "Borghi e paesi", nome_en: "Villages & towns",    icona: "borghi",      colore: "#c96a2b", sezione: "cat:borghi" },
     { id: "natura",      nome: "Natura e oasi", nome_en: "Nature & oases",     icona: "natura",      colore: "#2f9e60", sezione: "cat:natura" },
     { id: "archeologia", nome: "Archeologia", nome_en: "Archaeology",       icona: "archeologia", colore: "#b5892f", sezione: "cat:archeologia" },
-    { id: "santuari",    nome: "Santuari", nome_en: "Sanctuaries",          icona: "santuari",    colore: "#9550a8", sezione: "cat:santuari" },
+    { id: "santuari",    nome: "Santuari e chiese", nome_en: "Sanctuaries & churches",          icona: "santuari",    colore: "#9550a8", sezione: "cat:santuari" },
     { gruppo: "Il tuo soggiorno", gruppo_en: "Your stay" },
     { id: "ristoranti",  nome: "Ristoranti", nome_en: "Restaurants",        icona: "ristoranti",  colore: "#d64550", sezione: "g:ristoranti" },
     { id: "negozi",      nome: "Negozi", nome_en: "Shops",            icona: "negozi",      colore: "#5b7d8c", sezione: "g:negozi" },
@@ -43,7 +42,7 @@ window.GUIDA = {
     { id: "checkin",     nome: "Check-in / out", nome_en: "Check-in / out",    icona: "checkin",     pagina: "checkin" },
     { id: "wifi",        nome: "WiFi", nome_en: "WiFi",              icona: "wifi",        pagina: "wifi" },
     { id: "regole",      nome: "Regole della casa", nome_en: "House rules", icona: "regole",      pagina: "regole" },
-    { id: "muoversi",    nome: "Come muoversi", nome_en: "Getting around",     icona: "muoversi",    pagina: "muoversi" },
+    { id: "muoversi",    nome: "Come muoversi", nome_en: "Getting around",     icona: "muoversi",    sezione: "g:muoversi" },
     { id: "faq",         nome: "Domande frequenti", nome_en: "FAQ", icona: "faq",         pagina: "faq" },
     { id: "contatti",    nome: "Contatti", nome_en: "Contacts",          icona: "contatti",    pagina: "contatti" }
   ],
@@ -112,7 +111,136 @@ window.GUIDA = {
     muoversi: {
       titolo: "Come muoversi",
       titolo_en: "Getting around",
+      mappa: true,
       blocchi: [
+        { t: "Stazioni ferroviarie", t_en: "Railway stations", icona: "treno" },
+        { card: { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738,
+          dove: "La stazione di riferimento del residence", dove_en: "The residence's reference station",
+          testo: "Da qui si raggiungono Napoli, Salerno e la costa. Collegata a Palinuro dalla linea bus Infante tutti i giorni in estate; su richiesta organizziamo un taxi.",
+          testo_en: "Trains to Naples, Salerno and the coast. Linked to Palinuro by the Infante bus line every day in summer; we can arrange a taxi on request." } },
+        { card: { nome: "Stazione FS Centola", lat: 40.091144, lng: 15.345259,
+          dove: "San Severino di Centola", dove_en: "San Severino di Centola",
+          testo: "Collegata a Palinuro e Marina di Camerota dal bus Infante il sabato e la domenica in estate.",
+          testo_en: "Linked to Palinuro and Marina di Camerota by the Infante bus on summer weekends." } },
+        { card: { nome: "Stazione FS Vallo della Lucania-Castelnuovo", lat: 40.229471, lng: 15.158137,
+          dove: "Per Intercity e collegamenti principali", dove_en: "For Intercity and main connections",
+          testo: "", testo_en: "" } },
+        { card: { nome: "Stazione FS Sapri", lat: 40.077700, lng: 15.628100,
+          dove: "Piazza Vittorio Veneto, Sapri — Intercity e Frecce", dove_en: "Piazza Vittorio Veneto, Sapri — Intercity and high-speed trains",
+          testo: "", testo_en: "" } },
+        { t: "Linee autobus Infante — estate 2026", t_en: "Infante bus lines — summer 2026", icona: "muoversi" },
+        { card: { nome: "Bus urbano di Palinuro",
+          dove: "Tutti i giorni dall'1 al 31 agosto 2026", dove_en: "Every day, 1–31 August 2026",
+          testo: "Anello del paese: Rotatoria ex Club Med, Poste, Ficocella, Piazza Virgilio, Belvedere, Babylon, parcheggio porto, Porto e ritorno. Biglietti su infantebus.it (fino al 30% di sconto rispetto a bordo) — assistenza WhatsApp 388 3095051.",
+          testo_en: "Village loop: Ex Club Med roundabout, Post office, Ficocella, Piazza Virgilio, Belvedere, Babylon, harbour car park, Port and back. Tickets on infantebus.it (up to 30% cheaper than on board) — WhatsApp assistance 388 3095051.",
+          orari: [
+            { t: "Verso il porto", t_en: "Towards the port", righe: [
+              ["Rotatoria ex Club Med", "09:15  10:00  11:00  12:00  12:45  15:30  16:30  17:30  18:30"],
+              ["Poste", "09:17  10:02  11:02  12:02  12:47  15:32  16:32  17:32  18:32"],
+              ["Ficocella", "09:18  10:03  11:03  12:03  12:48  15:33  16:33  17:33  18:33"],
+              ["Piazza Virgilio", "09:20  10:05  11:05  12:05  12:50  15:35  16:35  17:35  18:35"],
+              ["Belvedere (Core a Core)", "09:25  10:10  11:10  12:10  12:55  15:40  16:40  17:40  18:40"],
+              ["Babylon", "09:30  10:15  11:15  12:15  13:00  15:45  16:45  17:45  18:45"],
+              ["Parcheggio porto", "09:33  10:18  11:18  12:18  13:03  15:48  16:48  17:48  18:48"],
+              ["Porto di Palinuro", "09:35  10:20  11:20  12:20  13:05  15:50  16:50  17:50  18:50"]
+            ]},
+            { t: "Dal porto", t_en: "From the port", righe: [
+              ["Porto di Palinuro", "09:45  10:30  11:30  12:30  13:15  16:00  17:00  18:00  19:00"],
+              ["Parcheggio porto", "09:47  10:32  11:32  12:32  13:17  16:02  17:02  18:02  19:02"],
+              ["Babylon", "09:49  10:34  11:34  12:34  13:19  16:04  17:04  18:04  19:04"],
+              ["Belvedere (Core a Core)", "09:54  10:39  11:39  12:39  13:24  16:09  17:09  18:09  19:09"],
+              ["Sopra Chiesa", "09:56  10:41  11:41  12:41  13:26  16:11  17:11  18:11  19:11"],
+              ["San Paolo", "09:58  10:43  11:43  12:43  13:28  16:13  17:13  18:13  19:13"],
+              ["Rotatoria ex Club Med", "10:00  10:45  11:45  12:45  13:30  16:15  17:15  18:15  19:15"]
+            ]}
+          ] } },
+        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro",
+          dove: "Sabato e domenica dal 27 giugno al 30 agosto 2026", dove_en: "Saturdays and Sundays, 27 June – 30 August 2026",
+          testo: "Collega la stazione ai lidi di Palinuro passando per Caprioli. Biglietti su infantebus.it — WhatsApp 388 3095051.",
+          testo_en: "Links the station to Palinuro's beach clubs via Caprioli. Tickets on infantebus.it — WhatsApp 388 3095051.",
+          orari: [
+            { t: "Verso i lidi", t_en: "Towards the beaches", righe: [
+              ["Stazione FS Pisciotta-Palinuro", "08:50  10:00  11:00  12:10  16:00  17:20  17:50  18:20"],
+              ["Caprioli - Lido Anireip", "08:55  10:05  11:05  12:15  16:05  17:25  17:55  18:25"],
+              ["Lidi Bellavista/La Vela", "08:56  10:06  11:06  12:06  16:06  17:26  17:56  18:26"],
+              ["Lidi La Torre/Le Conchiglie", "08:57  10:07  11:07  12:07  16:07  17:27  17:57  18:27"],
+              ["Lidi Pepe Rosso/Baia Saracena", "08:58  10:08  11:08  12:08  16:08  17:28  17:58  18:28"],
+              ["Lidi Le Saline/Le Dune", "08:59  10:09  11:09  12:09  16:09  17:29  17:59  18:29"],
+              ["Lidi Urlamare/Trip on the Beach", "09:00  10:10  11:10  12:10  16:10  17:30  18:00  18:30"],
+              ["Lidi Sunset/Baia degli Angeli", "09:01  10:11  11:11  12:11  16:11  17:31  18:01  18:31"],
+              ["Lido Mijeo", "09:02  10:12  11:12  12:12  16:12  17:32  18:02  18:32"],
+              ["Rotatoria ex Club Med", "09:05  10:15  11:15  12:25  16:15  17:35  18:05  18:35"]
+            ]},
+            { t: "Verso la stazione", t_en: "Towards the station", righe: [
+              ["Rotatoria ex Club Med", "09:05  10:15  11:15  12:25  15:45  17:05  17:35  18:05"],
+              ["Lido Mijeo", "09:08  10:18  11:18  12:28  15:48  17:08  17:38  18:08"],
+              ["Lidi Sunset/Baia degli Angeli", "09:09  10:19  11:19  12:29  15:49  17:09  17:39  18:09"],
+              ["Lidi Urlamare/Trip on the Beach", "09:10  10:20  11:20  12:30  15:50  17:10  17:40  18:10"],
+              ["Lidi Le Saline/Le Dune", "09:11  10:21  11:21  12:31  15:51  17:11  17:41  18:11"],
+              ["Lidi Pepe Rosso/Baia Saracena", "09:12  10:22  11:22  12:32  15:52  17:12  17:42  18:12"],
+              ["Lidi La Torre/Le Conchiglie", "09:13  10:23  11:23  12:33  15:53  17:13  17:43  18:13"],
+              ["Lidi Bellavista/La Vela", "09:14  10:24  11:24  12:34  15:54  17:14  17:44  18:14"],
+              ["Caprioli - Lido Anireip", "09:15  10:25  11:25  12:35  15:55  17:15  17:45  18:15"],
+              ["Stazione FS Pisciotta-Palinuro", "09:20  10:30  11:30  12:40  16:00  17:20  17:50  18:20"]
+            ]}
+          ] } },
+        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro",
+          dove: "Tutti i giorni dall'8 giugno al 13 settembre 2026", dove_en: "Every day, 8 June – 13 September 2026",
+          testo: "Marina di Camerota - Palinuro - Stazione FS. Fermate principali; il dettaglio completo su infantebus.it.",
+          testo_en: "Marina di Camerota - Palinuro - Railway station. Main stops; full details on infantebus.it.",
+          orari: [
+            { t: "Verso la stazione", t_en: "Towards the station", righe: [
+              ["M. di Camerota Lungomare", "06:20  07:15  08:40  10:00  11:15  12:20  13:50  15:20  16:40  17:05  18:00  18:30"],
+              ["M. di Camerota (Cinema)", "06:25  07:20  08:45  10:05  11:20  12:25  13:55  15:25  16:45  17:10  18:05  18:35  20:55  22:05"],
+              ["M. di Camerota Mingardo", "06:35  07:30  08:55  10:15  11:30  12:35  14:05  15:35  16:55  17:20  18:15  18:45  21:05  22:10"],
+              ["Palinuro Trivento", "06:40  07:35  09:00  10:20  11:35  12:40  14:10  15:40  17:00  17:25  18:20  18:50  21:10  22:20"],
+              ["Palinuro Rotatoria ex Club Med", "06:45  07:40  09:05  10:25  11:40  12:45  14:15  15:45  17:05  17:30  18:25  18:55  21:15  22:25"],
+              ["Palinuro Saline", "06:50  07:45  09:10  10:30  11:45  12:50  14:20  15:50  17:10  17:35  18:30  19:00  21:20  22:30"],
+              ["Caprioli (Bar 3R - La Grotta)", "06:55  07:50  09:15  10:35  11:50  12:55  14:25  15:55  17:15  17:40  18:35  19:05  21:25  22:35"],
+              ["Stazione FS Pisciotta-Palinuro", "07:00  07:55  09:20  10:40  11:55  13:00  14:30  16:00  17:20  17:45  18:40  19:10  21:30  22:40"]
+            ]},
+            { t: "Dalla stazione", t_en: "From the station", righe: [
+              ["Stazione FS Pisciotta-Palinuro", "08:00  08:50  10:00  11:00  12:10  13:25  14:40  16:00  17:20  17:50  19:30  20:20  21:30  23:15"],
+              ["Caprioli (Bar 3R - La Grotta)", "08:05  08:55  10:05  11:05  12:15  13:30  14:45  16:05  17:25  17:55  19:35  20:25  21:35  23:20"],
+              ["Palinuro Saline", "08:10  09:00  10:10  11:10  12:20  13:35  14:50  16:10  17:30  18:00  19:40  20:30  21:40  23:25"],
+              ["Palinuro Rotatoria ex Club Med", "08:15  09:05  10:15  11:15  12:25  13:40  14:55  16:15  17:35  18:05  19:45  20:35  21:45  23:30"],
+              ["Palinuro Trivento", "08:20  09:10  10:20  11:20  12:30  13:45  15:00  16:20  17:40  18:10  19:50  20:40  21:50  23:35"],
+              ["M. di Camerota Mingardo", "08:25  09:15  10:25  11:25  12:35  13:50  15:05  16:25  17:45  18:15  20:00  20:50  22:00  23:45"],
+              ["M. di Camerota (Cinema)", "08:35  09:25  10:35  11:35  12:45  14:00  15:15  16:35  17:55  18:25  20:05  20:55  22:05  23:50"],
+              ["M. di Camerota Lungomare", "08:40  09:30  10:40  11:40  12:50  14:05  15:20  16:40  18:00  18:30"]
+            ]}
+          ] } },
+        { card: { nome: "Linea da e per Stazione FS Centola",
+          dove: "Solo sabato e domenica dal 13 giugno al 13 settembre 2026", dove_en: "Saturdays and Sundays only, 13 June – 13 September 2026",
+          testo: "Marina di Camerota - Palinuro - Stazione FS Centola.",
+          testo_en: "Marina di Camerota - Palinuro - Centola railway station.",
+          orari: [
+            { t: "Verso la stazione", t_en: "Towards the station", righe: [
+              ["M. di Camerota Lungomare", "07:05  09:50  12:10  16:10"],
+              ["M. di Camerota (Cinema)", "07:10  09:55  12:15  16:15"],
+              ["M. di Camerota Mingardo", "07:20  10:05  12:25  16:25"],
+              ["Palinuro Trivento", "07:25  10:10  12:30  16:30"],
+              ["Palinuro Rotatoria ex Club Med", "07:30  10:15  12:35  16:35"],
+              ["Stazione FS Centola", "07:45  10:30  12:50  16:50"]
+            ]},
+            { t: "Dalla stazione", t_en: "From the station", righe: [
+              ["Stazione FS Centola", "08:10  11:00  15:00  17:30"],
+              ["Palinuro Rotatoria ex Club Med", "08:25  11:15  15:15  17:45"],
+              ["Palinuro Trivento", "08:30  11:20  15:20  17:50"],
+              ["M. di Camerota Mingardo", "08:35  11:25  15:25  17:55"],
+              ["M. di Camerota (Cinema)", "08:45  11:35  15:35  18:05"],
+              ["M. di Camerota Lungomare", "08:50  11:40  15:40  18:10"]
+            ]}
+          ] } },
+        { t: "Altri modi", t_en: "Other ways", icona: "auto" },
+        { card: { nome: "In auto", nome_en: "By car",
+          dove: "Parcheggio gratuito al residence", dove_en: "Free parking at the residence",
+          testo: "Il modo più comodo per esplorare il Cilento: spiagge, borghi e natura in libertà.",
+          testo_en: "The most convenient way to explore Cilento: beaches, villages and nature at your own pace." } },
+        { card: { nome: "Taxi e transfer", nome_en: "Taxi & transfers",
+          dove: "Su richiesta in reception", dove_en: "On request at reception",
+          testo: "Organizziamo taxi e transfer privati per stazioni, aeroporti e spostamenti locali: meglio prenotare in anticipo.",
+          testo_en: "We arrange taxis and private transfers to stations, airports and local trips: better to book in advance." } },
         { t: "In auto", t_en: "By car", icona: "auto" },
         { p: "Avere un'auto è il modo più comodo per esplorare il Cilento: ti permette di raggiungere liberamente spiagge, borghi e attrazioni naturalistiche. La struttura dispone di parcheggio gratuito.",
           p_en: "A car is the most convenient way to explore Cilento: it lets you freely reach beaches, villages and natural attractions. The residence has free parking." },

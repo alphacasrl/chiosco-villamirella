@@ -653,3 +653,25 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
   0%, 100% { opacity: 1; }
   50%      { opacity: .6; }
 }
+
+/* scorciatoia Mappa: sorella del meteo, stessa sobrieta' */
+#mappa-scorcia {
+  position: fixed; top: 4.2rem; left: .9rem; z-index: 21;
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--marrone); padding: .4rem .5rem;
+}
+#mappa-scorcia .meteo-icona { display: inline-flex; width: 1.7rem; height: 1.7rem; }
+#mappa-scorcia .meteo-icona svg { width: 100%; height: 100%; }
+#mappa-scorcia .scorcia-testo { font-family: Mulish, sans-serif; font-weight: 700; font-size: .9rem; }
+#mappa-scorcia:active { opacity: .6; }
+
+/* tabelline degli orari bus nel dettaglio */
+.orari-titolo { font-family: Mulish, sans-serif; font-size: .8rem; color: var(--marrone-scuro); margin: .9rem 0 .3rem; }
+.orari-riga {
+  display: flex; gap: .8rem; align-items: baseline;
+  background: var(--bianco); border: 1px solid #dfe5eb;
+  padding: .35rem .6rem; margin-bottom: .2rem; font-size: .66rem;
+}
+.orari-riga b { font-family: Mulish, sans-serif; flex: none; min-width: 11rem; color: var(--marrone-scuro); }
+.orari-riga span { letter-spacing: .04em; color: var(--testo); word-spacing: .3rem; }

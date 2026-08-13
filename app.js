@@ -68,6 +68,7 @@ var CONFIG = {
 
   /* colori dei pin per categoria (gli stessi delle etichette a sinistra) */
   COLORI: {
+    muoversi: '#5b6ec9',
     spiagge: '#1a87c9', borghi: '#c96a2b', grotte: '#7057c9',
     natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8',
     ristoranti: '#d64550', negozi: '#5b7d8c', salute: '#c0392b'
@@ -209,12 +210,13 @@ function perId(id) {
   return null;
 }
 var CAT_EN = { spiagge: 'Beaches & coves', borghi: 'Villages & towns', grotte: 'Caves & sea',
-               natura: 'Nature & oases', archeologia: 'Archaeology & museums', santuari: 'Sanctuaries' };
+               natura: 'Nature & oases', archeologia: 'Archaeology & museums', santuari: 'Sanctuaries & churches' };
 function nomeCategoria(id) {
   if (id === 'ristoranti') return TXT('ristorante');
   if (id === 'negozi') return TXT('negozio');
   if (id === 'salute') return TXT('salute');
   if (id === 'diving') return 'Diving';
+  if (id === 'muoversi') return lingua === 'en' ? 'Transport' : 'Trasporti';
   for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) {
     return (lingua === 'en' && CAT_EN[id]) ? CAT_EN[id] : CATEGORIE[i].nome;
   }
@@ -280,7 +282,7 @@ var GRUPPI = [
   }
   /* gruppi dalla guida: ristoranti e negozi georiferiti */
   var G = window.GUIDA || {};
-  ['ristoranti', 'negozi', 'salute'].forEach(function (pid) {
+  ['ristoranti', 'negozi', 'salute', 'muoversi'].forEach(function (pid) {
     var pag = (G.PAGINE || {})[pid];
     if (!pag || !pag.mappa) return;
     var pseudo = [];
@@ -297,11 +299,13 @@ var GRUPPI = [
         dove: b.card.dove || '',
         dove_en: b.card.dove_en || '',
         immagine: b.card.foto || '',
+        orari: b.card.orari || null,
+        nome_en: b.card.nome_en || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
       });
     });
     pseudo.forEach(function (l) { LUOGHI.push(l); });
-    var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute' };
+    var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute', muoversi: 'muoversi' };
     GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, nome_en: pag.titolo_en || pag.titolo, cat: pid, icona: ICP[pid] || pid,
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
@@ -477,6 +481,21 @@ function apriDettaglio(v) {
     if (nomi.length) riga(nomi.length > 1 ? TXT('luoghi') : TXT('luogo'), nomi.join(', '));
   }
 
+  /* orari delle linee bus: sezioni con righe fermata -> tempi */
+  var boxOrari = $('#det-articoli');
+  if (d.orari) {
+    for (var oi = 0; oi < d.orari.length; oi++) {
+      var oz = d.orari[oi];
+      var h4 = el('h4', 'orari-titolo', T2(oz.t, oz.t_en));
+      boxOrari.appendChild(h4);
+      for (var ri = 0; ri < oz.righe.length; ri++) {
+        var rr = el('div', 'orari-riga');
+        rr.appendChild(el('b', null, oz.righe[ri][0]));
+        rr.appendChild(el('span', null, oz.righe[ri][1]));
+        boxOrari.appendChild(rr);
+      }
+    }
+  }
   var arts = $('#det-articoli');
   vuota(arts);
   var lista = d.articoli || [];
@@ -551,7 +570,8 @@ function creaIconeMappa() {
     santuari: ['santuari', '#9550a8'], ristoranti: ['ristoranti', '#d64550'],
     negozi: ['negozi', '#5b7d8c'], salute: ['salute', '#c0392b'],
     diving: ['esperienze', '#0e7fb5'],
-    itinerari: ['itinerari', '#1f8074'], esperienze: ['esperienze', '#d09a1e']
+    itinerari: ['itinerari', '#1f8074'], esperienze: ['esperienze', '#d09a1e'],
+    muoversi: ['treno', '#5b6ec9']
   };
   Object.keys(TAV).forEach(function (k) {
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46">' +
@@ -1335,6 +1355,7 @@ function impostaLingua(nuova) {
   if (window.__aggiornaFrecce) window.__aggiornaFrecce();
   if (stato.aperta) apriDettaglio(stato.aperta);
   meteoWidget();
+  if (window.__aggScorcia) window.__aggScorcia();
   var pg = $('#pagina');
   if (pg.getAttribute('aria-hidden') === 'false' && pg.__pid) {
     if (pg.__pid === '__meteo__') meteoPagina();
@@ -1693,6 +1714,21 @@ function meteoAggiorna() {
   })['catch'](function () { /* niente rete: il widget resta con l'ultimo dato */ });
 }
 tocca($('#meteo-widget'), meteoPagina);
+(function () {
+  var n = $('#mappa-scorcia');
+  if (!n) return;
+  n.innerHTML = '<span class="meteo-icona">' + icona('mappa') + '</span><span class="scorcia-testo"></span>';
+  function agg() { n.querySelector('.scorcia-testo').textContent = lingua === 'en' ? 'Map' : 'Mappa'; }
+  agg();
+  window.__aggScorcia = agg;
+  tocca(n, function () {
+    apriSezione('tutti');
+    if (window.__assetta) {
+      window.__assetta('solo-mappa');
+      if (window.__aggiornaFrecce) setTimeout(window.__aggiornaFrecce, 60);
+    }
+  });
+})();
 meteoAggiorna();
 setInterval(meteoAggiorna, 30 * 60 * 1000);   /* ogni mezz'ora */
 
