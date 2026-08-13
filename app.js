@@ -1295,14 +1295,16 @@ tocca($('#reset'), ricomincia);
   function slideLista() {
     if (slide.lista.length) return slide.lista;
     var i;
+    /* in vetrina solo il territorio: niente negozi, farmacie o guide */
     for (i = 0; i < LUOGHI.length; i++) {
-      if (LUOGHI[i].immagine) {
+      if (LUOGHI[i].immagine &&
+          LUOGHI[i].categoria !== 'negozi' && LUOGHI[i].categoria !== 'salute') {
         slide.lista.push({ img: LUOGHI[i].immagine,
           testo: LUOGHI[i].nome, tipo: LUOGHI[i].categoria });
       }
     }
     for (i = 0; i < ESPERIENZE.length; i++) {
-      if (ESPERIENZE[i].immagine) {
+      if (ESPERIENZE[i].immagine && ESPERIENZE[i].tipo !== 'guida') {
         slide.lista.push({ img: ESPERIENZE[i].immagine,
           testo: ESPERIENZE[i].nome, tipo: null });
       }
