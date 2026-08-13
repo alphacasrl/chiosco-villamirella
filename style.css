@@ -690,3 +690,8 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .avviso-orari { font-size: .66rem; color: #7a5a12; background: #fdf3e0;
   border-left: .3rem solid #d09a1e; padding: .4rem .7rem; margin: .6rem 0 .4rem; }
 .apri-orario { margin: .3rem 0 .6rem; }
+
+#home-beta {
+  margin: .25rem 0 0; font-size: .58rem; color: #9aa5ad;
+  font-family: Mulish, sans-serif; letter-spacing: .02em;
+}

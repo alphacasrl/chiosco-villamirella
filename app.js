@@ -102,6 +102,7 @@ var TESTI = {
     guida: 'Guida del Residence Villamirella',
     titolo: 'Palinuro e il Cilento',
     invito: 'Tocca un riquadro per cominciare',
+    beta: 'Versione Beta in corso di sviluppo. Aiutateci a migliorare dando un feedback alla Reception.',
     vuoto: 'Nessuna voce in questa sezione.',
     senzaTesto: 'Per questo luogo il sito non riporta una descrizione.',
     percorsoInd: 'Percorso indicativo',
@@ -127,6 +128,7 @@ var TESTI = {
     guida: 'Residence Villamirella guest guide',
     titolo: 'Palinuro and Cilento',
     invito: 'Tap a tile to start',
+    beta: 'Beta version under development. Help us improve by leaving your feedback at Reception.',
     vuoto: 'Nothing in this section.',
     senzaTesto: 'The website has no description for this place.',
     percorsoInd: 'Approximate route',
@@ -1333,6 +1335,7 @@ function disegnaHome() {
   $('#home-titolo').textContent = T2(ben.titolo, ben.titolo_en) || 'Benvenuti!';
   $('#home-sotto').textContent = T2(ben.sotto, ben.sotto_en) || '';
   $('#home-invito').textContent = TXT('invito');
+  var hb = $('#home-beta'); if (hb) hb.textContent = TXT('beta');
   var griglia = $('#mattonelle');
   vuota(griglia);
   var m = GUIDA.MATTONELLE || [];
