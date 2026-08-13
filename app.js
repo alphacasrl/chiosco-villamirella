@@ -144,6 +144,28 @@ var TESTI = {
   }
 };
 var lingua = 'it';
+
+/* =====================================================================
+   CONTATORE D'USO — tutto locale, niente rete: conta le aperture di
+   sezioni, schede e pagine in localStorage. Si legge dal pannello
+   segreto: TRE TOCCHI RAPIDI nell'angolo in basso a DESTRA.
+   ===================================================================== */
+var STATS_CHIAVE = 'vm-statistiche';
+function statLeggi() {
+  try {
+    var d = JSON.parse(localStorage.getItem(STATS_CHIAVE));
+    if (d && d.sezioni) return d;
+  } catch (e) {}
+  return { da: new Date().toISOString().slice(0, 10), totale: 0, sezioni: {}, voci: {} };
+}
+function statConta(tipo, nome) {
+  try {
+    var d = statLeggi();
+    d.totale++;
+    d[tipo][nome] = (d[tipo][nome] || 0) + 1;
+    localStorage.setItem(STATS_CHIAVE, JSON.stringify(d));
+  } catch (e) { /* quota piena o storage negato: si vive lo stesso */ }
+}
 function TXT(k) { return (TESTI[lingua] && TESTI[lingua][k]) || TESTI.it[k] || k; }
 /* campo bilingue di guida.js: T(blocco.p, blocco.p_en) */
 function T2(it, en) { return (lingua === 'en' && en) ? en : it; }
@@ -441,6 +463,7 @@ function disegnaElenco() {
    ===================================================================== */
 function apriDettaglio(v) {
   var d = v.dato;
+  statConta('voci', d.nome);
   stato.aperta = v;
 
   var foto = $('#det-foto');
@@ -1266,6 +1289,7 @@ function mostraPagina(id) {
   var p = GUIDA.PAGINE[id];
   if (!p) return;
   n.__pid = id;
+  statConta('sezioni', 'pagina:' + id);
   $('#pagina-titolo').textContent = T2(p.titolo, p.titolo_en);
   var corpo = $('#pagina-corpo');
   vuota(corpo);
@@ -1321,6 +1345,7 @@ function mostraPagina(id) {
   mostraHome(false);
 }
 function apriSezione(idGruppo) {
+  statConta('sezioni', idGruppo);
   stato.gruppo = idGruppo;
   chiudiDettaglio();
   disegnaFiltri();
@@ -1550,6 +1575,17 @@ tocca($('#reset'), ricomincia);
     }
   }
   window.__provaStandby = entraStandby;   /* per collaudo manuale dalla console */
+  /* pannello statistiche: tre tocchi rapidi in basso a DESTRA */
+  (function () {
+    var n = $('#angolo-stat');
+    if (!n) return;
+    var tocchi = 0, primo = 0;
+    n.addEventListener('pointerup', function () {
+      var ora = Date.now();
+      if (ora - primo > 1500) { tocchi = 0; primo = ora; }
+      if (++tocchi >= 3) { tocchi = 0; setTimeout(mostraStatistiche, 50); }
+    });
+  })();
   /* tasto segreto: tre tocchi rapidi nell'angolo in basso a sinistra */
   (function () {
     var n = $('#angolo-segreto');
@@ -1616,6 +1652,43 @@ window.addEventListener('online', function () {
   ro.observe(document.documentElement);
   ro.observe($('#mappa-lato'));
 })();
+
+/* =====================================================================
+   PANNELLO STATISTICHE (solo per la reception)
+   ===================================================================== */
+function mostraStatistiche() {
+  var d = statLeggi();
+  var n = $('#statistiche'), corpo = $('#statistiche-corpo');
+  vuota(corpo);
+  corpo.appendChild(el('p', 'stat-riassunto',
+    d.totale + ' aperture registrate dal ' + d.da + ' (solo su questo schermo)'));
+  function blocco(titolo, dati) {
+    corpo.appendChild(el('h3', null, titolo));
+    var voci = Object.keys(dati).map(function (k) { return [k, dati[k]]; });
+    voci.sort(function (a, b) { return b[1] - a[1]; });
+    if (!voci.length) corpo.appendChild(el('p', 'stat-vuoto', 'ancora niente'));
+    var max = voci.length ? voci[0][1] : 1;
+    voci.slice(0, 20).forEach(function (v) {
+      var r = el('div', 'stat-riga');
+      var barra = el('div', 'stat-barra');
+      barra.style.width = Math.max(4, Math.round(v[1] / max * 100)) + '%';
+      r.appendChild(el('b', null, v[0]));
+      r.appendChild(barra);
+      r.appendChild(el('span', null, v[1]));
+      corpo.appendChild(r);
+    });
+  }
+  blocco('Sezioni e pagine', d.sezioni);
+  blocco('Schede aperte', d.voci);
+  n.setAttribute('aria-hidden', 'false');
+}
+tocca($('#statistiche-chiudi'), function () {
+  $('#statistiche').setAttribute('aria-hidden', 'true');
+});
+tocca($('#statistiche-azzera'), function () {
+  try { localStorage.removeItem(STATS_CHIAVE); } catch (e) {}
+  mostraStatistiche();
+});
 
 /* =====================================================================
    VISORE DOCUMENTI — l'orario ufficiale a schermo intero, X per chiudere

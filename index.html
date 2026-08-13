@@ -7,12 +7,25 @@
 <meta name="format-detection" content="telephone=no">
 <title>Villamirella — Palinuro e il Cilento</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.css">
-<link rel="stylesheet" href="style.css?v=202608131408">
+<link rel="stylesheet" href="style.css?v=202608131414">
 </head>
 <body>
 
 <!-- angolo di servizio: tre tocchi rapidi qui avviano l'attesa (collaudo) -->
 <div id="angolo-segreto" aria-hidden="true"></div>
+<div id="angolo-stat" aria-hidden="true"></div>
+
+<!-- statistiche d'uso: pannello per la reception, tre tocchi in basso a destra -->
+<div id="statistiche" aria-hidden="true">
+  <div id="statistiche-scheda">
+    <div id="statistiche-testa">
+      <b>Cosa toccano gli ospiti</b>
+      <button class="bt chiaro" id="statistiche-azzera" type="button">Azzera</button>
+      <button id="statistiche-chiudi" type="button" aria-label="Chiudi">&#10005;</button>
+    </div>
+    <div id="statistiche-corpo"></div>
+  </div>
+</div>
 
 <!-- lingua: STESSA posizione su ogni schermata, l'attiva e' evidenziata -->
 <div id="cambio-lingua" role="group" aria-label="Lingua / Language">
@@ -173,11 +186,11 @@
 
 </div>
 
-<script src="guida.js?v=202608131408"></script>
-<script src="poi.js?v=202608131408"></script>
-<script src="parco.js?v=202608131408"></script>
-<script src="percorsi.js?v=202608131408"></script>
+<script src="guida.js?v=202608131414"></script>
+<script src="poi.js?v=202608131414"></script>
+<script src="parco.js?v=202608131414"></script>
+<script src="percorsi.js?v=202608131414"></script>
 <script src="https://unpkg.com/maplibre-gl@^5/dist/maplibre-gl.js"></script>
-<script src="app.js?v=202608131408"></script>
+<script src="app.js?v=202608131414"></script>
 </body>
 </html>

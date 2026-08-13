@@ -697,3 +697,33 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
   border: 1px solid #ecd9ac; border-left: .3rem solid #d09a1e;
   font-family: Mulish, sans-serif; font-weight: 700; letter-spacing: .02em;
 }
+
+/* angolo segreto delle statistiche: gemello di quello dello standby, a destra */
+#angolo-stat {
+  position: fixed; right: 0; bottom: 0; width: 3.4rem; height: 3.4rem;
+  z-index: 27; background: transparent;
+}
+/* pannello statistiche */
+#statistiche { position: fixed; inset: 0; z-index: 29; background: rgba(8,16,24,.55); }
+#statistiche[aria-hidden="true"] { display: none; }
+#statistiche-scheda {
+  position: absolute; inset: 3rem 6rem; background: var(--bianco);
+  display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,.4);
+}
+#statistiche-testa {
+  flex: none; display: flex; align-items: center; gap: .8rem;
+  padding: .7rem 1rem; border-bottom: 2px solid #dfe5eb;
+}
+#statistiche-testa b { flex: 1; font-family: Mulish, sans-serif; font-size: 1rem; color: var(--marrone-scuro); }
+#statistiche-chiudi {
+  width: 3rem; height: 3rem; border: none; border-radius: 0;
+  background: #dd350f; color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+}
+#statistiche-corpo { flex: 1; overflow-y: auto; padding: .8rem 1.2rem 1.5rem; }
+#statistiche-corpo h3 { font-family: Mulish, sans-serif; font-size: .85rem; color: var(--marrone-scuro); margin: .9rem 0 .4rem; }
+.stat-riassunto { font-size: .72rem; color: var(--marrone); margin: 0; }
+.stat-vuoto { font-size: .7rem; color: #9aa5ad; }
+.stat-riga { display: flex; align-items: center; gap: .6rem; margin-bottom: .25rem; font-size: .7rem; }
+.stat-riga b { flex: none; width: 16rem; font-family: Mulish, sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stat-barra { height: .8rem; background: var(--blu); min-width: 2px; }
+.stat-riga span { flex: none; min-width: 2.2rem; text-align: right; font-weight: 700; }

@@ -420,6 +420,19 @@ window.LUOGHI = [
     inEvidenza: false
   },
 
+  {
+    id: "molo-dei-francesi",
+    nome: "Spiaggia del Molo dei Francesi (ex Club Med)",
+    categoria: "spiagge",
+    lat: 40.0455,   lng: 15.2815,   verified: true,
+    notaCoordinate: "APPROSSIMATA alla costa all'altezza dell'ex Club Mediterranee: il molo non e' mappato su OpenStreetMap — sposta il pin sul punto esatto",
+    sommario: "A soli 900 metri dal Residence Villamirella, la spiaggia del Molo dei Francesi e' un angolo di paradiso che ha vissuto la storia del Club Mediterranee sin dagli anni '50. Caratterizzata da sabbia dorata e rocce naturali, offre un'atmosfera unica, ideale per chi cerca sia il comfort che l'avventura.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "",   tempoAuto: "",
+    inEvidenza: true
+  },
+
   /* ---------- BORGHI E PAESI ---------- */
   {
     id: "palinuro",
