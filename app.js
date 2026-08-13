@@ -161,7 +161,16 @@ var STAT_PAUSA_MS = 90000;     /* fermo piu' a lungo: e' un'altra persona */
 var STAT_DWELL_MAX = 180;      /* tetto ai secondi attribuiti a una schermata */
 var STAT_PASSI_MAX = 14;       /* passi registrati per esteso in una visita */
 
-function statOggi(ms) { return new Date(ms || Date.now()).toISOString().slice(0, 10); }
+/* La data va presa in ora LOCALE, non UTC: d'estate l'Italia e' avanti di due
+   ore, quindi una visita dell'una di notte con toISOString() finirebbe
+   registrata nel giorno precedente — e le fasce orarie, che usano l'ora
+   locale, non tornerebbero con i riepiloghi giornalieri. */
+function statOggi(ms) {
+  var d = ms ? new Date(ms) : new Date();
+  return d.getFullYear() + '-' +
+         ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+         ('0' + d.getDate()).slice(-2);
+}
 function statVuoto() {
   return { v: 2, da: statOggi(), totale: 0, sezioni: {}, voci: {}, giorni: {}, sessioni: [] };
 }
