@@ -692,6 +692,8 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .apri-orario { margin: .3rem 0 .6rem; }
 
 #home-beta {
-  margin: .25rem 0 0; font-size: .58rem; color: #9aa5ad;
-  font-family: Mulish, sans-serif; letter-spacing: .02em;
+  display: inline-block; margin: .45rem auto 0; padding: .35rem .9rem;
+  font-size: .68rem; color: #7a5a12; background: #fdf3e0;
+  border: 1px solid #ecd9ac; border-left: .3rem solid #d09a1e;
+  font-family: Mulish, sans-serif; font-weight: 700; letter-spacing: .02em;
 }
