@@ -71,7 +71,7 @@ var CONFIG = {
     muoversi: '#5b6ec9',
     spiagge: '#1a87c9', borghi: '#c96a2b', grotte: '#7057c9',
     natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8',
-    ristoranti: '#d64550', negozi: '#5b7d8c', salute: '#c0392b'
+    ristoranti: '#d64550', negozi: '#5b7d8c', salute: '#c0392b', servizi: '#607d5b'
   },
   COLORE_SCELTO: '#dd350f',
   COLORE_CASA: '#dd350f',
@@ -219,6 +219,7 @@ function nomeCategoria(id) {
   if (id === 'salute') return TXT('salute');
   if (id === 'diving') return 'Diving';
   if (id === 'muoversi') return lingua === 'en' ? 'Transport' : 'Trasporti';
+  if (id === 'servizi') return lingua === 'en' ? 'Service' : 'Servizio';
   for (var i = 0; i < CATEGORIE.length; i++) if (CATEGORIE[i].id === id) {
     return (lingua === 'en' && CAT_EN[id]) ? CAT_EN[id] : CATEGORIE[i].nome;
   }
@@ -284,7 +285,7 @@ var GRUPPI = [
   }
   /* gruppi dalla guida: ristoranti e negozi georiferiti */
   var G = window.GUIDA || {};
-  ['ristoranti', 'negozi', 'salute', 'muoversi'].forEach(function (pid) {
+  ['ristoranti', 'negozi', 'salute', 'muoversi', 'servizi'].forEach(function (pid) {
     var pag = (G.PAGINE || {})[pid];
     if (!pag || !pag.mappa) return;
     var pseudo = [];
@@ -303,6 +304,7 @@ var GRUPPI = [
         immagine: b.card.foto || '',
         orari: b.card.orari || null,
         icona: b.card.icona || '',
+        pinIcona: b.card.pin || '',
         foglioOrari: b.card.foglioOrari || '',
         fermate: b.card.fermate || null,
         nome_en: b.card.nome_en || '',
@@ -310,7 +312,7 @@ var GRUPPI = [
       });
     });
     pseudo.forEach(function (l) { LUOGHI.push(l); });
-    var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute', muoversi: 'muoversi' };
+    var ICP = { ristoranti: 'ristoranti', negozi: 'negozi', salute: 'salute', muoversi: 'muoversi', servizi: 'servizi' };
     GRUPPI.push({ id: 'g:' + pid, nome: pag.titolo, nome_en: pag.titolo_en || pag.titolo, cat: pid, icona: ICP[pid] || pid,
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
@@ -594,7 +596,7 @@ function iconaPin(l) {
 function featureLuogo(l) {
   return { type: 'Feature',
     properties: { id: l.id, nome: l.nome, colore: colore(l.categoria),
-                  icona: 'pin-' + iconaPin(l) },
+                  icona: 'pin-' + (l.pinIcona || iconaPin(l)) },
     geometry: { type: 'Point', coordinates: [l.lng, l.lat] } };
 }
 /* le immagini dei pin: il set di icone, in bianco su tondo colorato */
@@ -605,8 +607,11 @@ function creaIconeMappa() {
     santuari: ['santuari', '#9550a8'], ristoranti: ['ristoranti', '#d64550'],
     negozi: ['negozi', '#5b7d8c'], salute: ['salute', '#c0392b'],
     diving: ['esperienze', '#0e7fb5'],
-    itinerari: ['itinerari', '#1f8074'], esperienze: ['esperienze', '#d09a1e'],
-    muoversi: ['treno', '#5b6ec9']
+    itinerari: ['itinerari', '#1f8074'], esperienze: ['esperenze' === 'x' ? '' : 'esperienze', '#d09a1e'],
+    muoversi: ['treno', '#5b6ec9'],
+    servizi: ['servizi', '#607d5b'],
+    benzina: ['benzina', '#607d5b'], posta: ['posta', '#607d5b'],
+    banca: ['banca', '#607d5b'], edicola: ['edicola', '#607d5b'], tabacchi: ['tabacchi', '#607d5b']
   };
   Object.keys(TAV).forEach(function (k) {
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46">' +
@@ -1232,6 +1237,12 @@ var ICONE = {
   bici:       '<circle cx="6" cy="16.5" r="3.4"/><circle cx="18" cy="16.5" r="3.4"/><path d="M6 16.5L9.5 9h5.8"/><path d="M12 16.5L9.5 9"/><path d="M15.3 9l2.7 7.5"/><path d="M13.8 6.5h3"/>',
   taxi:       '<path d="M5 16.5V12l1.8-4.5h10.4L19 12v4.5"/><path d="M5 12h14"/><circle cx="7.8" cy="16" r="1.4"/><circle cx="16.2" cy="16" r="1.4"/><path d="M10 7.5V5.2h4v2.3"/>',
   uscita:     '<path d="M9 4.5H5.5v15H9"/><path d="M13 8l4 4-4 4"/><path d="M17 12H8.5"/>',
+  servizi:    '<path d="M5 20.5V5.2A1.7 1.7 0 0 1 6.7 3.5h6.1a1.7 1.7 0 0 1 1.7 1.7v15.3"/><path d="M4 20.5h11.5"/><path d="M7.5 7h4.5M7.5 10.5h4.5"/><path d="M14.5 9.5h2.4a1.6 1.6 0 0 1 1.6 1.6v6.2a1.35 1.35 0 1 0 2.7 0V10l-2-2"/>',
+  benzina:    '<path d="M5 20.5V5.2A1.7 1.7 0 0 1 6.7 3.5h6.1a1.7 1.7 0 0 1 1.7 1.7v15.3"/><path d="M4 20.5h11.5"/><path d="M7.5 7h4.5M7.5 10.5h4.5"/><path d="M14.5 9.5h2.4a1.6 1.6 0 0 1 1.6 1.6v6.2a1.35 1.35 0 1 0 2.7 0V10l-2-2"/>',
+  posta:      '<rect x="3.5" y="5.5" width="17" height="13" rx="1.6"/><path d="M4.5 7l7.5 6 7.5-6"/>',
+  banca:      '<path d="M4 9.5L12 4l8 5.5"/><path d="M5.5 9.5h13"/><path d="M7 9.5v7M12 9.5v7M17 9.5v7"/><path d="M5 16.5h14M4 19.5h16"/>',
+  edicola:    '<path d="M4.5 7.5h11v12h-11z"/><path d="M15.5 9.5l4-1.5v10l-4 1.5"/><path d="M7 10.5h6M7 13.5h6M7 16.5h4"/>',
+  tabacchi:   '<rect x="4" y="4" width="16" height="16" rx="1.6"/><path d="M8.5 8.5h7M12 8.5v7.5"/>',
   casa:       '<path d="M4 11.5L12 4.5l8 7"/><path d="M6.3 10v10h11.4V10"/><path d="M10 20v-5h4v5"/>',
   mappa:      '<path d="M9 4.5L4 6.3v13.2L9 17.7l6 1.8 5-1.8V4.5L15 6.3z"/><path d="M9 4.5v13.2M15 6.3v13.2"/>',
   elenco:     '<path d="M8.5 6h11M8.5 12h11M8.5 18h11"/><circle cx="4.6" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="4.6" cy="18" r="1.2" fill="currentColor" stroke="none"/>'
