@@ -114,6 +114,7 @@ var TESTI = {
     ristorante: 'Ristorante', negozio: 'Negozio', salute: 'Salute',
     lunghezza: 'Lunghezza del percorso', durata: 'Durata indicativa', difficolta: 'Difficolt\u00e0',
     orariInd: 'Orari indicativi: fa fede l\'orario pubblicato dalla linea.', vediOrario: 'Vedi l\'orario ufficiale',
+    dislivello: 'Dislivello', quotaEtich: 'Quota', anello: 'Anello', traversata: 'Traversata', profilo: 'Profilo altimetrico',
     meteoTitolo: 'Previsioni del tempo', meteoOra: 'Adesso', meteoVento: 'vento', meteoPioggia: 'prob. pioggia', meteoFonte: 'Dati meteo: Open-Meteo.com', meteoOre: 'Le prossime ore', meteoGiorni: 'I prossimi giorni', meteoOggi: 'oggi', meteoUmidita: 'umidità', meteoIndietro: '‹ Tutte le previsioni'
   },
   en: {
@@ -140,6 +141,7 @@ var TESTI = {
     ristorante: 'Restaurant', negozio: 'Shop', salute: 'Health',
     lunghezza: 'Trail length', durata: 'Approximate duration', difficolta: 'Difficulty',
     orariInd: 'Times are indicative: the operator\'s published timetable prevails.', vediOrario: 'See the official timetable',
+    dislivello: 'Elevation gain', quotaEtich: 'Altitude', anello: 'Loop', traversata: 'One-way', profilo: 'Elevation profile',
     meteoTitolo: 'Weather forecast', meteoOra: 'Now', meteoVento: 'wind', meteoPioggia: 'rain prob.', meteoFonte: 'Weather data: Open-Meteo.com', meteoOre: 'Next hours', meteoGiorni: 'Coming days', meteoOggi: 'today', meteoUmidita: 'humidity', meteoIndietro: '‹ All forecasts'
   }
 };
@@ -514,6 +516,14 @@ function apriDettaglio(v) {
       if (kmTot > 0.3) riga(TXT('lunghezza'), kmTot.toFixed(1) + ' km' +
         (perc.indicativo ? ' \u2014 ' + TXT('percorsoInd').toLowerCase() : ''));
     }
+    if (perc && perc.quote) {
+      var qz = perc.quote;
+      if (qz.salita !== undefined) {
+        riga(TXT('dislivello'), '+' + qz.salita + ' m / −' + qz.discesa + ' m');
+        riga(TXT('quotaEtich'), qz.min + ' – ' + qz.max + ' m');
+      }
+      if (qz.anello !== undefined) riga('Tipo', qz.anello ? TXT('anello') : TXT('traversata'));
+    }
     if (d.durata) riga(TXT('durata'), d.durata);
     if (d.difficolta) riga(TXT('difficolta'), d.difficolta);
     var rif = d.luoghi || [], nomi = [];
@@ -523,6 +533,21 @@ function apriDettaglio(v) {
 
   var arts = $('#det-articoli');
   vuota(arts);
+  /* profilo altimetrico in stile app da trekking */
+  var percQ = (v.tipo === 'esperienza' && PERCORSI[d.id] && PERCORSI[d.id].quote) ? PERCORSI[d.id].quote : null;
+  if (percQ && percQ.profilo && percQ.profilo.length > 5) {
+    arts.appendChild(el('h4', 'orari-titolo', TXT('profilo')));
+    var pf = percQ.profilo, W = 600, H = 120, mn = percQ.min, mx = Math.max(percQ.max, mn + 1);
+    var pts = pf.map(function (vq, i) {
+      return (i * W / (pf.length - 1)).toFixed(1) + ',' + (H - 10 - (vq - mn) / (mx - mn) * (H - 25)).toFixed(1);
+    }).join(' ');
+    var box = el('div', 'profilo-box');
+    box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+      '<polygon points="0,' + (H - 10) + ' ' + pts + ' ' + W + ',' + (H - 10) + '" fill="#ddeaf6"/>' +
+      '<polyline points="' + pts + '" fill="none" stroke="#235784" stroke-width="2.5"/>' +
+      '</svg><div class="profilo-etich"><span>' + mn + ' m</span><span>' + mx + ' m</span></div>';
+    arts.appendChild(box);
+  }
   /* orari delle linee bus: dopo lo svuotamento, mai prima */
   if (d.orari || d.foglioOrari) {
     arts.appendChild(el('p', 'avviso-orari', TXT('orariInd')));
