@@ -277,6 +277,64 @@ document.addEventListener('visibilitychange', function () {
 });
 
 /* traccia delle ricariche automatiche: serve a capire se la prova funziona */
+/* =====================================================================
+   SCHERMO SEMPRE ACCESO
+   Il sistema operativo del monitor spegne il pannello quando nessuno tocca
+   nulla, e non gli importa che la pagina sia viva: conta gli input, non
+   l'attivita' del browser. L'unico modo che ha una pagina web di chiedere
+   di restare accesa e' il blocco di risveglio dello schermo. Se questo
+   browser non lo conosce, o lo rifiuta, il rimedio non puo' che stare nelle
+   impostazioni del monitor: per questo l'esito viene registrato e mostrato
+   nel pannello, invece di essere tentato in silenzio.
+   ===================================================================== */
+var schermo = { supportato: false, tenuto: false, rilasci: 0, errore: '', tentativi: 0 };
+try { schermo.supportato = !!(navigator.wakeLock && navigator.wakeLock.request); } catch (e) {}
+
+function statSegnaSchermo() {
+  var d = statLeggi();
+  d.schermo = {
+    supportato: schermo.supportato, tenuto: schermo.tenuto,
+    rilasci: schermo.rilasci, errore: schermo.errore,
+    tentativi: schermo.tentativi, quando: Date.now()
+  };
+  statScrivi(d);
+}
+var sentinella = null;
+function tieniSchermoAcceso() {
+  if (!schermo.supportato || sentinella) return;
+  schermo.tentativi++;
+  try {
+    navigator.wakeLock.request('screen').then(function (s) {
+      sentinella = s;
+      schermo.tenuto = true;
+      schermo.errore = '';
+      statSegnaSchermo();
+      s.addEventListener('release', function () {
+        /* il sistema lo revoca quando la pagina passa in secondo piano o
+           quando decide lui: si riprova, non si molla */
+        sentinella = null;
+        schermo.tenuto = false;
+        schermo.rilasci++;
+        statSegnaSchermo();
+      });
+    })['catch'](function (e) {
+      schermo.tenuto = false;
+      schermo.errore = String((e && (e.name || e.message)) || e).slice(0, 60);
+      statSegnaSchermo();
+    });
+  } catch (e) {
+    schermo.tenuto = false;
+    schermo.errore = String((e && (e.name || e.message)) || e).slice(0, 60);
+    statSegnaSchermo();
+  }
+}
+/* si tenta subito, a ogni ritorno in primo piano e una volta al minuto:
+   il blocco cade da solo piu' spesso di quanto si creda */
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'visible') tieniSchermoAcceso();
+});
+setInterval(tieniSchermoAcceso, 60000);
+
 function statSegnaRicarica() {
   var d = statLeggi();
   var g = statOggi();
@@ -1796,6 +1854,7 @@ tocca($('#reset'), ricomincia);
   }
   function azzera() {
     statTocco();
+    tieniSchermoAcceso();
     esciStandby();
     if (t) clearTimeout(t);
     if (ts) clearTimeout(ts);
@@ -2056,6 +2115,24 @@ function mostraStatistiche() {
 
   titolo('Lingua scelta', null);
   classifica(lingue, 4);
+
+  titolo('Schermo sempre acceso', 'esito della richiesta al monitor di non spegnersi');
+  var sc = (d.schermo || {});
+  var diag;
+  if (!sc.quando) {
+    diag = 'nessun tentativo ancora registrato';
+  } else if (!sc.supportato) {
+    diag = 'Questo monitor NON conosce la funzione: dalla pagina non si puo\u2019 fare nulla, '
+         + 'il rimedio sta nelle impostazioni di risparmio energetico del monitor.';
+  } else if (sc.tenuto) {
+    diag = 'Attiva: il monitor ha accettato di restare acceso'
+         + (sc.rilasci ? ' (revocata e ripresa ' + sc.rilasci + ' volte)' : '');
+  } else if (sc.errore) {
+    diag = 'Richiesta rifiutata dal monitor: ' + sc.errore;
+  } else {
+    diag = 'Supportata ma al momento non attiva (revoche: ' + (sc.rilasci || 0) + ')';
+  }
+  corpo.appendChild(el('p', 'stat-nota', diag));
 
   titolo('Ricariche automatiche', 'la pagina si ricarica da sola dopo ' +
     Math.round(CONFIG.RICARICA_MS / 60000) + ' minuti di inattivita\u2019, per evitare che il monitor si blocchi');
