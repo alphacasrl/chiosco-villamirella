@@ -278,6 +278,41 @@ document.addEventListener('visibilitychange', function () {
 
 /* traccia delle ricariche automatiche: serve a capire se la prova funziona */
 /* =====================================================================
+   CONTATTI MULTIPLI — quante volte il pannello annuncia un secondo dito.
+   Serve a distinguere un guasto da un disturbo ambientale: se i tocchi
+   multipli si addensano in certe ore, la causa e' fuori dal software
+   (illuminazione, umidita' della sera, insetti sul telaio).
+   Un pointerdown con isPrimary falso significa, per definizione, che c'e'
+   gia' un altro contatto attivo: e' il segnale piu' pulito, e non richiede
+   di tenere il conto dei contatti aperti (che si sporcherebbe da solo se
+   il pannello dimenticasse di annunciare un rilascio).
+   ===================================================================== */
+var fantasmi = { coda: 0, ultimaScrittura: 0 };
+function statSegnaFantasma() {
+  fantasmi.coda++;
+  var ora = Date.now();
+  if (ora - fantasmi.ultimaScrittura < 5000) return;   /* non si scrive a raffica */
+  fantasmi.ultimaScrittura = ora;
+  var quanti = fantasmi.coda;
+  fantasmi.coda = 0;
+  var d = statLeggi();
+  d.multi = d.multi || { totale: 0, ore: {}, giorni: {} };
+  d.multi.totale += quanti;
+  var h = new Date().getHours();
+  d.multi.ore[h] = (d.multi.ore[h] || 0) + quanti;
+  var g = statOggi();
+  d.multi.giorni[g] = (d.multi.giorni[g] || 0) + quanti;
+  d.multi.ultimo = ora;
+  try { d.multi.punti = navigator.maxTouchPoints; } catch (e) {}
+  var ch = Object.keys(d.multi.giorni).sort();
+  while (ch.length > STAT_GIORNI_MAX) { delete d.multi.giorni[ch.shift()]; }
+  statScrivi(d);
+}
+document.addEventListener('pointerdown', function (e) {
+  if (e.isPrimary === false) statSegnaFantasma();
+}, { passive: true });
+
+/* =====================================================================
    SCHERMO SEMPRE ACCESO
    Il sistema operativo del monitor spegne il pannello quando nessuno tocca
    nulla, e non gli importa che la pagina sia viva: conta gli input, non
@@ -1025,7 +1060,13 @@ function avvia() {
       maxPitch: 70,
       dragRotate: false,       /* la rotazione passa dalla bussola */
       touchPitch: false,       /* servirebbero due dita che non esistono */
-      touchZoomRotate: true,   /* doppio tap per ingrandire */
+      /* La pinch a due dita e' SPENTA di proposito. Su questo pannello i
+         contatti fantasma (umidita', insetti sul telaio, luce artificiale)
+         vengono letti come un secondo dito, e la mappa parte a zoomare e
+         ruotare da sola. Lo zoom resta sui pulsanti e sul doppio tocco, che
+         un solo dito basta a fare: meglio perdere un gesto che avere una
+         mappa che si muove quando nessuno la tocca. */
+      touchZoomRotate: false,
       keyboard: false
     });
   } catch (e) {
@@ -2115,6 +2156,28 @@ function mostraStatistiche() {
 
   titolo('Lingua scelta', null);
   classifica(lingue, 4);
+
+  titolo('Tocchi multipli rilevati',
+    'quante volte il pannello ha annunciato un secondo dito: se si addensano in certe ore, il disturbo e\u2019 ambientale');
+  var mu = d.multi || { totale: 0, ore: {} };
+  corpo.appendChild(el('p', 'stat-nota',
+    'totale: ' + (mu.totale || 0) +
+    (mu.punti !== undefined ? ' \u00b7 il pannello dichiara ' + mu.punti + ' punti di contatto' : '') +
+    (mu.ultimo ? ' \u00b7 ultimo il ' + statOggi(mu.ultimo) : '')));
+  if (mu.totale) {
+    var oreM = Object.keys(mu.ore).sort(function (a, b) { return a - b; });
+    var maxM = 1;
+    oreM.forEach(function (h) { if (mu.ore[h] > maxM) maxM = mu.ore[h]; });
+    oreM.forEach(function (h) {
+      var r = el('div', 'stat-riga');
+      var barra = el('div', 'stat-barra');
+      barra.style.width = Math.max(4, Math.round(mu.ore[h] / maxM * 100)) + '%';
+      r.appendChild(el('b', null, (h.length < 2 ? '0' + h : h) + ':00'));
+      r.appendChild(barra);
+      r.appendChild(el('span', null, mu.ore[h]));
+      corpo.appendChild(r);
+    });
+  }
 
   titolo('Schermo sempre acceso', 'esito della richiesta al monitor di non spegnersi');
   var sc = (d.schermo || {});
