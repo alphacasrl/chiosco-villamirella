@@ -84,8 +84,9 @@ var CONFIG = {
   STANDBY_MS: 600000,   /* dopo 10 minuti parte il video di attesa */
   /* Il pannello LG si blocca dopo circa mezz'ora di attesa. Ricaricare la
      pagina rimette in piedi contesto WebGL e temporizzatori senza che nessuno
-     debba toccare nulla. Portare a 0 per disattivare la prova. */
-  RICARICA_MS: 1800000,
+     debba toccare nulla. Sta a 29 minuti apposta: deve scattare PRIMA del
+     blocco, non insieme. Portare a 0 per disattivare la prova. */
+  RICARICA_MS: 1740000,
   GRUPPO_INIZIALE: 'mare'
 };
 
@@ -246,18 +247,20 @@ function statChiudiVisita() {
   var suHome = 0;
   v.passi.forEach(function (p) { if (p[0] === 'home') suHome += p[1]; });
   var durata = Math.max(0, lordo - suHome);
-  /* lo scarto si decide sul tempo LORDO: una visita che apre una scheda e poi
-     si ferma li' vale, anche se il tempo sull'ultima schermata non e'
-     misurabile e la durata netta risulta minima */
-  if (v.n <= 1 && lordo < 3) return;
+  /* Chi tocca lo schermo e resta sulla sola schermata iniziale non viene
+     registrato: puo' essere un urto, qualcuno che passa, o chi si affaccia
+     senza cercare niente. Si contano le visite che hanno aperto almeno un
+     contenuto. (Il tempo LORDO resta la base del calcolo della durata: una
+     visita che apre una scheda e si ferma li' vale comunque, anche se il
+     tempo sull'ultima schermata non e' misurabile.) */
+  if (v.n <= 1) return;
   var d = statLeggi();
   var g = statOggi(v.avvio);
-  var r = d.giorni[g] || { s: 0, sec: 0, passi: 0, oltre: 0, ore: {}, lin: {} };
+  var r = d.giorni[g] || { s: 0, sec: 0, passi: 0, ore: {}, lin: {} };
   var oraDelGiorno = new Date(v.avvio).getHours();
   r.s++;
   r.sec += durata;
   r.passi += v.n;
-  if (v.n > 1) r.oltre++;
   r.ore[oraDelGiorno] = (r.ore[oraDelGiorno] || 0) + 1;
   r.lin[v.lingua] = (r.lin[v.lingua] || 0) + 1;
   d.giorni[g] = r;
@@ -1913,10 +1916,10 @@ function mostraStatistiche() {
 
   /* ---------------- quadro d'insieme ---------------- */
   var giorni = Object.keys(d.giorni).sort();
-  var tot = { s: 0, sec: 0, passi: 0, oltre: 0 };
+  var tot = { s: 0, sec: 0, passi: 0 };
   giorni.forEach(function (g) {
     var r = d.giorni[g];
-    tot.s += r.s; tot.sec += r.sec; tot.passi += r.passi; tot.oltre += r.oltre;
+    tot.s += r.s; tot.sec += r.sec; tot.passi += r.passi;
   });
   var oggi = statOggi();
   var settimana = statLunedi(oggi);
@@ -1938,15 +1941,11 @@ function mostraStatistiche() {
   cifra(qGiorno.s, 'visite oggi');
   cifra(qSett.s, 'questa settimana');
   cifra(tot.s ? statDurata(Math.round(tot.sec / tot.s)) : '\u2014', 'durata media');   /* gia' al netto della home */
-  cifra(tot.s ? Math.round(tot.oltre / tot.s * 100) + '%' : '—', 'oltre la home');
   cifra(tot.s ? (tot.passi / tot.s).toFixed(1) : '\u2014', 'schermate a visita');
   corpo.appendChild(q);
   corpo.appendChild(el('p', 'stat-nota',
-    'Le durate escludono il tempo passato sulla schermata iniziale: contano solo i contenuti.'));
-  if (tot.s && tot.oltre / tot.s < 0.5) {
-    corpo.appendChild(el('p', 'stat-nota',
-      'Meno di una visita su due va oltre la schermata iniziale: molti toccano e se ne vanno.'));
-  }
+    'Si contano solo le visite che hanno aperto almeno un contenuto, e le durate '
+    + 'escludono il tempo passato sulla schermata iniziale.'));
 
   /* ---------------- giorno per giorno ---------------- */
   titolo('Ultimi 14 giorni', 'barra = visite; a destra il tempo d\u2019uso totale');
@@ -2090,10 +2089,10 @@ function statEsporta() {
     ].join(';'));
   });
   righe.push('');
-  righe.push('data;visite;secondi_totali;schermate;visite_oltre_la_home');
+  righe.push('data;visite;secondi_totali;schermate');
   Object.keys(d.giorni).sort().forEach(function (g) {
     var r = d.giorni[g];
-    righe.push([g, r.s, r.sec, r.passi, r.oltre].join(';'));
+    righe.push([g, r.s, r.sec, r.passi].join(';'));
   });
   var testo = righe.join('\r\n');
   try {
