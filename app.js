@@ -82,6 +82,10 @@ var CONFIG = {
 
   IDLE_MS: 120000,      /* dopo 2 minuti fermi si torna alla schermata iniziale */
   STANDBY_MS: 600000,   /* dopo 10 minuti parte il video di attesa */
+  /* Il pannello LG si blocca dopo circa mezz'ora di attesa. Ricaricare la
+     pagina rimette in piedi contesto WebGL e temporizzatori senza che nessuno
+     debba toccare nulla. Portare a 0 per disattivare la prova. */
+  RICARICA_MS: 1800000,
   GRUPPO_INIZIALE: 'mare'
 };
 
@@ -234,9 +238,18 @@ function statChiudiVisita() {
   if (v.passi.length < STAT_PASSI_MAX) {
     v.passi.push([v.dove, Math.min(STAT_DWELL_MAX, Math.round((v.ultimo - v.dal) / 1000))]);
   }
-  var durata = Math.round((v.ultimo - v.avvio) / 1000);
-  /* sfioramenti di passaggio: non sono un uso del chiosco */
-  if (v.n <= 1 && durata < 3) return;
+  var lordo = Math.round((v.ultimo - v.avvio) / 1000);
+  /* Il tempo fermi sulla SCHERMATA INIZIALE non e' uso del chiosco: e' la
+     schermata su cui il chiosco sta comunque, e chi si guarda intorno o si
+     avvicina senza cercare niente la lascia aperta. La durata registrata e'
+     quindi il solo tempo passato sui contenuti. */
+  var suHome = 0;
+  v.passi.forEach(function (p) { if (p[0] === 'home') suHome += p[1]; });
+  var durata = Math.max(0, lordo - suHome);
+  /* lo scarto si decide sul tempo LORDO: una visita che apre una scheda e poi
+     si ferma li' vale, anche se il tempo sull'ultima schermata non e'
+     misurabile e la durata netta risulta minima */
+  if (v.n <= 1 && lordo < 3) return;
   var d = statLeggi();
   var g = statOggi(v.avvio);
   var r = d.giorni[g] || { s: 0, sec: 0, passi: 0, oltre: 0, ore: {}, lin: {} };
@@ -259,6 +272,16 @@ window.addEventListener('pagehide', statChiudiVisita);
 document.addEventListener('visibilitychange', function () {
   if (document.visibilityState === 'hidden') statChiudiVisita();
 });
+
+/* traccia delle ricariche automatiche: serve a capire se la prova funziona */
+function statSegnaRicarica() {
+  var d = statLeggi();
+  var g = statOggi();
+  d.ricariche = d.ricariche || {};
+  d.ricariche[g] = (d.ricariche[g] || 0) + 1;
+  d.ultimaRicarica = Date.now();
+  statScrivi(d);
+}
 
 /* i codici interni diventano i nomi che si leggono sul chiosco */
 function statEtichetta(c) {
@@ -1745,18 +1768,57 @@ tocca($('#reset'), ricomincia);
       if (++tocchi >= 3) { tocchi = 0; setTimeout(entraStandby, 50); }
     });
   })();
+  /* =====================================================================
+     RICARICA DI SICUREZZA — il monitor si blocca dopo circa mezz'ora di
+     attesa. Si ricarica la pagina quando e' fermo da tanto: nessuno la sta
+     guardando, quindi non si interrompe nessuno.
+     Prima di ricaricare si verifica che il sito sia raggiungibile: senza
+     questo controllo, una ricarica con la linea giu' lascerebbe lo schermo
+     sulla pagina d'errore del browser fino al mattino dopo.
+     ===================================================================== */
+  var tr = null;
+  function provaRicarica() {
+    if (!CONFIG.RICARICA_MS) return;
+    statChiudiVisita();
+    var prova = 'index.html?vivo=' + Date.now();
+    var riprova = function () { tr = setTimeout(provaRicarica, 300000); };
+    try {
+      fetch(prova, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        if (!r || !r.ok) { riprova(); return; }
+        try { sessionStorage.setItem('vm-ricarica', String(Date.now())); } catch (e) {}
+        statSegnaRicarica();
+        location.reload();
+      })['catch'](riprova);
+    } catch (e) { riprova(); }
+  }
   function azzera() {
     statTocco();
     esciStandby();
     if (t) clearTimeout(t);
     if (ts) clearTimeout(ts);
+    if (tr) clearTimeout(tr);
     t = setTimeout(ricomincia, CONFIG.IDLE_MS);
     ts = setTimeout(entraStandby, CONFIG.STANDBY_MS);
+    if (CONFIG.RICARICA_MS) tr = setTimeout(provaRicarica, CONFIG.RICARICA_MS);
   }
   ['pointerdown', 'pointerup', 'wheel', 'touchstart'].forEach(function (ev) {
     document.addEventListener(ev, azzera, { passive: true });
   });
   azzera();
+  /* se si riparte da una ricarica automatica si torna subito in attesa: senza
+     questo, lo schermo mostrerebbe la schermata iniziale a nessuno per dieci
+     minuti a ogni giro, tutta la notte */
+  (function () {
+    var q = null;
+    try { q = sessionStorage.getItem('vm-ricarica'); } catch (e) {}
+    if (!q) return;
+    try { sessionStorage.removeItem('vm-ricarica'); } catch (e) {}
+    /* se qui andasse storto qualcosa lo schermo deve restare comunque usabile:
+       peggio della schermata iniziale accesa c'e' solo un chiosco morto */
+    setTimeout(function () {
+      try { entraStandby(); } catch (e) {}
+    }, 1500);
+  })();
 })();
 
 /* =====================================================================
@@ -1875,10 +1937,12 @@ function mostraStatistiche() {
   }
   cifra(qGiorno.s, 'visite oggi');
   cifra(qSett.s, 'questa settimana');
-  cifra(tot.s ? statDurata(Math.round(tot.sec / tot.s)) : '\u2014', 'durata media');
+  cifra(tot.s ? statDurata(Math.round(tot.sec / tot.s)) : '\u2014', 'durata media');   /* gia' al netto della home */
   cifra(tot.s ? Math.round(tot.oltre / tot.s * 100) + '%' : '—', 'oltre la home');
   cifra(tot.s ? (tot.passi / tot.s).toFixed(1) : '\u2014', 'schermate a visita');
   corpo.appendChild(q);
+  corpo.appendChild(el('p', 'stat-nota',
+    'Le durate escludono il tempo passato sulla schermata iniziale: contano solo i contenuti.'));
   if (tot.s && tot.oltre / tot.s < 0.5) {
     corpo.appendChild(el('p', 'stat-nota',
       'Meno di una visita su due va oltre la schermata iniziale: molti toccano e se ne vanno.'));
@@ -1957,6 +2021,7 @@ function mostraStatistiche() {
        Contarla come zero falserebbe verso il basso proprio le schede su cui la
        gente si ferma di piu'. Per "Dove si fermano" invece va benissimo. */
     p.slice(0, -1).forEach(function (passo) {
+      if (passo[0] === 'home') return;   /* il tempo sulla home non si conta */
       dwell[passo[0]] = (dwell[passo[0]] || 0) + passo[1];
       dwellN[passo[0]] = (dwellN[passo[0]] || 0) + 1;
     });
@@ -1992,6 +2057,15 @@ function mostraStatistiche() {
 
   titolo('Lingua scelta', null);
   classifica(lingue, 4);
+
+  titolo('Ricariche automatiche', 'la pagina si ricarica da sola dopo ' +
+    Math.round(CONFIG.RICARICA_MS / 60000) + ' minuti di inattivita\u2019, per evitare che il monitor si blocchi');
+  if (d.ultimaRicarica) {
+    var ur = new Date(d.ultimaRicarica);
+    corpo.appendChild(el('p', 'stat-nota', 'ultima: ' + statOggi(d.ultimaRicarica) + ' alle ' +
+      ('0' + ur.getHours()).slice(-2) + ':' + ('0' + ur.getMinutes()).slice(-2)));
+  }
+  classifica(d.ricariche || {}, 10);
 
   /* ---------------- conteggi storici ---------------- */
   titolo('Sezioni e pagine', 'aperture totali, comprese quelle registrate prima del registro');
