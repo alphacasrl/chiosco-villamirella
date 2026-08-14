@@ -1060,13 +1060,13 @@ function avvia() {
       maxPitch: 70,
       dragRotate: false,       /* la rotazione passa dalla bussola */
       touchPitch: false,       /* servirebbero due dita che non esistono */
-      /* La pinch a due dita e' SPENTA di proposito. Su questo pannello i
-         contatti fantasma (umidita', insetti sul telaio, luce artificiale)
-         vengono letti come un secondo dito, e la mappa parte a zoomare e
-         ruotare da sola. Lo zoom resta sui pulsanti e sul doppio tocco, che
-         un solo dito basta a fare: meglio perdere un gesto che avere una
-         mappa che si muove quando nessuno la tocca. */
-      touchZoomRotate: false,
+      /* Pinch a due dita ATTIVA: e' comoda e il titolare la vuole. Sul
+         pannello del chiosco i contatti fantasma la fanno partire da sola;
+         l'ipotesi in verifica dal 14/08/2026 e' che dipendano dalla stanza
+         poco illuminata. Il conteggio dei tocchi multipli per ora del giorno,
+         nel pannello di reception, serve a misurare se accendere la luce li
+         fa sparire. Se non bastasse, si rimette a false da qui. */
+      touchZoomRotate: true,
       keyboard: false
     });
   } catch (e) {
