@@ -33,7 +33,7 @@ window.GUIDA = {
     { id: "itinerari",   nome: "Itinerari", nome_en: "Itineraries",         icona: "itinerari",   colore: "#1f8074", sezione: "itinerari" },
     { id: "borghi",      nome: "Borghi e paesi", nome_en: "Villages & towns",    icona: "borghi",      colore: "#c96a2b", sezione: "cat:borghi" },
     { id: "natura",      nome: "Natura e oasi", nome_en: "Nature & oases",     icona: "natura",      colore: "#2f9e60", sezione: "cat:natura" },
-    { id: "archeologia", nome: "Archeologia", nome_en: "Archaeology",       icona: "archeologia", colore: "#b5892f", sezione: "cat:archeologia" },
+    { id: "archeologia", nome: "Archeologia e musei", nome_en: "Archaeology & museums", icona: "archeologia", colore: "#b5892f", sezione: "cat:archeologia" },
     { id: "santuari",    nome: "Santuari e chiese", nome_en: "Sanctuaries & churches",          icona: "santuari",    colore: "#9550a8", sezione: "cat:santuari" },
     { gruppo: "Il tuo soggiorno", gruppo_en: "Your stay" },
     { id: "ristoranti",  nome: "Ristoranti", nome_en: "Restaurants",        icona: "ristoranti",  colore: "#d64550", sezione: "g:ristoranti" },

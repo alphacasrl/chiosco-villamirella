@@ -1240,6 +1240,78 @@ window.LUOGHI = [
     inEvidenza: false
   },
   {
+    id: "sito-molpa",
+    nome: "Sito archeologico della Molpa",
+    categoria: "archeologia",
+    lat: "40.032889",   lng: "15.303729",   verified: true,
+    notaCoordinate: "OpenStreetMap [archaeological_site] — sul promontorio della Molpa, alla foce del Mingardo; accanto ci sono le rovine del castello (40.032473, 15.303738)",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "1,5 km",   tempoAuto: "5 min di macchina",
+    inEvidenza: false
+  },
+  {
+    id: "cenotafio-palinuro",
+    nome: "Cenotafio di Palinuro",
+    categoria: "archeologia",
+    lat: "40.083875",   lng: "15.261240",   verified: true,
+    notaCoordinate: "OpenStreetMap [archaeological_site]",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "5,3 km",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "muvip-camerota",
+    nome: "MUVIP — Museo Virtuale del Paleolitico",
+    categoria: "archeologia",
+    lat: "40.000879",   lng: "15.376191",   verified: true,
+    notaCoordinate: "OpenStreetMap [museum] — al porto di Marina di Camerota, accanto all'ASL",
+    sommario: "Museo dedicato alle grotte della costa di Camerota e alla presenza dell'uomo nel Paleolitico, con una sala immersiva. Si trova al porto di Marina di Camerota. Per orari e prenotazioni conviene telefonare.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "8,3 km",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "antiquarium-roccagloriosa",
+    nome: "Antiquarium di Roccagloriosa",
+    categoria: "archeologia",
+    lat: "40.108604",   lng: "15.430784",   verified: true,
+    notaCoordinate: "OpenStreetMap [museum] — l'area archeologica lucana si trova poco piu' a monte (40.126527, 15.446651)",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "13,3 km",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "palazzo-vinciprova-pioppi",
+    nome: "Palazzo Vinciprova a Pioppi — Museo Vivo del Mare e Dieta Mediterranea",
+    categoria: "archeologia",
+    lat: "40.174227",   lng: "15.089287",   verified: true,
+    notaCoordinate: "OpenStreetMap [museum] — i due musei condividono lo stesso palazzo, quindi un solo punto sulla mappa",
+    sommario: "Nel palazzo storico di Pioppi convivono due musei: il Museo Vivo del Mare, con tredici vasche che ospitano pesci e organismi del mare del Cilento, e il Museo Vivente della Dieta Mediterranea, dedicato allo stile di vita studiato da Ancel Keys, che a Pioppi visse per circa quarant'anni.",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "22,8 km",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
+    id: "civitella-moio",
+    nome: "Parco archeologico della Civitella",
+    categoria: "archeologia",
+    lat: "40.257851",   lng: "15.275872",   verified: true,
+    notaCoordinate: "OpenStreetMap [archaeological_site] — Moio della Civitella",
+    sommario: "",
+    immagine: "",
+    articoli: [],
+    distanzaKm: "23,7 km",   tempoAuto: "",
+    inEvidenza: false
+  },
+  {
     id: "antiquarium",
     nome: "Antiquarium di Palinuro",
     categoria: "archeologia",
