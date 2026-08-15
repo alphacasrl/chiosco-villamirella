@@ -98,6 +98,20 @@ window.GUIDA = {
               "Access by persons not expressly authorised will be considered trespassing on private property and prosecuted as provided by law."
             ]
           } },
+        { t: "Nella struttura", t_en: "Around the residence", icona: "regole" },
+        { kv: [
+          ["Piscina", "aperta dalle 9:00 alle 20:00; sorveglia i bambini; non sono ammessi tuffi", "piscina"],
+          ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto", "auto"],
+          ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina", "animali"],
+          ["Non dare cibo agli animali", "è severamente vietato dare da mangiare agli animali — compreso Spritz, il golden retriever mascotte della struttura: può essere un rischio per la loro salute e attirare animali indesiderati", "animali"],
+          ["Droni", "è vietato l'uso di droni (UAV) all'interno della struttura", "drone"]
+        ], kv_en: [
+          ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed", "piscina"],
+          ["Parking", "park in the internal car park using one space only", "auto"],
+          ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area", "animali"],
+          ["Do not feed the animals", "feeding animals is strictly forbidden — including Spritz, our golden retriever mascot: it can harm their health and attract unwanted animals", "animali"],
+          ["Drones", "flying drones (UAVs) is not allowed anywhere within the residence", "drone"]
+        ]},
         { t: "In appartamento", t_en: "In the apartment", icona: "casa" },
         { kv: [
           ["Raccolta differenziata", "l'isola ecologica è all'interno del residence, in fondo al parcheggio", "riciclo"],
@@ -113,20 +127,6 @@ window.GUIDA = {
           ["Fridge", "close the door properly and keep the temperature set to 2", "frigo"],
           ["Cleaning", "with the residence formula, daily tidying is up to you; extra cleaning is available on request, for a fee", "pulizia"],
           ["Air conditioning", "do not keep windows open while it is on; switch it off when you leave", "aria"]
-        ]},
-        { t: "Nella struttura", t_en: "Around the residence", icona: "regole" },
-        { kv: [
-          ["Piscina", "aperta dalle 9:00 alle 20:00; sorveglia i bambini; non sono ammessi tuffi", "piscina"],
-          ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto", "auto"],
-          ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina", "animali"],
-          ["Non dare cibo agli animali", "è severamente vietato dare da mangiare agli animali — compreso Spritz, il golden retriever mascotte della struttura: può essere un rischio per la loro salute e attirare animali indesiderati", "animali"],
-          ["Droni", "è vietato l'uso di droni (UAV) all'interno della struttura", "drone"]
-        ], kv_en: [
-          ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed", "piscina"],
-          ["Parking", "park in the internal car park using one space only", "auto"],
-          ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area", "animali"],
-          ["Do not feed the animals", "feeding animals is strictly forbidden — including Spritz, our golden retriever mascot: it can harm their health and attract unwanted animals", "animali"],
-          ["Drones", "flying drones (UAVs) is not allowed anywhere within the residence", "drone"]
         ]},
         { avviso: "Queste regole sono un promemoria indicativo: fa sempre fede il regolamento completo della struttura.",
           avviso_en: "These rules are an indicative reminder: the full house regulations always prevail." }
