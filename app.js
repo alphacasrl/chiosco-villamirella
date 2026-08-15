@@ -1568,6 +1568,7 @@ var ICONE = {
   pulizia:    '<path d="M14 3l-2.5 8"/><path d="M8 11h8l1.5 9h-11z"/><path d="M9.5 14.5v3M12 14.5v3M14.5 14.5v3"/>',
   aria:       '<path d="M4 8h10a2.5 2.5 0 1 0-2.5-2.5"/><path d="M4 12h14a2.5 2.5 0 1 1-2.5 2.5"/><path d="M4 16h7a2.2 2.2 0 1 1-2.2 2.2"/>',
   piscina:    '<path d="M9 16V5.5a1.8 1.8 0 0 1 3.6 0M15 16V5.5"/><path d="M9 8.5h6M9 12.5h6"/><path d="M3 18.5c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/>',
+  lavanderia: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8.5h16"/><circle cx="12" cy="14.5" r="4"/><circle cx="12" cy="14.5" r="1.5"/><circle cx="7" cy="5.8" r=".8"/><circle cx="9.8" cy="5.8" r=".8"/>',
   drone:      '<circle cx="5.2" cy="5.2" r="2.3"/><circle cx="18.8" cy="5.2" r="2.3"/><circle cx="5.2" cy="18.8" r="2.3"/><circle cx="18.8" cy="18.8" r="2.3"/><rect x="9.2" y="9.2" width="5.6" height="5.6" rx="1.2"/><path d="M6.9 6.9L9.2 9.2M17.1 6.9L14.8 9.2M6.9 17.1L9.2 14.8M17.1 17.1L14.8 14.8"/>',
   ospiti:     '<circle cx="9" cy="8" r="3"/><path d="M4 20v-1.5A4.5 4.5 0 0 1 8.5 14h1A4.5 4.5 0 0 1 14 18.5V20"/><circle cx="17" cy="9.2" r="2.4"/><path d="M15.8 13.5c2.8 0 4.7 1.7 4.7 4.3V20"/>',
   animali:    '<circle cx="7" cy="9" r="1.6"/><circle cx="11" cy="6.5" r="1.6"/><circle cx="15.5" cy="7.5" r="1.6"/><circle cx="18.4" cy="11" r="1.5"/><path d="M8.5 15.5c0-2 1.8-3.8 4-3.8s4 1.8 4 3.8c0 1.7-1.2 3-2.8 3-1 0-1.2-.4-2.2-.4s-1.2.4-2.2.4c-1.6 0-2.8-1.3-2.8-3z"/>',
