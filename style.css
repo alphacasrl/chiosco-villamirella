@@ -779,3 +779,9 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
   color: var(--marrone-scuro);
 }
 .regolamento-punti li::marker { font-weight: 700; color: var(--blu); }
+
+/* orario di una linea a due versi: la fascia colorata richiama il colore
+   della direzione sulla mappa */
+.orari-titolo.con-verso {
+  border-left: 6px solid currentColor; padding-left: .55rem;
+}

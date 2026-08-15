@@ -608,9 +608,9 @@ var GRUPPI = [
         pinIcona: b.card.pin || '',
         foglioOrari: b.card.foglioOrari || '',
         /* le fermate delle linee stanno in linee.js, il file che si corregge
-           a mano con modifica-linee.html; quelle nella guida fanno da riserva */
-        fermate: (b.card.linea && window.LINEE_BUS && window.LINEE_BUS[b.card.linea]
-                  && window.LINEE_BUS[b.card.linea].fermate) || b.card.fermate || null,
+           a mano con modifica-linee.html; quelle nella guida fanno da riserva.
+           Se la linea ha due versi, ogni fermata porta il colore del suo. */
+        fermate: fermateDellaLinea(b.card),
         nome_en: b.card.nome_en || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
       });
@@ -621,6 +621,22 @@ var GRUPPI = [
                   voci: function () { return pseudo.map(voceLuogo); } });
   });
 })();
+
+/* Le fermate di una linea: se ha due versi si concatenano, e ognuna si porta
+   dietro il colore del proprio verso — lo stesso che avra' sulla mappa e in
+   testa alla tabella dell'orario. */
+function fermateDellaLinea(card) {
+  var L = (card.linea && window.LINEE_BUS) ? window.LINEE_BUS[card.linea] : null;
+  if (!L) return card.fermate || null;
+  if (!L.versi) return L.fermate || card.fermate || null;
+  var out = [];
+  L.versi.forEach(function (s) {
+    (s.fermate || []).forEach(function (f) {
+      out.push({ nome: f.nome, lat: f.lat, lng: f.lng, colore: s.colore, verso: s.id });
+    });
+  });
+  return out.length ? out : (card.fermate || null);
+}
 
 function luoghiDelGruppo(g) {
   var voci = g.voci(), visti = {}, out = [];
@@ -851,7 +867,12 @@ function apriDettaglio(v) {
   if (d.orari) {
     for (var oi = 0; oi < d.orari.length; oi++) {
       var oz = d.orari[oi];
-      arts.appendChild(el('h4', 'orari-titolo', T2(oz.t, oz.t_en)));
+      var ht = el('h4', 'orari-titolo', T2(oz.t, oz.t_en));
+      /* stesso colore del verso sulla mappa: cosi' si capisce a colpo d'occhio
+         a quale delle due direzioni si riferisce la tabella */
+      var col = coloreDelVerso(d, oi);
+      if (col) { ht.classList.add('con-verso'); ht.style.borderLeftColor = col; }
+      arts.appendChild(ht);
       for (var ri = 0; ri < oz.righe.length; ri++) {
         var rr = el('div', 'orari-riga');
         rr.appendChild(el('b', null, oz.righe[ri][0]));
@@ -885,7 +906,7 @@ function apriDettaglio(v) {
 
   var fer = (v.tipo === 'luogo' && d.fermate) ? d.fermate : null;
   setSorgente('fermate', { type: 'FeatureCollection', features: (fer || []).map(function (f) {
-    return { type: 'Feature', properties: { nome: f.nome },
+    return { type: 'Feature', properties: { nome: f.nome, colore: f.colore || '#5b6ec9' },
              geometry: { type: 'Point', coordinates: [f.lng, f.lat] } };
   }) });
   evidenzia(v);
@@ -1007,15 +1028,18 @@ function stileMappa() {
       /* percorso: bordo bianco sotto, colore sopra; tratteggio se indicativo */
       { id: 'percorso-bordo', type: 'line', source: 'percorso',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#ffffff', 'line-width': 7, 'line-opacity': .9 } },
+        paint: { 'line-color': '#ffffff', 'line-width': 7, 'line-opacity': .9,
+                 'line-offset': ['coalesce', ['get', 'scarto'], 0] } },
       { id: 'percorso-linea', type: 'line', source: 'percorso',
         filter: ['!=', ['get', 'indicativo'], true],
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': CONFIG.COLORE_SCELTO, 'line-width': 4 } },
+        paint: { 'line-color': ['coalesce', ['get', 'colore'], CONFIG.COLORE_SCELTO], 'line-width': 4,
+                 'line-offset': ['coalesce', ['get', 'scarto'], 0] } },
       { id: 'percorso-tratteggio', type: 'line', source: 'percorso',
         filter: ['==', ['get', 'indicativo'], true],
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': CONFIG.COLORE_SCELTO, 'line-width': 4, 'line-dasharray': [1.6, 1.6] } },
+        paint: { 'line-color': ['coalesce', ['get', 'colore'], CONFIG.COLORE_SCELTO], 'line-width': 4,
+                 'line-dasharray': [1.6, 1.6], 'line-offset': ['coalesce', ['get', 'scarto'], 0] } },
 
       /* luogo scelto: anello rosso sotto il cerchio */
       { id: 'scelto-anello', type: 'circle', source: 'scelto',
@@ -1025,7 +1049,7 @@ function stileMappa() {
 
       /* fermate della linea aperta: puntini con nome */
       { id: 'fermate-punti', type: 'circle', source: 'fermate',
-        paint: { 'circle-radius': 5.5, 'circle-color': '#5b6ec9',
+        paint: { 'circle-radius': 5.5, 'circle-color': ['coalesce', ['get', 'colore'], '#5b6ec9'],
                  'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } },
       { id: 'fermate-nomi', type: 'symbol', source: 'fermate',
         layout: { 'text-field': ['get', 'nome'], 'text-font': CONFIG.FONT_MAPPA,
@@ -1213,13 +1237,32 @@ function evidenzia(v) {
   setSorgente('scelto', { type: 'FeatureCollection', features: punti });
 }
 
+/* il colore del verso n-esimo della linea aperta, se ne ha due */
+function coloreDelVerso(d, i) {
+  if (!d || !d.id || d.id.indexOf('linea-') !== 0 || !window.LINEE_BUS) return null;
+  var L = window.LINEE_BUS[d.id.slice(6)];
+  if (!L || !L.versi || !L.versi[i]) return null;
+  return L.versi[i].colore;
+}
+
 function disegnaPercorso(v) {
   var f = [];
   if (v) {
     var p = PERCORSI[v.dato.id];
-    if (p && p.linee && p.linee.length) {
+    if (p && p.versi && p.versi.length) {
+      /* andata e ritorno su strade diverse: due colori, e uno scarto di pochi
+         pixel per lato cosi' restano distinguibili anche dove combaciano */
+      p.versi.forEach(function (s, k) {
+        (s.linee || []).forEach(function (linea) {
+          f.push({ type: 'Feature',
+                   properties: { indicativo: !!p.indicativo, colore: s.colore,
+                                 scarto: (k % 2 === 0) ? 3 : -3 },
+                   geometry: { type: 'LineString', coordinates: linea } });
+        });
+      });
+    } else if (p && p.linee && p.linee.length) {
       for (var i = 0; i < p.linee.length; i++) {
-        f.push({ type: 'Feature', properties: { indicativo: !!p.indicativo },
+        f.push({ type: 'Feature', properties: { indicativo: !!p.indicativo, scarto: 0 },
                  geometry: { type: 'LineString', coordinates: p.linee[i] } });
       }
     }
