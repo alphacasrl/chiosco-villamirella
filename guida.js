@@ -451,8 +451,8 @@ window.GUIDA = {
     },
 
     salute: {
-      titolo: "Salute ed emergenze",
-      titolo_en: "Health & emergencies",
+      titolo: "Salute e farmacie",
+      titolo_en: "Health & pharmacies",
       mappa: true,
       blocchi: [
         { kv: [
