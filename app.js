@@ -1685,7 +1685,9 @@ function disegnaHome() {
   for (var i = 0; i < m.length; i++) {
     if (m[i].gruppo) {
       griglia.appendChild(el('div', 'gruppo-mattonelle', T2(m[i].gruppo, m[i].gruppo_en)));
-      fascia = el('div', 'fascia');
+      /* i gruppi marcati "minore" hanno tessere all'80%: la sezione che conta
+         davvero e' quella dei luoghi, e le altre non devono rubarle spazio */
+      fascia = el('div', m[i].minore ? 'fascia minore' : 'fascia');
       griglia.appendChild(fascia);
       continue;
     }

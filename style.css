@@ -361,10 +361,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   margin: .3rem 0 .1rem;
 }
 .mattonella {
-  /* 5.9rem invece di 6.4: con tre gruppi invece di due la schermata
-     iniziale sforava di 32 px e cominciava a scorrere. La regola resta
-     quella data dal titolare: la home non si scorre mai. */
-  min-height: 5.9rem; padding: .55rem .4rem .5rem;
+  min-height: 6.4rem; padding: .6rem .4rem .55rem;
   background: var(--bianco); border: 1px solid #dfe5eb; border-radius: 0;
   box-shadow: 0 2px 6px rgba(4, 11, 17, .07);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem;
@@ -755,3 +752,12 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
   flex: none; height: 7rem; margin: 0 1.2rem 1rem; font-size: .6rem;
   font-family: monospace; border: 1px solid #dfe5eb; padding: .4rem; resize: none;
 }
+
+/* Gruppi secondari: tessere all'80% dell'altezza di "Esplora il territorio",
+   che e' la sezione a cui il titolare tiene di piu'. Rimpicciolire questi due
+   restituisce al primo gruppo la dimensione piena e tiene la schermata
+   iniziale dentro l'altezza dello schermo, senza scorrimento. */
+.fascia.minore .mattonella { min-height: 5.12rem; padding: .45rem .35rem .4rem; gap: .35rem; }
+.fascia.minore .mattonella .cerchio { width: 2.4rem; height: 2.4rem; }
+.fascia.minore .mattonella .cerchio.con-img { width: 2.64rem; height: 2.64rem; }
+.fascia.minore .mattonella .cerchio svg { width: 1.36rem; height: 1.36rem; }
