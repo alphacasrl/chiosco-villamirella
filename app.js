@@ -591,7 +591,9 @@ var GRUPPI = [
     (pag.blocchi || []).forEach(function (b) {
       if (!b.card) return;
       pseudo.push({
-        id: 'g-' + pid + '-' + pseudo.length,
+        /* le linee autobus prendono un id stabile: cosi' i tracciati di
+           linee.js si agganciano ai percorsi e la mappa li disegna da se' */
+        id: b.card.linea ? 'linea-' + b.card.linea : 'g-' + pid + '-' + pseudo.length,
         nome: b.card.nome, categoria: b.card.cat || pid,
         lat: (b.card.lat !== undefined ? b.card.lat : null),
         lng: (b.card.lng !== undefined ? b.card.lng : null),

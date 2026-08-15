@@ -154,10 +154,16 @@ window.GUIDA = {
           dove: "Piazza Vittorio Veneto, Sapri — Intercity e Frecce", dove_en: "Piazza Vittorio Veneto, Sapri — Intercity and high-speed trains",
           testo: "", testo_en: "" } },
         { t: "Linee autobus Infante — estate 2026", t_en: "Infante bus lines — summer 2026", icona: "muoversi" },
-        { card: { nome: "Bus urbano di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/urbano-palinuro.png",
+        { card: { linea: "urbano-palinuro", nome: "Bus urbano di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/urbano-palinuro.png",
           fermate: [
-            { nome: "Piazza Virgilio", lat: 40.034602, lng: 15.287262 },
-            { nome: "Porto di Palinuro", lat: 40.031163, lng: 15.277197 }
+            { nome: "Palinuro Rotatoria (ex Club Med)", lat: 40.042721, lng: 15.289573 },
+            { nome: "Palinuro (Poste)", lat: 40.038275, lng: 15.287669 },
+            { nome: "Palinuro (Ficocella)", lat: 40.034769, lng: 15.285517 },
+            { nome: "Palinuro (Piazza Virgilio)", lat: 40.033797, lng: 15.288713 },
+            { nome: "Palinuro Belvedere (Core a Core)", lat: 40.028661, lng: 15.289119 },
+            { nome: "Porto di Palinuro", lat: 40.029422, lng: 15.277076 },
+            { nome: "Palinuro (sopra Chiesa)", lat: 40.033706, lng: 15.289036 },
+            { nome: "Palinuro (San Paolo)", lat: 40.037794, lng: 15.290477 }
           ],
           dove: "Tutti i giorni dall'1 al 31 agosto 2026", dove_en: "Every day, 1–31 August 2026",
           testo: "Anello del paese: Rotatoria ex Club Med, Poste, Ficocella, Piazza Virgilio, Belvedere, Babylon, parcheggio porto, Porto e ritorno. Biglietti su infantebus.it (fino al 30% di sconto rispetto a bordo) — assistenza WhatsApp 388 3095051.",
@@ -183,10 +189,15 @@ window.GUIDA = {
               ["Rotatoria ex Club Med", "10:00  10:45  11:45  12:45  13:30  16:15  17:15  18:15  19:15"]
             ]}
           ] } },
-        { card: { nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/linea-mare.png",
+        { card: { linea: "linea-mare", nome: "Linea mare: Stazione FS Pisciotta - Lidi di Palinuro", icona: "muoversi", foglioOrari: "assets/orari/linea-mare.png",
           fermate: [
-            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738 },
-            { nome: "Lidi delle Saline", lat: 40.062627, lng: 15.278547 }
+            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091375, lng: 15.243289 },
+            { nome: "Caprioli (Bar 3R - La Grotta)", lat: 40.077259, lng: 15.271849 },
+            { nome: "Palinuro - Lidi Bellavista/La Vela", lat: 40.066455, lng: 15.277023 },
+            { nome: "Palinuro - Lidi La Torre/Le Conchiglie", lat: 40.06418, lng: 15.278565 },
+            { nome: "Palinuro - Lidi Sunset/Baia degli Angeli", lat: 40.054127, lng: 15.28257 },
+            { nome: "Palinuro - Lido Mijeo", lat: 40.050474, lng: 15.283376 },
+            { nome: "Palinuro Rotatoria (ex Club Med)", lat: 40.042721, lng: 15.289573 }
           ],
           dove: "Sabato e domenica dal 27 giugno al 30 agosto 2026", dove_en: "Saturdays and Sundays, 27 June – 30 August 2026",
           testo: "Collega la stazione ai lidi di Palinuro passando per Caprioli. Biglietti su infantebus.it — WhatsApp 388 3095051.",
@@ -217,11 +228,15 @@ window.GUIDA = {
               ["Stazione FS Pisciotta-Palinuro", "09:20  10:30  11:30  12:40  16:00  17:20  17:50  18:20"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Pisciotta-Palinuro", icona: "muoversi", foglioOrari: "assets/orari/stazione-pisciotta.png",
+        { card: { linea: "stazione-pisciotta", nome: "Linea da e per Stazione FS Pisciotta-Palinuro", icona: "muoversi", foglioOrari: "assets/orari/stazione-pisciotta.png",
           fermate: [
-            { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
-            { nome: "Palinuro Saline", lat: 40.062627, lng: 15.278547 },
-            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091413, lng: 15.243738 }
+            { nome: "Marina di Camerota Lungomare", lat: 40.000486, lng: 15.374471 },
+            { nome: "Marina di Camerota (Cinema)", lat: 40.002898, lng: 15.371474 },
+            { nome: "Palinuro Trivento", lat: 40.038996, lng: 15.312485 },
+            { nome: "Palinuro Rotatoria (ex Club Med)", lat: 40.042721, lng: 15.289573 },
+            { nome: "Palinuro Saline", lat: 40.04767, lng: 15.285116 },
+            { nome: "Caprioli (Bar 3R - La Grotta)", lat: 40.077259, lng: 15.271849 },
+            { nome: "Stazione FS Pisciotta-Palinuro", lat: 40.091375, lng: 15.243289 }
           ],
           dove: "Tutti i giorni dall'8 giugno al 13 settembre 2026", dove_en: "Every day, 8 June – 13 September 2026",
           testo: "Marina di Camerota - Palinuro - Stazione FS. Fermate principali; il dettaglio completo su infantebus.it.",
@@ -248,10 +263,13 @@ window.GUIDA = {
               ["M. di Camerota Lungomare", "08:40  09:30  10:40  11:40  12:50  14:05  15:20  16:40  18:00  18:30"]
             ]}
           ] } },
-        { card: { nome: "Linea da e per Stazione FS Centola", icona: "muoversi", foglioOrari: "assets/orari/stazione-centola.png",
+        { card: { linea: "stazione-centola", nome: "Linea da e per Stazione FS Centola", icona: "muoversi", foglioOrari: "assets/orari/stazione-centola.png",
           fermate: [
-            { nome: "Marina di Camerota", lat: 40.000151, lng: 15.373751 },
-            { nome: "Stazione FS Centola", lat: 40.091144, lng: 15.345259 }
+            { nome: "Marina di Camerota Lungomare", lat: 40.000486, lng: 15.374471 },
+            { nome: "Marina di Camerota (Cinema)", lat: 40.002898, lng: 15.371474 },
+            { nome: "Palinuro Trivento", lat: 40.038996, lng: 15.312485 },
+            { nome: "Palinuro Rotatoria (ex Club Med)", lat: 40.042721, lng: 15.289573 },
+            { nome: "Stazione FS Centola", lat: 40.090466, lng: 15.346237 }
           ],
           dove: "Solo sabato e domenica dal 13 giugno al 13 settembre 2026", dove_en: "Saturdays and Sundays only, 13 June – 13 September 2026",
           testo: "Marina di Camerota - Palinuro - Stazione FS Centola.",
