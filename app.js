@@ -1572,7 +1572,7 @@ var ICONE = {
   moneta:     '<circle cx="12" cy="12" r="9"/><path d="M15.2 8.6a4.2 4.2 0 1 0 0 6.8"/><path d="M7.8 11.1h5.6M7.8 13.1h5.6"/>',
   pulsanteOn: '<circle cx="12" cy="12" r="9.3"/><path d="M12 6.3v5.2"/><path d="M9.1 8.5a4.4 4.4 0 1 0 5.8 0"/>',
   manopola:   '<circle cx="12" cy="12.8" r="6.2"/><path d="M12 12.8V8.2"/><path d="M4.4 12.8h1.5M18.1 12.8h1.5M6.6 7.4l1.1 1.1M17.4 7.4l-1.1 1.1M12 20.5v-1.5"/>',
-  detersivo:  '<path d="M4.4 10.6h10v9.6a1 1 0 0 1-1 1H5.4a1 1 0 0 1-1-1z"/><path d="M4.4 10.6L6.2 8h6.4l1.8 2.6"/><path d="M6.8 14.4h5.2"/><circle cx="17.7" cy="8.6" r="1.7"/><circle cx="20.6" cy="4.7" r="1.2"/><circle cx="16.4" cy="4.1" r="1"/>',
+  detersivo:  '<path d="M9.2 2.6h3.4v2.6H9.2z"/><path d="M7.6 5.2h6.6a2.8 2.8 0 0 1 2.8 2.8v10.6a2.8 2.8 0 0 1-2.8 2.8H7.6a2.8 2.8 0 0 1-2.8-2.8V8a2.8 2.8 0 0 1 2.8-2.8z"/><path d="M17 9h1.3a2.2 2.2 0 0 1 0 4.4H17"/><path d="M4.8 15.2h12.2"/>',
   play:       '<circle cx="12" cy="12" r="9.2"/><path d="M10.1 8.1l5.9 3.9-5.9 3.9z"/>',
   lavanderia: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8.5h16"/><circle cx="12" cy="14.5" r="4"/><circle cx="12" cy="14.5" r="1.5"/><circle cx="7" cy="5.8" r=".8"/><circle cx="9.8" cy="5.8" r=".8"/>',
   drone:      '<circle cx="5.2" cy="5.2" r="2.3"/><circle cx="18.8" cy="5.2" r="2.3"/><circle cx="5.2" cy="18.8" r="2.3"/><circle cx="18.8" cy="18.8" r="2.3"/><rect x="9.2" y="9.2" width="5.6" height="5.6" rx="1.2"/><path d="M6.9 6.9L9.2 9.2M17.1 6.9L14.8 9.2M6.9 17.1L9.2 14.8M17.1 17.1L14.8 14.8"/>',
