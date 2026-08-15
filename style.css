@@ -761,3 +761,21 @@ body.in-standby #pagina, body.in-standby #cambio-lingua { visibility: hidden; }
 .fascia.minore .mattonella .cerchio { width: 2.4rem; height: 2.4rem; }
 .fascia.minore .mattonella .cerchio.con-img { width: 2.64rem; height: 2.64rem; }
 .fascia.minore .mattonella .cerchio svg { width: 1.36rem; height: 1.36rem; }
+
+/* Regolamento Visite: in cima alle regole e riquadrato, perche' e' la norma
+   che il titolare vuole ben visibile. */
+.regolamento {
+  border: 2px solid var(--blu); border-left-width: 6px;
+  background: var(--crema); padding: .7rem .9rem .8rem; margin: 0 0 1rem;
+}
+.regolamento-titolo {
+  display: flex; align-items: center; gap: .45rem; margin: 0 0 .35rem;
+  font-family: Mulish, sans-serif; font-size: .92rem; color: var(--blu);
+}
+.regolamento-intro { font-size: .68rem; margin: 0 0 .5rem; color: var(--marrone-scuro); }
+.regolamento-punti { margin: 0; padding-left: 1.15rem; }
+.regolamento-punti li {
+  font-size: .68rem; line-height: 1.42; margin-bottom: .35rem;
+  color: var(--marrone-scuro);
+}
+.regolamento-punti li::marker { font-weight: 700; color: var(--blu); }

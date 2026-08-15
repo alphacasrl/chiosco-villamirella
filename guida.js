@@ -78,6 +78,26 @@ window.GUIDA = {
       titolo: "Regole della casa",
       titolo_en: "House rules",
       blocchi: [
+        { regolamento: {
+            titolo: "Regolamento Visite",
+            titolo_en: "Visitor Rules",
+            intro: "Al fine di garantire un adeguato livello di quiete, privacy e sicurezza a vantaggio di tutti i residenti si prega di rispettare la seguente regolamentazione per le visite:",
+            intro_en: "In order to ensure an adequate level of quiet, privacy and safety for all residents, please observe the following rules for visits:",
+            punti: [
+              "\u00c8 vietata la permanenza notturna nell\u2019appartamento di persone diverse da quelle registrate, anche in sostituzione di persone gi\u00e0 registrate.",
+              "Ospiti diurni possono essere eccezionalmente ammessi previo preventivo consenso della direzione e limitatamente alla visita di cortesia; \u00e8 escluso l\u2019uso degli spazi comuni e l\u2019uso della piscina \u00e8 riservato ai soli ospiti residenti.",
+              "All\u2019arrivo il visitatore deve presentarsi in direzione e lasciare un documento di riconoscimento.",
+              "La direzione pu\u00f2 limitare le visite ritenute eccessive o di disturbo alla quiete degli ospiti.",
+              "L\u2019accesso di persone non espressamente autorizzate sar\u00e0 considerato violazione della propriet\u00e0 privata e perseguito penalmente come per legge."
+            ],
+            punti_en: [
+              "Overnight stays in the apartment by persons other than those registered are not permitted, not even in place of persons already registered.",
+              "Daytime visitors may exceptionally be admitted with the prior consent of the management and only for a courtesy visit; the use of common areas is excluded and the swimming pool is reserved for resident guests only.",
+              "On arrival, visitors must report to the management office and leave an identity document.",
+              "The management may restrict visits considered excessive or disruptive to the quiet of the guests.",
+              "Access by persons not expressly authorised will be considered trespassing on private property and prosecuted as provided by law."
+            ]
+          } },
         { t: "In appartamento", t_en: "In the apartment", icona: "casa" },
         { kv: [
           ["Raccolta differenziata", "l'isola ecologica è all'interno del residence, in fondo al parcheggio", "riciclo"],
@@ -98,14 +118,12 @@ window.GUIDA = {
         { kv: [
           ["Piscina", "aperta dalle 9:00 alle 20:00; sorveglia i bambini; non sono ammessi tuffi", "piscina"],
           ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto", "auto"],
-          ["Ospiti esterni", "ricevili nel giardino davanti alla reception, avvisando la direzione; non possono usare la piscina né accedere all'alloggio", "ospiti"],
           ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina", "animali"],
           ["Non dare cibo agli animali", "è severamente vietato dare da mangiare agli animali — compreso Spritz, il golden retriever mascotte della struttura: può essere un rischio per la loro salute e attirare animali indesiderati", "animali"],
           ["Droni", "è vietato l'uso di droni (UAV) all'interno della struttura", "drone"]
         ], kv_en: [
           ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed", "piscina"],
           ["Parking", "park in the internal car park using one space only", "auto"],
-          ["Visitors", "welcome them in the garden in front of reception, informing the management; they may not use the pool or enter the apartment", "ospiti"],
           ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area", "animali"],
           ["Do not feed the animals", "feeding animals is strictly forbidden — including Spritz, our golden retriever mascot: it can harm their health and attract unwanted animals", "animali"],
           ["Drones", "flying drones (UAVs) is not allowed anywhere within the residence", "drone"]

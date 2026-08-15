@@ -1623,6 +1623,22 @@ function mostraPagina(id) {
       av.appendChild(el('span', null, T2(b.avviso, b.avviso_en)));
       corpo.appendChild(av);
     }
+    else if (b.regolamento) {
+      var rg = b.regolamento;
+      var riq = el('div', 'regolamento');
+      var rt = el('h3', 'regolamento-titolo');
+      var rti = el('span', 'titolo-icona');
+      rti.innerHTML = icona('ospiti');
+      rt.appendChild(rti);
+      rt.appendChild(el('span', null, T2(rg.titolo, rg.titolo_en)));
+      riq.appendChild(rt);
+      riq.appendChild(el('p', 'regolamento-intro', T2(rg.intro, rg.intro_en)));
+      var lista = el('ol', 'regolamento-punti');
+      var punti = (lingua === 'en' && rg.punti_en) ? rg.punti_en : rg.punti;
+      for (var q = 0; q < punti.length; q++) lista.appendChild(el('li', null, punti[q]));
+      riq.appendChild(lista);
+      corpo.appendChild(riq);
+    }
     else if (b.t) {
       var h3 = el('h3');
       if (b.icona) {
