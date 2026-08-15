@@ -323,7 +323,7 @@ window.GUIDA = {
         { t: "Sapori del territorio", t_en: "Local flavours" },
         { card: { nome: "La Calabrisella", fotoSospesa: "assets/img/negozio-calabrisella.jpg", lat: 40.033126, lng: 15.288192, dove: "Via Santa Maria — 5 min di macchina",
           testo: "Pescheria storica di Palinuro con ottimo pesce fresco e pescato locale." } },
-        { card: { nome: "Punto Carni Romano", fotoSospesa: "assets/img/negozio-punto-carni.jpg", lat: 40.043156, lng: 15.300111, dove: "Palinuro — 4 min a piedi",
+        { card: { nome: "Punto Carni Romano", fotoSospesa: "assets/img/negozio-punto-carni.jpg", lat: 40.043156, lng: 15.300111, dove: "Palinuro — 4 min a piedi o 1 min di auto",
           testo: "Carni selezionate di alta qualità, preparazioni fresche e specialità locali, ideali per le grigliate." } },
         { card: { nome: "Cilenterie", fotoSospesa: "assets/img/negozio-cilenterie.jpg", lat: 40.033592, lng: 15.286972, dove: "Corso Carlo Pisacane — 5 min di macchina",
           testo: "Negozio di specialità del Cilento e articoli da regalo." } }
