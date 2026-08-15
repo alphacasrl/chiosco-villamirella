@@ -940,7 +940,7 @@ function creaIconeMappa() {
     santuari: ['santuari', '#9550a8'], ristoranti: ['ristoranti', '#d64550'],
     negozi: ['negozi', '#5b7d8c'], salute: ['salute', '#c0392b'],
     /* le farmacie in verde: il rosso resta a ospedali e guardia medica */
-    farmacia: ['salute', '#2f9e60'],
+    farmacia: ['farmacia', '#2f9e60'],
     diving: ['esperienze', '#0e7fb5'],
     itinerari: ['itinerari', '#1f8074'], esperienze: ['esperenze' === 'x' ? '' : 'esperienze', '#d09a1e'],
     muoversi: ['treno', '#5b6ec9'],
@@ -1577,6 +1577,7 @@ var ICONE = {
   manopola:   '<circle cx="12" cy="12.8" r="6.2"/><path d="M12 12.8V8.2"/><path d="M4.4 12.8h1.5M18.1 12.8h1.5M6.6 7.4l1.1 1.1M17.4 7.4l-1.1 1.1M12 20.5v-1.5"/>',
   detersivo:  '<path d="M9.2 2.6h3.4v2.6H9.2z"/><path d="M7.6 5.2h6.6a2.8 2.8 0 0 1 2.8 2.8v10.6a2.8 2.8 0 0 1-2.8 2.8H7.6a2.8 2.8 0 0 1-2.8-2.8V8a2.8 2.8 0 0 1 2.8-2.8z"/><path d="M17 9h1.3a2.2 2.2 0 0 1 0 4.4H17"/><path d="M4.8 15.2h12.2"/>',
   play:       '<circle cx="12" cy="12" r="9.2"/><path d="M10.1 8.1l5.9 3.9-5.9 3.9z"/>',
+  farmacia:   '<rect x="3.4" y="3.4" width="17.2" height="17.2" rx="3"/><path d="M12 8v8M8 12h8"/>',
   lavanderia: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8.5h16"/><circle cx="12" cy="14.5" r="4"/><circle cx="12" cy="14.5" r="1.5"/><circle cx="7" cy="5.8" r=".8"/><circle cx="9.8" cy="5.8" r=".8"/>',
   drone:      '<circle cx="5.2" cy="5.2" r="2.3"/><circle cx="18.8" cy="5.2" r="2.3"/><circle cx="5.2" cy="18.8" r="2.3"/><circle cx="18.8" cy="18.8" r="2.3"/><rect x="9.2" y="9.2" width="5.6" height="5.6" rx="1.2"/><path d="M6.9 6.9L9.2 9.2M17.1 6.9L14.8 9.2M6.9 17.1L9.2 14.8M17.1 17.1L14.8 14.8"/>',
   ospiti:     '<circle cx="9" cy="8" r="3"/><path d="M4 20v-1.5A4.5 4.5 0 0 1 8.5 14h1A4.5 4.5 0 0 1 14 18.5V20"/><circle cx="17" cy="9.2" r="2.4"/><path d="M15.8 13.5c2.8 0 4.7 1.7 4.7 4.3V20"/>',
@@ -1600,7 +1601,7 @@ function icona(nome) {
   if (typeof ICONE === 'undefined' || !ICONE) return '';
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-         (ICONE[nome] || ICONE.posti) + '</svg>';
+         (ICONE[nome] || ICONE.posti || '') + '</svg>';
 }
 
 function mostraHome(si) {
