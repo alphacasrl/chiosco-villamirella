@@ -9,28 +9,29 @@
   :root { --blu: #235784; --rosso: #dd350f; --bordo: #dfe5eb; }
   * { box-sizing: border-box; }
   body { margin: 0; font: 14px/1.45 system-ui, sans-serif; color: #22323f; display: flex; height: 100vh; }
-  #lato { width: 360px; flex: none; overflow-y: auto; border-right: 2px solid var(--bordo); padding: 14px; }
+  #lato { width: 370px; flex: none; overflow-y: auto; border-right: 2px solid var(--bordo); padding: 14px; }
   #mappa { flex: 1; }
   h1 { font-size: 17px; margin: 0 0 4px; color: var(--blu); }
   h2 { font-size: 13px; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: .08em; color: #6b7c88; }
   p.aiuto { font-size: 12px; color: #566; margin: 6px 0 10px; }
   select, input { width: 100%; padding: 6px 8px; border: 1px solid var(--bordo); font: inherit; }
+  input[type=color] { padding: 2px; height: 32px; }
   button { font: inherit; padding: 7px 10px; border: 1px solid var(--bordo); background: #fff; cursor: pointer; }
   button:hover { background: #eef4f8; }
   button.attivo { background: var(--blu); color: #fff; border-color: var(--blu); }
   button.rosso { color: var(--rosso); border-color: #f2c4b8; }
-  .fila { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+  .fila { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; align-items: center; }
   .fila button { flex: 1 1 auto; }
   #fermate { margin: 0; padding: 0; list-style: none; }
   #fermate li { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px dotted var(--bordo); }
-  #fermate .n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--blu); color: #fff;
+  #fermate .n { flex: none; width: 22px; height: 22px; border-radius: 50%; color: #fff;
                 font-size: 11px; display: flex; align-items: center; justify-content: center; }
   #fermate input { flex: 1; border: none; border-bottom: 1px solid transparent; padding: 2px 0; }
   #fermate input:focus { border-bottom-color: var(--blu); outline: none; }
   #fermate button { flex: none; padding: 2px 7px; }
   #stato { font-size: 12px; background: #f4f8fb; border: 1px solid var(--bordo); padding: 8px; margin-top: 10px; }
   .avviso { background: #fdf3e0; border-left: 4px solid #d09a1e; padding: 8px 10px; font-size: 12px; margin: 10px 0; }
-  .marcatore-fermata { width: 22px; height: 22px; border-radius: 50%; background: #d09a1e; border: 2px solid #fff;
+  .marcatore-fermata { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff;
                        box-shadow: 0 1px 4px rgba(0,0,0,.4); color: #fff; font: 700 11px/18px system-ui, sans-serif;
                        text-align: center; cursor: grab; }
 </style>
@@ -42,13 +43,13 @@
   <p class="aiuto">Correggi il percorso seguendo la strada vera e sposta le fermate dove sono davvero.
      Quando hai finito scarica il file e sostituisci <b>linee.js</b> nella cartella del chiosco.</p>
 
-  <h2>Linea</h2>
+  <h2>Cosa stai modificando</h2>
   <select id="scelta"></select>
 
   <div class="avviso" id="nota-indicativo"></div>
 
   <h2>Percorso</h2>
-  <p class="aiuto">Passa alla mappa <b>OpenStreetMap</b> per vedere i nomi delle strade: si legge molto meglio del satellite.</p>
+  <p class="aiuto">La mappa è <b>OpenStreetMap</b>: mostra i nomi delle strade e si segue molto meglio del satellite.</p>
   <div class="fila">
     <button id="m-aggiungi">Aggiungi punti in coda</button>
     <button id="m-inserisci">Inserisci fra due punti</button>
@@ -62,8 +63,20 @@
     <button id="svuota" class="rosso">Cancella tutto il percorso</button>
   </div>
 
+  <h2>Andata e ritorno</h2>
+  <p class="aiuto">Quando andata e ritorno seguono strade diverse — tipico con i sensi unici — la linea si
+     divide in due tracciati con due colori, che tornano anche sulle fermate e sull’orario.</p>
+  <div class="fila">
+    <button id="dividi">Dividi in andata e ritorno</button>
+  </div>
+  <div class="fila">
+    <span style="flex:1; font-size:12px">Colore di questo verso</span>
+    <input type="color" id="colore" style="width:70px">
+  </div>
+
   <h2>Fermate</h2>
-  <p class="aiuto">Trascina il pallino giallo sulla mappa per spostare una fermata. Il nome si modifica qui.</p>
+  <p class="aiuto">Trascina il pallino sulla mappa per spostare una fermata. Il nome si modifica qui.
+     I numeri servono solo a te per l’ordine: sul chiosco non compaiono.</p>
   <div class="fila">
     <button id="m-fermata">Aggiungi una fermata</button>
   </div>
@@ -74,8 +87,7 @@
   <div class="fila">
     <button id="scarica" class="attivo">Scarica linee.js</button>
   </div>
-  <p class="aiuto">Il file scaricato va messo nella cartella del chiosco al posto di quello vecchio,
-     poi si pubblica come al solito.</p>
+  <p class="aiuto">Metti il file scaricato nella cartella del chiosco al posto di quello vecchio, poi pubblica.</p>
 
   <div id="stato"></div>
 </div>
@@ -88,20 +100,41 @@
 (function () {
 'use strict';
 var DATI = window.LINEE_BUS;
-var chiavi = Object.keys(DATI);
-var corrente = chiavi[0];
+
+/* Una "traccia" e' cio' che si modifica: una linea intera, oppure un singolo
+   verso di una linea che ne ha due. */
+var tracce = [];
+function rifaiTracce() {
+  tracce = [];
+  Object.keys(DATI).forEach(function (k) {
+    var L = DATI[k];
+    if (L.versi && L.versi.length) {
+      L.versi.forEach(function (s, i) {
+        tracce.push({ k: k, i: i, etichetta: L.nome + ' — ' + s.nome, colore: s.colore });
+      });
+    } else {
+      tracce.push({ k: k, i: null, etichetta: L.nome, colore: '#dd350f' });
+    }
+  });
+}
+rifaiTracce();
+
+var corrente = 0;
 var modo = null;
 var storia = [];
 var marcatori = [];
+var inTrascinamento = null;
+
+function traccia() { return tracce[corrente]; }
+function dato() { var t = traccia(); return t.i === null ? DATI[t.k] : DATI[t.k].versi[t.i]; }
+function linea() { var d = dato(); return d.linee[0] || (d.linee[0] = []); }
 
 var mappa = new maplibregl.Map({
   container: 'mappa',
   style: {
     version: 8,
-    sources: {
-      osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-             tileSize: 256, maxzoom: 19, attribution: '© OpenStreetMap' }
-    },
+    sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                      tileSize: 256, maxzoom: 19, attribution: '© OpenStreetMap' } },
     layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
   },
   center: [15.29, 40.045], zoom: 13
@@ -112,19 +145,27 @@ mappa.on('load', function () {
   mappa.addSource('percorso', { type: 'geojson', data: vuoto() });
   mappa.addSource('nodi', { type: 'geojson', data: vuoto() });
   mappa.addLayer({ id: 'percorso-l', type: 'line', source: 'percorso',
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: { 'line-color': '#dd350f', 'line-width': 5, 'line-opacity': .85 } });
   mappa.addLayer({ id: 'nodi-c', type: 'circle', source: 'nodi',
     paint: { 'circle-radius': 4.5, 'circle-color': '#fff', 'circle-stroke-color': '#dd350f', 'circle-stroke-width': 2 } });
+  riempiScelta();
   disegna();
   inquadra();
 });
 
 function vuoto() { return { type: 'FeatureCollection', features: [] }; }
-function linea() { return DATI[corrente].linee[0] || (DATI[corrente].linee[0] = []); }
 
 function salvaStato() {
-  storia.push(JSON.stringify({ linee: DATI[corrente].linee, fermate: DATI[corrente].fermate }));
+  storia.push(JSON.stringify({ linee: dato().linee, fermate: dato().fermate }));
   if (storia.length > 60) storia.shift();
+}
+
+function colora() {
+  if (!mappa.getLayer('percorso-l')) return;
+  mappa.setPaintProperty('percorso-l', 'line-color', traccia().colore);
+  mappa.setPaintProperty('nodi-c', 'circle-stroke-color', traccia().colore);
+  document.getElementById('colore').value = traccia().colore;
 }
 
 function disegna() {
@@ -133,6 +174,7 @@ function disegna() {
     ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: pts }, properties: {} }] : [] });
   mappa.getSource('nodi').setData({ type: 'FeatureCollection', features: pts.map(function (p, i) {
     return { type: 'Feature', geometry: { type: 'Point', coordinates: p }, properties: { i: i } }; }) });
+  colora();
   disegnaFermate();
   aggiornaStato();
 }
@@ -140,13 +182,14 @@ function disegna() {
 function disegnaFermate() {
   marcatori.forEach(function (m) { m.remove(); });
   marcatori = [];
-  DATI[corrente].fermate.forEach(function (f, i) {
+  var col = traccia().colore;
+  dato().fermate.forEach(function (f, i) {
     var el = document.createElement('div');
     el.className = 'marcatore-fermata';
+    el.style.background = col;
     el.textContent = (i + 1);
     el.title = f.nome;
-    var m = new maplibregl.Marker({ element: el, draggable: true })
-      .setLngLat([f.lng, f.lat]).addTo(mappa);
+    var m = new maplibregl.Marker({ element: el, draggable: true }).setLngLat([f.lng, f.lat]).addTo(mappa);
     m.on('dragstart', salvaStato);
     m.on('dragend', function () {
       var p = m.getLngLat();
@@ -155,26 +198,28 @@ function disegnaFermate() {
     });
     marcatori.push(m);
   });
+
   var ul = document.getElementById('fermate');
   ul.innerHTML = '';
-  DATI[corrente].fermate.forEach(function (f, i) {
+  dato().fermate.forEach(function (f, i) {
     var li = document.createElement('li');
-    var n = document.createElement('span'); n.className = 'n'; n.textContent = i + 1;
+    var n = document.createElement('span'); n.className = 'n'; n.textContent = i + 1; n.style.background = col;
     var inp = document.createElement('input'); inp.value = f.nome;
     inp.addEventListener('change', function () { f.nome = inp.value; disegnaFermate(); });
     var su = document.createElement('button'); su.textContent = '↑'; su.title = 'Sposta su';
-    su.onclick = function () { if (i > 0) { salvaStato(); var a = DATI[corrente].fermate; a.splice(i - 1, 0, a.splice(i, 1)[0]); disegnaFermate(); } };
-    var el = document.createElement('button'); el.textContent = '✕'; el.className = 'rosso'; el.title = 'Elimina';
-    el.onclick = function () { salvaStato(); DATI[corrente].fermate.splice(i, 1); disegnaFermate(); aggiornaStato(); };
-    li.appendChild(n); li.appendChild(inp); li.appendChild(su); li.appendChild(el);
+    su.onclick = function () { if (i > 0) { salvaStato(); var a = dato().fermate; a.splice(i - 1, 0, a.splice(i, 1)[0]); disegnaFermate(); } };
+    var ele = document.createElement('button'); ele.textContent = '✕'; ele.className = 'rosso'; ele.title = 'Elimina';
+    ele.onclick = function () { salvaStato(); dato().fermate.splice(i, 1); disegnaFermate(); aggiornaStato(); };
+    li.appendChild(n); li.appendChild(inp); li.appendChild(su); li.appendChild(ele);
     ul.appendChild(li);
   });
+
   var dc = document.getElementById('da-collocare');
-  var senza = DATI[corrente].senzaPunto || [];
+  var senza = DATI[traccia().k].senzaPunto || [];
   dc.innerHTML = senza.length
-    ? '<p class="aiuto"><b>Sul foglio orario ci sono anche queste fermate</b>, che non sono state collocate:<br>'
+    ? '<p class="aiuto"><b>Sul foglio orario ci sono anche queste fermate</b>, non ancora collocate:<br>'
       + senza.map(function (s) { return '• ' + s; }).join('<br>')
-      + '<br>Aggiungile con il tasto qui sopra e dai loro questo nome.</p>'
+      + '<br>Aggiungile col tasto qui sopra e dai loro questo nome.</p>'
     : '';
 }
 
@@ -190,27 +235,28 @@ function lunghezza() {
 }
 
 function aggiornaStato() {
-  DATI[corrente].km = +lunghezza().toFixed(1);
+  dato().km = +lunghezza().toFixed(1);
   document.getElementById('stato').innerHTML =
-    '<b>' + DATI[corrente].nome + '</b><br>' +
-    linea().length + ' punti nel percorso · ' + DATI[corrente].km + ' km<br>' +
-    DATI[corrente].fermate.length + ' fermate collocate';
+    '<b>' + traccia().etichetta + '</b><br>' +
+    linea().length + ' punti nel percorso · ' + dato().km + ' km<br>' +
+    dato().fermate.length + ' fermate collocate';
+  var L = DATI[traccia().k];
   var na = document.getElementById('nota-indicativo');
-  na.innerHTML = DATI[corrente].indicativo === false
-    ? 'Questa linea è segnata come <b>verificata</b>: sulla mappa del chiosco appare a linea piena.'
+  na.innerHTML = L.indicativo === false
+    ? 'Questa linea è segnata come <b>verificata</b>: sul chiosco appare a linea piena.'
     : 'Questa linea è ancora <b>indicativa</b> (tratteggiata sul chiosco). Quando l’hai corretta, premi qui sotto.'
       + '<br><br><button id="conferma">Segna come verificata</button>';
   var c = document.getElementById('conferma');
   if (c) c.onclick = function () {
-    DATI[corrente].indicativo = false;
-    DATI[corrente].fonte = 'percorso corretto a mano dalla direzione';
+    L.indicativo = false;
+    L.fonte = 'percorso corretto a mano dalla direzione';
     aggiornaStato();
   };
 }
 
 function inquadra() {
   var pts = linea().slice();
-  DATI[corrente].fermate.forEach(function (f) { pts.push([f.lng, f.lat]); });
+  dato().fermate.forEach(function (f) { pts.push([f.lng, f.lat]); });
   if (!pts.length) return;
   var b = pts.reduce(function (acc, p) {
     return [Math.min(acc[0], p[0]), Math.min(acc[1], p[1]), Math.max(acc[2], p[0]), Math.max(acc[3], p[1])];
@@ -221,16 +267,14 @@ function inquadra() {
 /* ------------------------------ interazione ------------------------------ */
 function setModo(m) {
   modo = (modo === m) ? null : m;
-  ['m-aggiungi', 'm-inserisci', 'm-sposta', 'm-elimina', 'm-fermata'].forEach(function (id) {
-    document.getElementById(id).className = (id === 'm-' + m && modo) ? 'attivo' : '';
+  ['aggiungi', 'inserisci', 'sposta', 'elimina', 'fermata'].forEach(function (x) {
+    document.getElementById('m-' + x).className = (x === modo) ? 'attivo' : '';
   });
   mappa.getCanvas().style.cursor = modo ? 'crosshair' : '';
 }
 ['aggiungi', 'inserisci', 'sposta', 'elimina', 'fermata'].forEach(function (m) {
   document.getElementById('m-' + m).onclick = function () { setModo(m); };
 });
-
-var inTrascinamento = null;
 
 function vicino(punto) {
   var p = linea(), best = -1, dmin = 1e9;
@@ -248,7 +292,7 @@ mappa.on('click', function (e) {
   if (modo === 'aggiungi') { salvaStato(); linea().push(pt); disegna(); }
   else if (modo === 'fermata') {
     salvaStato();
-    DATI[corrente].fermate.push({ nome: 'Nuova fermata', lat: pt[1], lng: pt[0] });
+    dato().fermate.push({ nome: 'Nuova fermata', lat: pt[1], lng: pt[0] });
     disegna();
   }
   else if (modo === 'elimina') {
@@ -256,7 +300,6 @@ mappa.on('click', function (e) {
     if (v.i >= 0 && v.d < 0.0015) { salvaStato(); linea().splice(v.i, 1); disegna(); }
   }
   else if (modo === 'inserisci') {
-    /* si inserisce nel tratto piu' vicino, fra i due estremi */
     var p = linea(), best = -1, dmin = 1e9;
     for (var i = 1; i < p.length; i++) {
       var mx = (p[i-1][0] + p[i][0]) / 2, my = (p[i-1][1] + p[i][1]) / 2;
@@ -270,12 +313,7 @@ mappa.on('click', function (e) {
 mappa.on('mousedown', function (e) {
   if (modo !== 'sposta') return;
   var v = vicino(e.lngLat);
-  if (v.i >= 0 && v.d < 0.0015) {
-    inTrascinamento = v.i;
-    salvaStato();
-    mappa.dragPan.disable();
-    e.preventDefault();
-  }
+  if (v.i >= 0 && v.d < 0.0015) { inTrascinamento = v.i; salvaStato(); mappa.dragPan.disable(); e.preventDefault(); }
 });
 mappa.on('mousemove', function (e) {
   if (inTrascinamento === null) return;
@@ -289,61 +327,134 @@ mappa.on('mouseup', function () {
 document.getElementById('annulla').onclick = function () {
   if (!storia.length) return;
   var s = JSON.parse(storia.pop());
-  DATI[corrente].linee = s.linee;
-  DATI[corrente].fermate = s.fermate;
+  dato().linee = s.linee;
+  dato().fermate = s.fermate;
   disegna();
 };
 document.getElementById('svuota').onclick = function () {
-  if (!confirm('Cancellare tutto il percorso di questa linea? Le fermate restano.')) return;
+  if (!confirm('Cancellare tutto il percorso di questo tracciato? Le fermate restano.')) return;
   salvaStato();
-  DATI[corrente].linee = [[]];
+  dato().linee = [[]];
   disegna();
 };
 
+/* ------------------------------ scelta e versi ------------------------------ */
 var sel = document.getElementById('scelta');
-chiavi.forEach(function (k) {
-  var o = document.createElement('option');
-  o.value = k; o.textContent = DATI[k].nome;
-  sel.appendChild(o);
-});
-sel.onchange = function () { corrente = sel.value; storia = []; disegna(); inquadra(); };
+function riempiScelta() {
+  sel.innerHTML = '';
+  tracce.forEach(function (t, i) {
+    var o = document.createElement('option');
+    o.value = i; o.textContent = t.etichetta;
+    sel.appendChild(o);
+  });
+  sel.value = corrente;
+}
+sel.onchange = function () { corrente = +sel.value; storia = []; disegna(); inquadra(); };
+
+document.getElementById('dividi').onclick = function () {
+  var t = traccia();
+  if (t.i !== null) { alert('Questa linea è già divisa in andata e ritorno.'); return; }
+  var L = DATI[t.k];
+  var nomi = L.fermate.map(function (f, i) { return (i + 1) + '. ' + f.nome; }).join('\n');
+  var r = prompt('Da quale fermata comincia il RITORNO?\nScrivi il numero.\n\n' + nomi);
+  var k = parseInt(r, 10);
+  if (!k || k < 2 || k > L.fermate.length) return;
+  var fs = L.fermate[k - 1];
+  var pts = L.linee[0] || [], best = 0, dmin = 1e9;
+  pts.forEach(function (p, i) {
+    var d = Math.pow(p[0] - fs.lng, 2) + Math.pow(p[1] - fs.lat, 2);
+    if (d < dmin) { dmin = d; best = i; }
+  });
+  DATI[t.k] = {
+    nome: L.nome, senzaPunto: L.senzaPunto || [],
+    indicativo: L.indicativo, fonte: L.fonte,
+    versi: [
+      { id: 'andata', nome: 'Andata', nome_en: 'Outbound', colore: '#1a87c9',
+        km: 0, fermate: L.fermate.slice(0, k), linee: [pts.slice(0, best + 1)] },
+      { id: 'ritorno', nome: 'Ritorno', nome_en: 'Return', colore: '#d09a1e',
+        km: 0, fermate: L.fermate.slice(k - 1), linee: [pts.slice(best)] }
+    ]
+  };
+  rifaiTracce();
+  for (var q = 0; q < tracce.length; q++) { if (tracce[q].k === t.k) { corrente = q; break; } }
+  riempiScelta();
+  storia = [];
+  disegna(); inquadra();
+};
+
+document.getElementById('colore').onchange = function () {
+  var t = traccia();
+  if (t.i === null) { alert('Il colore serve quando la linea ha due versi: dividila prima in andata e ritorno.'); colora(); return; }
+  DATI[t.k].versi[t.i].colore = this.value;
+  rifaiTracce(); riempiScelta(); disegna();
+};
 
 /* ------------------------------ esportazione ------------------------------ */
 document.getElementById('scarica').onclick = function () {
-  var voci = chiavi.map(function (k) {
-    var v = DATI[k];
-    var ferm = v.fermate.map(function (f) {
-      return '      { "nome": ' + JSON.stringify(f.nome) + ', "lat": ' + f.lat + ', "lng": ' + f.lng + ' }';
+  function fermateTesto(lista, sp) {
+    return lista.map(function (f) {
+      return sp + '{ "nome": ' + JSON.stringify(f.nome) + ', "lat": ' + f.lat + ', "lng": ' + f.lng + ' }';
     }).join(',\n');
+  }
+  var voci = Object.keys(DATI).map(function (k) {
+    var v = DATI[k];
     var extra = '';
     if (v.indicativo === false) {
       extra = '    "indicativo": false,\n    "fonte": ' + JSON.stringify(v.fonte || 'percorso corretto a mano dalla direzione') + ',\n';
     }
-    return '  ' + JSON.stringify(k) + ': {\n' +
-      '    "nome": ' + JSON.stringify(v.nome) + ',\n' +
-      '    "km": ' + v.km + ',\n' +
-      extra +
-      '    "fermate": [\n' + ferm + '\n    ],\n' +
-      '    "senzaPunto": ' + JSON.stringify(v.senzaPunto || []) + ',\n' +
+    var testa = '  ' + JSON.stringify(k) + ': {\n' +
+      '    "nome": ' + JSON.stringify(v.nome) + ',\n' + extra +
+      '    "senzaPunto": ' + JSON.stringify(v.senzaPunto || []) + ',\n';
+    if (v.versi && v.versi.length) {
+      var blocchi = v.versi.map(function (s) {
+        return '      {\n        "id": ' + JSON.stringify(s.id) + ',\n' +
+          '        "nome": ' + JSON.stringify(s.nome) + ',\n' +
+          '        "nome_en": ' + JSON.stringify(s.nome_en || '') + ',\n' +
+          '        "colore": ' + JSON.stringify(s.colore) + ',\n' +
+          '        "km": ' + s.km + ',\n' +
+          '        "fermate": [\n' + fermateTesto(s.fermate, '          ') + '\n        ],\n' +
+          '        "linee": [' + JSON.stringify(s.linee[0] || []) + ']\n      }';
+      }).join(',\n');
+      return testa + '    "versi": [\n' + blocchi + '\n    ]\n  }';
+    }
+    return testa + '    "km": ' + v.km + ',\n' +
+      '    "fermate": [\n' + fermateTesto(v.fermate, '      ') + '\n    ],\n' +
       '    "linee": [' + JSON.stringify(v.linee[0] || []) + ']\n  }';
   }).join(',\n');
+
+  var innesto = [
+    '(function () {',
+    '  window.PERCORSI = window.PERCORSI || {};',
+    '  Object.keys(window.LINEE_BUS).forEach(function (k) {',
+    '    var v = window.LINEE_BUS[k];',
+    '    var linee = [], versi = [];',
+    '    if (v.versi) {',
+    '      v.versi.forEach(function (s) {',
+    '        linee = linee.concat(s.linee);',
+    '        versi.push({ colore: s.colore, linee: s.linee });',
+    '      });',
+    '    } else {',
+    '      linee = v.linee;',
+    '    }',
+    "    window.PERCORSI['linea-' + k] = {",
+    '      linee: linee,',
+    '      versi: versi.length ? versi : null,',
+    "      fonte: v.fonte || 'ricostruito sulle strade da autobus dalle fermate del foglio orario',",
+    '      indicativo: v.indicativo !== false',
+    '    };',
+    '  });',
+    '})();'
+  ].join('\n');
+
   var testo = '/* ======================================================================\n' +
-    '   LINEE AUTOBUS — dati modificabili a mano\n' +
+    '   LINEE AUTOBUS — dati modificabili a mano con  modifica-linee.html\n' +
     '   ----------------------------------------------------------------------\n' +
-    '   Modificato con modifica-linee.html.\n' +
+    '   Una linea puo’ avere un solo tracciato, oppure due VERSI quando andata e\n' +
+    '   ritorno seguono strade diverse. Ogni verso ha colore, fermate e tracciato\n' +
+    '   propri, e quel colore torna sulla mappa, sulle fermate e sull’orario.\n' +
     '   ====================================================================== */\n' +
-    'window.LINEE_BUS = {\n' + voci + '\n};\n\n' +
-    '(function () {\n' +
-    '  window.PERCORSI = window.PERCORSI || {};\n' +
-    '  Object.keys(window.LINEE_BUS).forEach(function (k) {\n' +
-    '    var v = window.LINEE_BUS[k];\n' +
-    '    window.PERCORSI[\'linea-\' + k] = {\n' +
-    '      linee: v.linee,\n' +
-    '      fonte: v.fonte || \'ricostruito sulle strade da autobus dalle fermate del foglio orario\',\n' +
-    '      indicativo: v.indicativo !== false\n' +
-    '    };\n' +
-    '  });\n' +
-    '})();\n';
+    'window.LINEE_BUS = {\n' + voci + '\n};\n\n' + innesto + '\n';
+
   var a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([testo], { type: 'text/javascript' }));
   a.download = 'linee.js';
