@@ -607,7 +607,10 @@ var GRUPPI = [
         icona: b.card.icona || '',
         pinIcona: b.card.pin || '',
         foglioOrari: b.card.foglioOrari || '',
-        fermate: b.card.fermate || null,
+        /* le fermate delle linee stanno in linee.js, il file che si corregge
+           a mano con modifica-linee.html; quelle nella guida fanno da riserva */
+        fermate: (b.card.linea && window.LINEE_BUS && window.LINEE_BUS[b.card.linea]
+                  && window.LINEE_BUS[b.card.linea].fermate) || b.card.fermate || null,
         nome_en: b.card.nome_en || '',
         articoli: [], distanzaKm: '', tempoAuto: '', inEvidenza: false
       });
