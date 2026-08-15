@@ -361,7 +361,10 @@ img { -webkit-user-drag: none; user-drag: none; }
   margin: .3rem 0 .1rem;
 }
 .mattonella {
-  min-height: 6.4rem; padding: .6rem .4rem .55rem;
+  /* 5.9rem invece di 6.4: con tre gruppi invece di due la schermata
+     iniziale sforava di 32 px e cominciava a scorrere. La regola resta
+     quella data dal titolare: la home non si scorre mai. */
+  min-height: 5.9rem; padding: .55rem .4rem .5rem;
   background: var(--bianco); border: 1px solid #dfe5eb; border-radius: 0;
   box-shadow: 0 2px 6px rgba(4, 11, 17, .07);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem;
@@ -381,6 +384,7 @@ img { -webkit-user-drag: none; user-drag: none; }
   line-height: 1.2; color: var(--marrone-scuro);
 }
 #home-invito {
+  margin: .4rem 0;
   font-size: .62rem; color: var(--marrone);
   text-transform: uppercase; letter-spacing: .12em;
   font-family: Mulish, sans-serif; font-weight: 700;
