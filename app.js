@@ -70,7 +70,7 @@ var CONFIG = {
   COLORI: {
     muoversi: '#5b6ec9',
     spiagge: '#1a87c9', borghi: '#c96a2b', grotte: '#7057c9',
-    natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8',
+    natura: '#2f9e60', archeologia: '#b5892f', santuari: '#9550a8', farmacia: '#2f9e60',
     ristoranti: '#d64550', negozi: '#5b7d8c', salute: '#c0392b', servizi: '#607d5b'
   },
   COLORE_SCELTO: '#dd350f',
@@ -515,6 +515,7 @@ function nomeCategoria(id) {
   if (id === 'ristoranti') return TXT('ristorante');
   if (id === 'negozi') return TXT('negozio');
   if (id === 'salute') return TXT('salute');
+  if (id === 'farmacia') return lingua === 'en' ? 'Pharmacy' : 'Farmacia';
   if (id === 'diving') return 'Diving';
   if (id === 'muoversi') return lingua === 'en' ? 'Transport' : 'Trasporti';
   if (id === 'servizi') return lingua === 'en' ? 'Service' : 'Servizio';
@@ -591,7 +592,7 @@ var GRUPPI = [
       if (!b.card) return;
       pseudo.push({
         id: 'g-' + pid + '-' + pseudo.length,
-        nome: b.card.nome, categoria: pid,
+        nome: b.card.nome, categoria: b.card.cat || pid,
         lat: (b.card.lat !== undefined ? b.card.lat : null),
         lng: (b.card.lng !== undefined ? b.card.lng : null),
         verified: b.card.lat !== undefined,
@@ -938,6 +939,8 @@ function creaIconeMappa() {
     natura: ['natura', '#2f9e60'], archeologia: ['archeologia', '#b5892f'],
     santuari: ['santuari', '#9550a8'], ristoranti: ['ristoranti', '#d64550'],
     negozi: ['negozi', '#5b7d8c'], salute: ['salute', '#c0392b'],
+    /* le farmacie in verde: il rosso resta a ospedali e guardia medica */
+    farmacia: ['salute', '#2f9e60'],
     diving: ['esperienze', '#0e7fb5'],
     itinerari: ['itinerari', '#1f8074'], esperienze: ['esperenze' === 'x' ? '' : 'esperienze', '#d09a1e'],
     muoversi: ['treno', '#5b6ec9'],
