@@ -409,10 +409,10 @@ window.LUOGHI = [
   },
   {
     id: "chiesa-san-severino",
-    nome: "Chiesa di Santa Maria degli Angeli",
+    nome: "Chiesa di San Severino Abate",
     categoria: "santuari",
-    lat: 40.087162,   lng: 15.348841,   verified: true,
-    notaCoordinate: "APPROSSIMATA al borgo di San Severino di Centola — sposta il pin sulla chiesa esatta",
+    lat: 40.089159,   lng: 15.344070,   verified: true,
+    notaCoordinate: "nome e posizione indicati dal titolare (15/08/2026), nel borgo di San Severino di Centola",
     sommario: "",
     immagine: "",
     articoli: [],
