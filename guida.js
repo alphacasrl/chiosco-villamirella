@@ -341,23 +341,23 @@ window.GUIDA = {
           p_en: "The steps are in the order they must be followed. The control panel is the one on the wall; the washing machine only turns on after the coins have been inserted." },
         { kv: [
             ["1. Caricare la lavatrice", "sistema il bucato nel cestello e chiudi l\u2019oblo\u2019", "lavanderia"],
-            ["2. Selezionare il servizio 2", "sul pannello di controllo a muro", "luce"],
-            ["3. Inserire le monete", "RAPIDO 30: 2 gettoni da 2\u20ac \u00b7 INTENSIVO 60: 3 gettoni da 2\u20ac", "servizi"],
+            ["2. Selezionare il servizio 2", "sul pannello di controllo a muro", "pulsantiera"],
+            ["3. Inserire le monete", "RAPIDO 30: 2 gettoni da 2\u20ac \u00b7 INTENSIVO 60: 3 gettoni da 2\u20ac", "monete"],
             ["Attenzione", "dopo pochi secondi la luce rossa sul servizio selezionato indica l\u2019inizio dell\u2019erogazione", "luce"],
-            ["4. Premere il pulsante di accensione", "sulla lavatrice", "lavanderia"],
-            ["5. Selezionare il ciclo desiderato", "con la manopola dei programmi", "lavanderia"],
-            ["6. Aggiungere il detersivo", "nel cassetto della lavatrice", "pulizia"],
-            ["7. Premere il pulsante di avvio", "il lavaggio comincia", "lavanderia"]
+            ["4. Premere il pulsante di accensione", "sulla lavatrice", "pulsanteOn"],
+            ["5. Selezionare il ciclo desiderato", "con la manopola dei programmi", "manopola"],
+            ["6. Aggiungere il detersivo", "nel cassetto della lavatrice", "flacone"],
+            ["7. Premere il pulsante di avvio", "il lavaggio comincia", "play"]
           ],
           kv_en: [
             ["1. Load the washing machine", "put the laundry in the drum and close the door", "lavanderia"],
-            ["2. Select service 2", "on the control panel on the wall", "luce"],
-            ["3. Insert coins according to the wished cycle", "QUICK 30: 2 coins of \u20ac2 \u00b7 INTENSIVE 60: 3 coins of \u20ac2", "servizi"],
+            ["2. Select service 2", "on the control panel on the wall", "pulsantiera"],
+            ["3. Insert coins according to the wished cycle", "QUICK 30: 2 coins of \u20ac2 \u00b7 INTENSIVE 60: 3 coins of \u20ac2", "monete"],
             ["Note", "after a few seconds a red light on the selected service will turn on and service supply will start", "luce"],
-            ["4. Push the turn-on button", "on the washing machine", "lavanderia"],
-            ["5. Select the wished cycle", "with the programme knob", "lavanderia"],
-            ["6. Add soap", "in the washing machine drawer", "pulizia"],
-            ["7. Push the starting cycle button", "the wash begins", "lavanderia"]
+            ["4. Push the turn-on button", "on the washing machine", "pulsanteOn"],
+            ["5. Select the wished cycle", "with the programme knob", "manopola"],
+            ["6. Add soap", "in the washing machine drawer", "flacone"],
+            ["7. Push the starting cycle button", "the wash begins", "play"]
           ] },
         { avviso: "Per qualsiasi dubbio, o se la lavatrice non parte, rivolgiti alla reception.",
           avviso_en: "If anything is unclear, or if the washing machine does not start, please ask at reception." }
