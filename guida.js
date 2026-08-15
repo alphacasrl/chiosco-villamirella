@@ -98,13 +98,15 @@ window.GUIDA = {
           ["Parcheggio", "parcheggia nel parcheggio interno occupando un solo posto auto", "auto"],
           ["Ospiti esterni", "ricevili nel giardino davanti alla reception, avvisando la direzione; non possono usare la piscina né accedere all'alloggio", "ospiti"],
           ["Animali", "benvenuti fino a 25 kg, uno per alloggio, previa autorizzazione e con supplemento; sempre al guinzaglio nelle aree comuni, niente zona piscina", "animali"],
-          ["Non dare cibo agli animali", "è severamente vietato dare da mangiare agli animali — compreso Spritz, il golden retriever mascotte della struttura: può essere un rischio per la loro salute e attirare animali indesiderati", "animali"]
+          ["Non dare cibo agli animali", "è severamente vietato dare da mangiare agli animali — compreso Spritz, il golden retriever mascotte della struttura: può essere un rischio per la loro salute e attirare animali indesiderati", "animali"],
+          ["Droni", "è vietato l'uso di droni (UAV) all'interno della struttura", "drone"]
         ], kv_en: [
           ["Swimming pool", "open from 9 am to 8 pm; keep an eye on children; diving is not allowed", "piscina"],
           ["Parking", "park in the internal car park using one space only", "auto"],
           ["Visitors", "welcome them in the garden in front of reception, informing the management; they may not use the pool or enter the apartment", "ospiti"],
           ["Pets", "welcome up to 25 kg, one per apartment, subject to authorisation and a supplement; always on a lead in common areas, no pool area", "animali"],
-          ["Do not feed the animals", "feeding animals is strictly forbidden — including Spritz, our golden retriever mascot: it can harm their health and attract unwanted animals", "animali"]
+          ["Do not feed the animals", "feeding animals is strictly forbidden — including Spritz, our golden retriever mascot: it can harm their health and attract unwanted animals", "animali"],
+          ["Drones", "flying drones (UAVs) is not allowed anywhere within the residence", "drone"]
         ]},
         { avviso: "Queste regole sono un promemoria indicativo: fa sempre fede il regolamento completo della struttura.",
           avviso_en: "These rules are an indicative reminder: the full house regulations always prevail." }

@@ -287,17 +287,20 @@ document.addEventListener('visibilitychange', function () {
    di tenere il conto dei contatti aperti (che si sporcherebbe da solo se
    il pannello dimenticasse di annunciare un rilascio).
    ===================================================================== */
-var fantasmi = { coda: 0, ultimaScrittura: 0 };
-function statSegnaFantasma() {
+var fantasmi = { coda: 0, codaAttesa: 0, ultimaScrittura: 0 };
+function statSegnaFantasma(inAttesa) {
   fantasmi.coda++;
+  if (inAttesa) fantasmi.codaAttesa++;
   var ora = Date.now();
   if (ora - fantasmi.ultimaScrittura < 5000) return;   /* non si scrive a raffica */
   fantasmi.ultimaScrittura = ora;
-  var quanti = fantasmi.coda;
+  var quanti = fantasmi.coda, quantiAttesa = fantasmi.codaAttesa;
   fantasmi.coda = 0;
+  fantasmi.codaAttesa = 0;
   var d = statLeggi();
   d.multi = d.multi || { totale: 0, ore: {}, giorni: {} };
   d.multi.totale += quanti;
+  d.multi.inAttesa = (d.multi.inAttesa || 0) + quantiAttesa;
   var h = new Date().getHours();
   d.multi.ore[h] = (d.multi.ore[h] || 0) + quanti;
   var g = statOggi();
@@ -308,9 +311,49 @@ function statSegnaFantasma() {
   while (ch.length > STAT_GIORNI_MAX) { delete d.multi.giorni[ch.shift()]; }
   statScrivi(d);
 }
+/* Un contatto multiplo mentre lo schermo e' in ATTESA e' la prova che non
+   c'e' nessuno davanti: quello e' certamente un fantasma, non una pinch di un
+   ospite. E' la sola misura che distingue il disturbo dall'uso normale, visto
+   che una pinch vera e un contatto spurio sono indistinguibili sul momento. */
 document.addEventListener('pointerdown', function (e) {
-  if (e.isPrimary === false) statSegnaFantasma();
+  if (e.isPrimary === false) {
+    statSegnaFantasma(document.body.classList.contains('in-standby'));
+    guardiaFantasmi();
+  }
 }, { passive: true });
+
+/* =====================================================================
+   GUARDIA CONTRO I CONTATTI FANTASMA
+   La pinch resta attiva, perche' e' comoda. Ma quando i contatti multipli
+   arrivano a raffica — piu' di quanti ne produrrebbe una persona che
+   ingrandisce una mappa — si spegne da sola per un quarto d'ora, cosi' la
+   mappa smette di zoomare e ruotare per conto suo. Poi torna disponibile.
+   ===================================================================== */
+var GUARDIA_SOGLIA = 6;         /* contatti multipli... */
+var GUARDIA_FINESTRA = 60000;   /* ...entro un minuto */
+var GUARDIA_RIPOSO = 900000;    /* pinch sospesa per 15 minuti */
+var guardia = { colpi: [], sospesa: false, fino: 0 };
+function guardiaFantasmi() {
+  var ora = Date.now();
+  guardia.colpi.push(ora);
+  while (guardia.colpi.length && ora - guardia.colpi[0] > GUARDIA_FINESTRA) guardia.colpi.shift();
+  if (guardia.sospesa || guardia.colpi.length < GUARDIA_SOGLIA) return;
+  try {
+    if (mappa && mappa.touchZoomRotate) mappa.touchZoomRotate.disable();
+  } catch (e) { return; }
+  guardia.sospesa = true;
+  guardia.fino = ora + GUARDIA_RIPOSO;
+  guardia.colpi = [];
+  var d = statLeggi();
+  d.multi = d.multi || { totale: 0, ore: {}, giorni: {} };
+  d.multi.guardie = (d.multi.guardie || 0) + 1;
+  d.multi.ultimaGuardia = ora;
+  statScrivi(d);
+  setTimeout(function () {
+    try { if (mappa && mappa.touchZoomRotate) mappa.touchZoomRotate.enable(); } catch (e) {}
+    guardia.sospesa = false;
+  }, GUARDIA_RIPOSO);
+}
 
 /* =====================================================================
    SCHERMO SEMPRE ACCESO
@@ -1525,6 +1568,7 @@ var ICONE = {
   pulizia:    '<path d="M14 3l-2.5 8"/><path d="M8 11h8l1.5 9h-11z"/><path d="M9.5 14.5v3M12 14.5v3M14.5 14.5v3"/>',
   aria:       '<path d="M4 8h10a2.5 2.5 0 1 0-2.5-2.5"/><path d="M4 12h14a2.5 2.5 0 1 1-2.5 2.5"/><path d="M4 16h7a2.2 2.2 0 1 1-2.2 2.2"/>',
   piscina:    '<path d="M9 16V5.5a1.8 1.8 0 0 1 3.6 0M15 16V5.5"/><path d="M9 8.5h6M9 12.5h6"/><path d="M3 18.5c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/>',
+  drone:      '<circle cx="5.2" cy="5.2" r="2.3"/><circle cx="18.8" cy="5.2" r="2.3"/><circle cx="5.2" cy="18.8" r="2.3"/><circle cx="18.8" cy="18.8" r="2.3"/><rect x="9.2" y="9.2" width="5.6" height="5.6" rx="1.2"/><path d="M6.9 6.9L9.2 9.2M17.1 6.9L14.8 9.2M6.9 17.1L9.2 14.8M17.1 17.1L14.8 14.8"/>',
   ospiti:     '<circle cx="9" cy="8" r="3"/><path d="M4 20v-1.5A4.5 4.5 0 0 1 8.5 14h1A4.5 4.5 0 0 1 14 18.5V20"/><circle cx="17" cy="9.2" r="2.4"/><path d="M15.8 13.5c2.8 0 4.7 1.7 4.7 4.3V20"/>',
   animali:    '<circle cx="7" cy="9" r="1.6"/><circle cx="11" cy="6.5" r="1.6"/><circle cx="15.5" cy="7.5" r="1.6"/><circle cx="18.4" cy="11" r="1.5"/><path d="M8.5 15.5c0-2 1.8-3.8 4-3.8s4 1.8 4 3.8c0 1.7-1.2 3-2.8 3-1 0-1.2-.4-2.2-.4s-1.2.4-2.2.4c-1.6 0-2.8-1.3-2.8-3z"/>',
   auto:       '<path d="M5 16.5V12l1.8-5h10.4L19 12v4.5"/><path d="M5 12h14"/><circle cx="7.8" cy="16" r="1.4"/><circle cx="16.2" cy="16" r="1.4"/><path d="M4.5 19h15"/>',
@@ -2164,6 +2208,15 @@ function mostraStatistiche() {
     'totale: ' + (mu.totale || 0) +
     (mu.punti !== undefined ? ' \u00b7 il pannello dichiara ' + mu.punti + ' punti di contatto' : '') +
     (mu.ultimo ? ' \u00b7 ultimo il ' + statOggi(mu.ultimo) : '')));
+  if (mu.inAttesa) {
+    corpo.appendChild(el('p', 'stat-nota',
+      'di cui ' + mu.inAttesa + ' a schermo in attesa, cioe\u2019 con NESSUNO davanti: '
+      + 'quelli sono contatti fantasma certi, non gesti di un ospite.'));
+  }
+  if (mu.guardie) {
+    corpo.appendChild(el('p', 'stat-nota',
+      'la pinch e\u2019 stata sospesa automaticamente ' + mu.guardie + ' volte per raffiche di contatti multipli'));
+  }
   if (mu.totale) {
     var oreM = Object.keys(mu.ore).sort(function (a, b) { return a - b; });
     var maxM = 1;
