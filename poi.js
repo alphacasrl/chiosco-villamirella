@@ -1252,18 +1252,6 @@ window.LUOGHI = [
     inEvidenza: false
   },
   {
-    id: "cenotafio-palinuro",
-    nome: "Cenotafio di Palinuro",
-    categoria: "archeologia",
-    lat: "40.083875",   lng: "15.261240",   verified: true,
-    notaCoordinate: "OpenStreetMap [archaeological_site]",
-    sommario: "",
-    immagine: "",
-    articoli: [],
-    distanzaKm: "5,3 km",   tempoAuto: "",
-    inEvidenza: false
-  },
-  {
     id: "muvip-camerota",
     nome: "MUVIP — Museo Virtuale del Paleolitico",
     categoria: "archeologia",
