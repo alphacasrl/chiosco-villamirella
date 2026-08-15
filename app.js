@@ -87,6 +87,10 @@ var CONFIG = {
      debba toccare nulla. Sta a 29 minuti apposta: deve scattare PRIMA del
      blocco, non insieme. Portare a 0 per disattivare la prova. */
   RICARICA_MS: 1740000,
+  /* I tracciati degli autobus restano fuori dalla mappa finche' non sono
+     verificati uno per uno: i dati e l'editor ci sono comunque, basta
+     rimettere true. Le fermate continuano a comparire. */
+  LINEE_BUS_SULLA_MAPPA: false,
   GRUPPO_INIZIALE: 'mare'
 };
 
@@ -1245,9 +1249,13 @@ function coloreDelVerso(d, i) {
   return L.versi[i].colore;
 }
 
+function linaBusNascosta(id) {
+  return !CONFIG.LINEE_BUS_SULLA_MAPPA && id && id.indexOf('linea-') === 0;
+}
+
 function disegnaPercorso(v) {
   var f = [];
-  if (v) {
+  if (v && !linaBusNascosta(v.dato.id)) {
     var p = PERCORSI[v.dato.id];
     if (p && p.versi && p.versi.length) {
       /* andata e ritorno su strade diverse: due colori, e uno scarto di pochi
@@ -1283,7 +1291,7 @@ function puntiDi(v) {
     }
   }
   var p = PERCORSI[v.dato.id];
-  if (p && p.linee) {
+  if (p && p.linee && !linaBusNascosta(v.dato.id)) {
     for (var j = 0; j < p.linee.length; j++)
       for (var k = 0; k < p.linee[j].length; k++) out.push(p.linee[j][k]);
   }
