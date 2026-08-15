@@ -327,6 +327,7 @@ window.GUIDA = {
           testo: "Pescheria storica di Palinuro con ottimo pesce fresco e pescato locale." } },
         { card: { nome: "Punto Carni Romano", fotoSospesa: "assets/img/negozio-punto-carni.jpg", lat: 40.043156, lng: 15.300111, dove: "Palinuro — 4 min a piedi o 1 min di auto",
           testo: "Carni selezionate di alta qualità, preparazioni fresche e specialità locali, ideali per le grigliate." } },
+        { card: { nome: "Habitat Zoo", lat: 40.038611, lng: 15.300087, dove: "Palinuro — 10 min a piedi o 2 min di auto", dove_en: "Palinuro — 10 min on foot or 2 min by car", testo: "Negozio per animali: alimenti e articoli per cani, gatti e altri animali domestici.", testo_en: "Pet shop: food and supplies for dogs, cats and other pets." } },
         { card: { nome: "Cilenterie", fotoSospesa: "assets/img/negozio-cilenterie.jpg", lat: 40.033592, lng: 15.286972, dove: "Corso Carlo Pisacane — 5 min di macchina",
           testo: "Negozio di specialità del Cilento e articoli da regalo." } }
       ]
@@ -397,8 +398,8 @@ window.GUIDA = {
       mappa: true,
       blocchi: [
         { card: { nome: "IP — Palinuro", icona: "benzina", pin: "benzina", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
-        { card: { nome: "Tabacchi alla rotatoria di Palinuro (presso IP)", icona: "tabacchi", pin: "tabacchi", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
-        { card: { nome: "Edicola alla rotatoria di Palinuro", icona: "edicola", pin: "edicola", lat: 40.042715, lng: 15.29071, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
+        { card: { nome: "Tabacchi alla rotatoria di Palinuro (presso IP)", icona: "tabacchi", pin: "tabacchi", lat: 40.042528, lng: 15.290656, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~750 m in linea d'aria", testo_en: "~750 m as the crow flies" } },
+        { card: { nome: "Edicola F.lli Gasparro", icona: "edicola", pin: "edicola", lat: 40.042517, lng: 15.289477, dove: "Alla rotatoria di Palinuro", dove_en: "At the Palinuro roundabout", testo: "a ~840 m in linea d'aria", testo_en: "~840 m as the crow flies" } },
         { card: { nome: "IP — Palinuro", icona: "benzina", pin: "benzina", lat: 40.044234, lng: 15.287993, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~850 m in linea d'aria", testo_en: "~850 m as the crow flies" } },
         { card: { nome: "Banca della Campania", icona: "banca", pin: "banca", lat: 40.038811, lng: 15.28923, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~1.1 km in linea d'aria", testo_en: "~1.1 km as the crow flies" } },
         { card: { nome: "Ufficio postale — Palinuro", icona: "posta", pin: "posta", lat: 40.038275, lng: 15.287669, dove: "Palinuro", dove_en: "Palinuro", testo: "a ~1.3 km in linea d'aria", testo_en: "~1.3 km as the crow flies" } },
@@ -441,6 +442,17 @@ window.GUIDA = {
         ], kv_en: [
           ["Single European emergency number", "112"]
         ]},
+        { t: "Ospedali con pronto soccorso", t_en: "Hospitals with an emergency department", icona: "salute" },
+        { card: { nome: "Ospedale San Luca — Vallo della Lucania", lat: 40.225813, lng: 15.262483,
+                  dove: "Vallo della Lucania — circa 20 km, 30 min di auto",
+                  dove_en: "Vallo della Lucania — about 20 km, 30 min by car",
+                  testo: "È l’ospedale di riferimento della zona, con pronto soccorso attivo. Centralino 0974 7111111.",
+                  testo_en: "The main hospital for the area, with a 24-hour emergency department. Switchboard 0974 7111111." } },
+        { card: { nome: "Presidio Ospedaliero dell’Immacolata — Sapri", lat: 40.069672, lng: 15.617904,
+                  dove: "Sapri — circa 27 km, 40 min di auto",
+                  dove_en: "Sapri — about 27 km, 40 min by car",
+                  testo: "Ospedale con pronto soccorso, verso il Golfo di Policastro.",
+                  testo_en: "Hospital with an emergency department, towards the Gulf of Policastro." } },
         { t: "Guardia medica", t_en: "Out-of-hours doctor", icona: "salute" },
         { card: { nome: "Guardia Medica Turistica — Marina di Camerota", lat: 40.000415, lng: 15.374597,
           dove: "Località Porto, uffici all'ingresso della struttura portuale",
