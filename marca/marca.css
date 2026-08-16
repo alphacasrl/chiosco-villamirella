@@ -1,0 +1,58 @@
+/* ======================================================================
+   MARCA VILLAMIRELLA — variabili condivise fra le applicazioni
+   ----------------------------------------------------------------------
+   Va incluso PRIMA del foglio di stile della singola app. L'app puo'
+   ridefinire fondi, forme e densita' (sono libere per contesto), ma NON i
+   colori di marca qui sotto. Le regole stanno in MARCA-VILLAMIRELLA.md.
+   ====================================================================== */
+
+:root {
+  /* --- colori di marca: obbligatori, non si approssimano --- */
+  --vm-blu:        #235784;
+  --vm-blu-scuro:  #1a4263;
+  --vm-azzurro:    #ddeaf6;
+  --vm-oro:        #e0a11b;
+  --vm-oro-cupo:   #c78710;
+  --vm-rosso:      #dd350f;   /* solo errori e chiusure */
+  --vm-verde:      #1e8a4c;   /* conferme, disponibilita' */
+  --vm-testo:      #2c3c4a;
+  --vm-titolo:     #040b11;
+
+  /* --- coppia per distinguere due cose (es. andata/ritorno) ---
+     blu e ambra, MAI rosso e verde: quella coppia e' illeggibile per chi
+     ha una disfunzione della visione dei colori. */
+  --vm-coppia-a:   #1a87c9;
+  --vm-coppia-b:   #d09a1e;
+
+  /* --- colori delle categorie: stesso significato in tutte le app --- */
+  --vm-spiagge:     #1a87c9;
+  --vm-borghi:      #c96a2b;
+  --vm-grotte:      #7057c9;
+  --vm-natura:      #2f9e60;
+  --vm-archeologia: #b5892f;
+  --vm-santuari:    #9550a8;
+  --vm-ristoranti:  #d64550;
+  --vm-negozi:      #5b7d8c;
+  --vm-salute:      #c0392b;
+  --vm-farmacie:    #2f9e60;
+  --vm-servizi:     #607d5b;
+  --vm-trasporti:   #5b6ec9;
+
+  /* --- caratteri --- */
+  --vm-font-titoli: Mulish, system-ui, sans-serif;
+  --vm-font-testo:  "Open Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* --- misure che valgono ovunque --- */
+  --vm-tocco-min: 44px;   /* bersaglio toccabile minimo, tocco singolo */
+}
+
+/* I caratteri vanno copiati nella cartella dell'app: niente CDN, le app
+   devono funzionare anche senza linea. Sostituire il percorso se serve. */
+@font-face { font-family: Mulish; font-weight: 700; font-display: swap;
+  src: url("assets/fonts/mulish-700.woff2") format("woff2"); }
+@font-face { font-family: Mulish; font-weight: 900; font-display: swap;
+  src: url("assets/fonts/mulish-900.woff2") format("woff2"); }
+@font-face { font-family: "Open Sans"; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/opensans-400.woff2") format("woff2"); }
+@font-face { font-family: "Open Sans"; font-weight: 600; font-display: swap;
+  src: url("assets/fonts/opensans-600.woff2") format("woff2"); }
